@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    marginVertical: 8,
+    marginVertical: 4,
     marginHorizontal: 10,
   },
 
@@ -29,6 +29,5 @@ const styles = StyleSheet.create({
     color: '#1F2937',
   },
   content: {
-    // 내부 컨텐츠 여백 조정 가능
   },
 });

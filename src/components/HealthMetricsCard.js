@@ -31,19 +31,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    paddingVertical: 8,
+    paddingVertical: 6,
   },
   metric: {
     flex: 1,
     alignItems: 'center',
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     marginBottom: 2,
   },
   value: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#1F2937',
     marginBottom: 2,
