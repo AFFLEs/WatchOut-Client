@@ -2,7 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../pages/Main/LoginScreen.js';
 import SignUpScreen from '../pages/Main/SignUpScreen.js';
-
+import TermsScreen from '../pages/Main/TermsScreen.js';
+import TermsScreen2 from '../pages/Main/TermsScreen2.js';
 const Stack = createStackNavigator();
 
 export default function OnBoardingNavigator() {
@@ -15,6 +16,8 @@ export default function OnBoardingNavigator() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="TermsScreen2" component={TermsScreen2} />
     </Stack.Navigator>
   );
 }

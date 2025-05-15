@@ -8,15 +8,15 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [phone, setPhone] = useState('');
+
   const handleBack = () => {
     navigation.navigate('Login');
   };
-
+  const handleSignUp = () => {
+    navigation.navigate('Terms');
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-        <Image source={require('../../assets/icons/back.png')} style={styles.backButtonImage} />
-      </TouchableOpacity>
       <View style={styles.contentContainer}>
         <Image source={require('../../assets/icons/logo.png')} style={styles.logo} />
         <Text style={styles.description}>여행자들을 위한 스마트 워치 안전 관리 서비스</Text>
@@ -62,11 +62,11 @@ export default function SignUpScreen({ navigation }) {
           />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupButtonText}>회원가입</Text>
+        <TouchableOpacity style={styles.signupButton} onPress={handleSignUp}>
+          <Text style={styles.signupButtonText}>회원가입 진행하기</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>로그인</Text>
+        <TouchableOpacity style={styles.loginButton} onPress={handleBack}>
+          <Text style={styles.loginButtonText}>로그인하기</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -77,12 +77,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 40,
-    zIndex: 1,
   },
   contentContainer: {
     alignItems: 'left',
