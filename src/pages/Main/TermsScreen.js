@@ -8,7 +8,7 @@ export default function TermsScreen({ navigation }) {
 
   const handleAgree = () => {
     // 동의 후 다음 단계로 이동
-    navigation.navigate('TermsScreen2');
+    navigation.navigate('Terms2');
   };
 
   return (

@@ -12,7 +12,7 @@ export default function TermsScreen({ navigation }) {
   const handleAgree = () => {
     if (locationEnabled && emergencyEnabled) {
       // 모든 항목에 동의한 경우에만 진행
-      navigation.navigate('SignUp');
+      navigation.navigate('TravelDate');
     }
   };
 
