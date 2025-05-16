@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -12,9 +12,23 @@ export default function SignUpScreen({ navigation }) {
   const handleBack = () => {
     navigation.navigate('Login');
   };
+
   const handleSignUp = () => {
+    // 입력값 검증
+    if (!name || !birthday || !email || !password || !passwordConfirm || !phone) {
+      Alert.alert('회원가입 오류', '모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      Alert.alert('비밀번호 오류', '비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    
     navigation.navigate('Terms');
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>

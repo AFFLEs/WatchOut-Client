@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 export default function TravelDateScreen({ navigation }) {
@@ -53,8 +53,21 @@ export default function TravelDateScreen({ navigation }) {
 
   const handleNext = () => {
     if (startDate && endDate) {
-      // 다음 화면으로 이동하면서 선택된 날짜 정보 전달
-      navigation.navigate('Login', { startDate, endDate });
+      // 회원가입 완료 알림
+      Alert.alert(
+        '회원가입 완료',
+        '회원가입이 성공적으로 완료되었습니다.',
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              // 로그인 화면으로 이동하면서 선택된 날짜 정보 전달
+              navigation.navigate('Login', { startDate, endDate });
+            }
+          }
+        ],
+        { cancelable: false }
+      );
     }
   };
 
@@ -62,7 +75,7 @@ export default function TravelDateScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          
+          <Image source={require('../../assets/icons/location2.png')} style={styles.locationIcon} />
           <Text style={styles.title}>안전한 여행을 위해{'\n'}여행 일정을 입력해 볼까요?</Text>
         </View>
       </View>
@@ -132,7 +145,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 10,
-    marginTop: 3,
+    marginTop: 5,
   },
   title: {
     fontSize: 18,
