@@ -28,8 +28,8 @@ export default function BottomTabNavigator() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Monitoring" component={MonitoringScreen} />
       <Tab.Screen name="Travel" component={TravelScreen} />
+      <Tab.Screen name="Monitoring" component={MonitoringScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
