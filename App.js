@@ -7,7 +7,8 @@ import BottomTabNavigator from './src/navigations/BottomTabNavigator';
 const Stack = createNativeStackNavigator();
 
 const AppContent = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  //로그인 전 온보딩 화면 진행을 위한 false 설정
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <NavigationContainer>
