@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 export default function TravelDateScreen({ navigation }) {
@@ -53,8 +53,21 @@ export default function TravelDateScreen({ navigation }) {
 
   const handleNext = () => {
     if (startDate && endDate) {
-      // 다음 화면으로 이동하면서 선택된 날짜 정보 전달
-      navigation.navigate('Login', { startDate, endDate });
+      // 회원가입 완료 알림
+      Alert.alert(
+        '회원가입 완료',
+        '회원가입이 성공적으로 완료되었습니다.',
+        [
+          {
+            text: '확인',
+            onPress: () => {
+              // 로그인 화면으로 이동하면서 선택된 날짜 정보 전달
+              navigation.navigate('Login', { startDate, endDate });
+            }
+          }
+        ],
+        { cancelable: false }
+      );
     }
   };
 
