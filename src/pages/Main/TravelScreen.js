@@ -33,7 +33,7 @@ export default function TravelScreen() {
           dateLabel={dateLabel}
           city="뉴욕"
           country="미국"
-          mapImage={require('/Users/han-yewon/WebstormProjects/WatchOut-Client/src/assets/icons/edit.png')}
+          mapImage={require('../../assets/icons/edit.png')}
           schedules={schedules}
           isToday={idx === 0}
           onAddSchedule={() => {/* 일정 추가 동작 */}}
