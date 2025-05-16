@@ -62,7 +62,7 @@ export default function TravelDateScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.titleContainer}>
-          
+          <Image source={require('../../assets/icons/location2.png')} style={styles.locationIcon} />
           <Text style={styles.title}>안전한 여행을 위해{'\n'}여행 일정을 입력해 볼까요?</Text>
         </View>
       </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     marginRight: 10,
-    marginTop: 3,
+    marginTop: 5,
   },
   title: {
     fontSize: 18,
