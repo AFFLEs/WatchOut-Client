@@ -19,12 +19,12 @@ export default function TravelRecordCard({
       </View>
       {schedules.map((item, idx) => (
         <View key={idx} style={styles.scheduleRow}>
-          <Text style={styles.time}>{item.time}</Text>
-          <View>
-            <Text style={styles.place}>{item.place}</Text>
-            <Text style={styles.address}>{item.address}</Text>
+            <Text style={styles.time}>{item.time}</Text>
+            <View>
+              <Text style={styles.place}>{item.place}</Text>
+              <Text style={styles.address}>{item.address}</Text>
+            </View>
           </View>
-        </View>
       ))}
     </View>
   );
