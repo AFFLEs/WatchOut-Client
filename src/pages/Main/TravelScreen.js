@@ -5,6 +5,7 @@ import TravelRecordCard from '../../components/TravelRecordCard';
 import SectionCard from '../../components/SectionCard';
 import AddTravelButton from '../../components/AddTravelButton';
 import TravelRecordNotice from '../../components/TravelRecordNotice';
+import ExportTravelRecord from '../../components/ExportTravelRecord';
 
 export default function TravelScreen() {
   const scheduleByDate = {
@@ -39,7 +40,9 @@ export default function TravelScreen() {
           onAddSchedule={() => {/* 일정 추가 동작 */}}
         />
       ))}
+        
         <TravelRecordNotice />
+        <ExportTravelRecord scheduleByDate={scheduleByDate} />
       </SectionCard>
     </ScrollView>
   );
