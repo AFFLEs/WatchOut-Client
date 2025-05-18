@@ -1,6 +1,6 @@
 // src/components/TravelRecordCard.js
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 export default function TravelRecordCard({
   dateLabel,
@@ -8,16 +8,16 @@ export default function TravelRecordCard({
   country,
   mapImage,
   schedules,
-  onDownload,
+  onCheckSchedule,
 }) {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onCheckSchedule}>
       <Image source={mapImage} style={styles.map} />
       <View style={styles.dateRow}>
         <Text style={styles.dateLabel}>{dateLabel}</Text>
         <Text style={styles.cityCountry}>{city}, {country}</Text>
       </View>
-      {schedules.map((item, idx) => (
+      {schedules.slice(0, 3).map((item, idx) => (
         <View key={idx} style={styles.scheduleRow}>
             <Text style={styles.time}>{item.time}</Text>
             <View>
@@ -26,7 +26,7 @@ export default function TravelRecordCard({
             </View>
           </View>
       ))}
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -48,11 +48,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     color: '#222B3A',
-  },
-  download: {
-    color: '#2563EB',
-    fontSize: 13,
-    fontWeight: 'bold',
   },
   map: {
     width: '100%',

@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 // import FileViewer from 'react-native-file-viewer';
 import Share from 'react-native-share';
+import ModalCard from './ModalCard';
+import ModalButton from './ModalButton';
 
 
 export default function ExportTravelRecord({ scheduleByDate }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
   const handleExport = async () => {
     // HTML 생성
     let html = '<h1>여행 기록</h1>';
@@ -34,14 +39,28 @@ export default function ExportTravelRecord({ scheduleByDate }) {
       });
 
     } catch (e) {
-      Alert.alert('PDF 생성/열기 실패', e.message);
+      setModalMessage(e.message || 'PDF 생성/공유 중 오류가 발생했습니다.');
+      setModalVisible(true);
     }
   };
 
   return (
-    <TouchableOpacity style={styles.button} onPress={handleExport}>
-      <Text style={styles.text}>여행 기록 내보내기</Text>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity style={styles.button} onPress={handleExport}>
+        <Text style={styles.text}>여행 기록 내보내기</Text>
+      </TouchableOpacity>
+      <ModalCard
+        visible={modalVisible}
+        title="오류가 발생했습니다."
+        onRequestClose={() => setModalVisible(false)}
+        width={260}
+        buttons={[
+          <ModalButton key="close" title="닫기" onPress={() => setModalVisible(false)} />
+        ]}
+      >
+        <Text style={{ color: '#222B3A', fontSize: 14, textAlign: 'center',  marginBottom:10 }}>{modalMessage}</Text>
+      </ModalCard>
+    </>
   );
 }
 

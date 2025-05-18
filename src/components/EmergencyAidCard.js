@@ -62,9 +62,11 @@ export default function EmergencyAidCard() {
     if (res.success) {
       setGuardianPhone(inputPhone);
       setModalVisible(false);
-      Alert.alert('완료', '전화번호가 수정되었습니다.');
+      setNoticeModal({ visible: true, message: '전화번호가 수정되었습니다.' });
+      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
     } else {
-      Alert.alert('오류', '전화번호 수정에 실패했습니다.');
+      setNoticeModal({ visible: true, message: '전화번호 수정에 실패했습니다.' });
+      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
     }
   };
 

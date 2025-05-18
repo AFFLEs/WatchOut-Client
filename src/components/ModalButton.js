@@ -1,17 +1,17 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function ModalButton({ title, onPress, style }) {
+export default function ModalButton({ title, onPress, style, textStyle }) {
   return (
     <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
-      <Text style={styles.text}>{title}</Text>
+      <Text style={[styles.text, textStyle]}>{title}</Text> 
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#fff',
+    backgroundColor: '#2563EB',
     borderColor: '#2563EB',
     borderWidth: 1,
     borderRadius: 8,
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     minWidth: 0,
   },
   text: {
-    color: '#2563EB',
+    color: '#fff',
     fontWeight: 'bold',
     fontSize: 14,
   },

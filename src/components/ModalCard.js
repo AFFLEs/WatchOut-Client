@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 20,
+    padding:20,
     alignItems: 'flex-start',
   },
   title: {
