@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, Modal, TextInput, Button } from 'react-native';
+import ModalButton from './ModalButton';
+import ModalCard from './ModalCard';
 
 export default function EmergencyAidCard() {
   const [enabled, setEnabled] = useState(false);
   const [guardianPhone, setGuardianPhone] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [inputPhone, setInputPhone] = useState('');
+  const [noticeModal, setNoticeModal] = useState({ visible: false, message: '' });
 
   const fetchInitialSettings = async () => {
-    // API 호출
+    // 초기 설정용 API 호출
     return {
       enabled: true,
       guardianPhone: '010-9225-0234',
@@ -20,10 +25,49 @@ export default function EmergencyAidCard() {
     });
   }, []);
 
-  const handleToggle = () => setEnabled(prev => !prev);
+  // 토글 수정 후 안내 메시지 출력 + 더미 API 호출
+  const handleToggle = async () => {
+    const newEnabled = !enabled;
+    setEnabled(newEnabled);
 
+    const message = newEnabled
+      ? '긴급 구조 요청이 설정되었습니다.'
+      : '긴급 구조 요청이 해제되었습니다.';
+
+    setNoticeModal({ visible: true, message });
+
+    await updateEmergencySettingAPI(newEnabled);
+    setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
+  };
+
+  // 긴급 구조 설정용 더미 API 함수 (API 파일로 따로 분리 예정)
+  const updateEmergencySettingAPI = async (newEnabled) => {
+    return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
+  };
+
+  // 보호자 전화번호 수정 모달 창 열기
   const handleEditPhone = () => {
-    Alert.alert('전화번호 수정', '전화번호 수정 후 API 호출 예정.');
+    setInputPhone(guardianPhone); 
+    setModalVisible(true);
+  };
+
+  // 보호자 전화번호 수정용 더미 API 함수 (API 파일로 따로 분리 예정)
+  const updatePhoneAPI = async (newPhone) => {
+    return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
+  };
+
+  // 보호자 전화번호 수정 모달 창 닫기
+  const handlePhoneSubmit = async () => {
+    const res = await updatePhoneAPI(inputPhone);
+    if (res.success) {
+      setGuardianPhone(inputPhone);
+      setModalVisible(false);
+      setNoticeModal({ visible: true, message: '전화번호가 수정되었습니다.' });
+      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
+    } else {
+      setNoticeModal({ visible: true, message: '전화번호 수정에 실패했습니다.' });
+      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
+    }
   };
 
   return (
@@ -53,6 +97,37 @@ export default function EmergencyAidCard() {
           <Text style={styles.editBtn}>수정하기</Text>
         </TouchableOpacity>
       </View>
+
+      {/* 보호자 전화번호 수정 모달 */}
+      <ModalCard
+        visible={modalVisible}
+        title="보호자 전화번호 수정하기"
+        onRequestClose={() => setModalVisible(false)}
+        buttons={[
+          <ModalButton title="취소" onPress={() => setModalVisible(false)} />,
+          <ModalButton title="완료" onPress={handlePhoneSubmit} />,
+        ]}
+      >
+        <TextInput
+          value={inputPhone}
+          onChangeText={setInputPhone}
+          style={styles.input}
+          keyboardType="phone-pad"
+          placeholder="전화번호 입력"
+        />
+      </ModalCard>
+
+      {/* 긴급 구조 요청 안내 모달 */}
+      <ModalCard
+        visible={noticeModal.visible}
+        onRequestClose={() => setNoticeModal({ visible: false, message: '' })}
+        width={240}
+        buttons={[]} 
+      >
+        <Text style={{ color: '#222B3A', fontSize: 14, fontWeight: 'bold', textAlign: 'center' }}>
+          {noticeModal.message}
+        </Text>
+      </ModalCard>
     </View>
   );
 }
@@ -107,11 +182,20 @@ const styles = StyleSheet.create({
     width: 12,
     height: 12,
     marginRight: 3,
-    tintColor: '#2563EB', // 필요시 색상
+    tintColor: '#2563EB', 
   },
   editBtn: {
     color: '#2563EB',
     fontWeight: 'bold',
     fontSize: 12,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 8,
+    padding: 8,
+    width: '100%',
+    fontSize: 15,
+    marginBottom: 16,
   },
 });

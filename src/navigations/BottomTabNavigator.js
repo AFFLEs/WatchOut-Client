@@ -3,10 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import HomeScreen from '../pages/Main/HomeScreen';
 import MonitoringScreen from '../pages/Main/MonitoringScreen';
-import TravelScreen from '../pages/Main/TravelScreen';
 import ProfileScreen from '../pages/Main/ProfileScreen';
 import icons from '../datas/menu';
 import Header from '../components/Header';
+import TravelStack from './TravelStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +28,7 @@ export default function BottomTabNavigator() {
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Travel" component={TravelScreen} />
+      <Tab.Screen name="Travel" component={TravelStack} />
       <Tab.Screen name="Monitoring" component={MonitoringScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
