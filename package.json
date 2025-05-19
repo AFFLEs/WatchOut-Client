@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@expo/vector-icons": "^14.1.0",
     "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-native-community/datetimepicker": "^8.3.0",
@@ -37,7 +38,9 @@
     "react-native-screens": "^4.9.0",
     "react-native-share": "^12.0.11",
     "react-native-svg": "^15.12.0",
-    "react-native-vector-icons": "^10.2.0"
+    "react-native-vector-icons": "^10.2.0",
+    "react-native-watch-connectivity": "^1.1.0",
+    "save": "^2.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
