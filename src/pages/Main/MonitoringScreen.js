@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Button, Alert, TouchableOpacity } from 'react-native';
 import SectionCard from '../../components/SectionCard';
 import HealthMetricsCard from '../../components/HealthMetricsCard';
 import AlertCard from '../../components/AlertCard';
 import SwitchRow from '../../components/SwitchRow';
 import  InstitutionList from '../../components/InstitutionList';
 import ModalCard from '../../components/ModalCard';
+// 워치 연동 관련 라이브러리
+import { sendMessage, getReachability } from 'react-native-watch-connectivity';
 
 export default function MonitoringScreen() {
   const [vibrationAlert, setVibrationAlert] = useState(true);
@@ -38,8 +40,43 @@ export default function MonitoringScreen() {
     return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
   };
 
+  // 워치로 데모 알림 보내기
+  const sendDemoMessageToWatch = async () => {
+    try {
+      const isReachable = await getReachability();
+      if (isReachable) {
+        sendMessage(
+          { message: '테스트로 메시지를 보냈어요! 5월 21일' },
+          (replyObj) => {
+            Alert.alert('성공', '워치로 메시지 전송 성공!');
+            console.log('워치 응답:', replyObj);
+          },
+          (error) => {
+            Alert.alert('실패', '워치로 메시지 전송 실패');
+            console.log('워치 전송 오류:', error);
+          }
+        );
+      } else {
+        Alert.alert('연결 안 됨', '워치가 연결되어 있지 않습니다.');
+      }
+    } catch (error) {
+      Alert.alert('오류', '메시지 전송 중 오류 발생');
+      console.error('워치 메시지 전송 오류:', error);
+    }
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      {/* 워치 연결 데모용 버튼 */}
+      <SectionCard title="워치 연결 테스트">
+        <TouchableOpacity 
+          style={styles.watchButton}
+          onPress={sendDemoMessageToWatch}
+        >
+          <Text style={styles.watchButtonText}>워치로 알림보내기!</Text>
+        </TouchableOpacity>
+      </SectionCard>
+
       {/* 건강 모니터링 */}
       <SectionCard title="건강 모니터링">
         <HealthMetricsCard {...health} />
@@ -87,5 +124,16 @@ export default function MonitoringScreen() {
 }
 
 const styles = StyleSheet.create({
-  // 필요시 스타일 추가
+  watchButton: {
+    backgroundColor: '#2196F3',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 8,
+  },
+  watchButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
