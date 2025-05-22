@@ -31,6 +31,7 @@
     "react-native-file-viewer": "^2.1.5",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.24.0",
+    "react-native-health": "^1.19.0",
     "react-native-html-to-pdf": "^0.12.0",
     "react-native-maps": "^1.20.1",
     "react-native-reanimated": "^3.16.7",
