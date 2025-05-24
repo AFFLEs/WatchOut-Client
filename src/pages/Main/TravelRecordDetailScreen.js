@@ -1,43 +1,104 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SectionCard from '../../components/SectionCard';
+import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 
-const dummyPhoto = require('../../assets/icons/edit.png'); 
 
 export default function TravelRecordDetailScreen({ route }) {
-  const { dateLabel, schedules, city, country, photo } = route.params;
+  const { dateLabel, schedules, city, country } = route.params;
+  const [coordinates, setCoordinates] = useState([]);
+  
+  // 제주도 중심 좌표를 기본값으로 설정
+  const [region, setRegion] = useState({
+    latitude: 33.4890,  
+    longitude: 126.4983,
+    latitudeDelta: 0.5,
+    longitudeDelta: 0.5,
+  });
+
+  useEffect(() => {
+    if (schedules && schedules.length > 0) {
+      const sortedSchedules = [...schedules].sort((a, b) => {
+        const timeA = new Date(`2000/01/01 ${a.time}`).getTime();
+        const timeB = new Date(`2000/01/01 ${b.time}`).getTime();
+        return timeA - timeB;
+      });
+
+      const coords = sortedSchedules
+        .filter(schedule => schedule.latitude && schedule.longitude)
+        .map(schedule => ({
+          latitude: schedule.latitude,
+          longitude: schedule.longitude
+        }));
+
+      setCoordinates(coords);
+
+      // 모든 마커가 보이도록 지도 중심과 줌 레벨 조정
+      if (coords.length > 0) {
+        const latitudes = coords.map(coord => coord.latitude);
+        const longitudes = coords.map(coord => coord.longitude);
+        const minLat = Math.min(...latitudes);
+        const maxLat = Math.max(...latitudes);
+        const minLng = Math.min(...longitudes);
+        const maxLng = Math.max(...longitudes);
+
+        setRegion({
+          latitude: (minLat + maxLat) / 2,
+          longitude: (minLng + maxLng) / 2,
+          latitudeDelta: (maxLat - minLat) * 1.5 || 0.02,
+          longitudeDelta: (maxLng - minLng) * 1.5 || 0.02,
+        });
+      }
+    }
+  }, [schedules]);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }}>
-        <SectionCard>
-            <Image
-            source={photo || dummyPhoto}
-            style={styles.topImage}
-            resizeMode="cover"
-          />
-          <Text style={styles.title}>{dateLabel}</Text>
-          <Text style={styles.subtitle}>{city}, {country}</Text>
-          <Text style={styles.sectionTitle}>일정 목록</Text>
-          {(!schedules || schedules.length === 0) ? (
-            <View style={styles.emptyBox}>
-              <Text style={styles.emptyText}>등록된 일정이 없습니다.</Text>
-            </View>
-          ) : (
-            schedules.map((item, idx) => (
-              <View key={idx} style={styles.card}>
-                <View style={styles.row}>
-                  <View style={styles.timeBadge}>
-                    <Text style={styles.timeText}>{item.time}</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.place}>{item.place}</Text>
-                    <Text style={styles.address}>{item.address}</Text>
-                  </View>
+      <SectionCard>
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          region={region}
+        >
+          {coordinates.map((coord, index) => (
+            <Marker
+              key={index}
+              coordinate={coord}
+              title={schedules[index]?.place}
+              description={`${schedules[index]?.time} - ${schedules[index]?.address}`}
+            />
+          ))}
+          {coordinates.length > 1 && (
+            <Polyline
+              coordinates={coordinates}
+              strokeColor="#2563EB"
+              strokeWidth={3}
+            />
+          )}
+        </MapView>
+        <Text style={styles.title}>{dateLabel}</Text>
+        <Text style={styles.subtitle}>{city}, {country}</Text>
+        <Text style={styles.sectionTitle}>일정 목록</Text>
+        {(!schedules || schedules.length === 0) ? (
+          <View style={styles.emptyBox}>
+            <Text style={styles.emptyText}>등록된 일정이 없습니다.</Text>
+          </View>
+        ) : (
+          schedules.map((item, idx) => (
+            <View key={idx} style={styles.card}>
+              <View style={styles.row}>
+                <View style={styles.timeBadge}>
+                  <Text style={styles.timeText}>{item.time}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.place}>{item.place}</Text>
+                  <Text style={styles.address}>{item.address}</Text>
                 </View>
               </View>
-            ))
-          )}
-        </SectionCard>
+            </View>
+          ))
+        )}
+      </SectionCard>
     </ScrollView>
   );
 }
@@ -121,5 +182,10 @@ const styles = StyleSheet.create({
   emptyText: {
     color: '#8B95A1',
     fontSize: 15,
+  },
+  map: {
+    width: '100%',
+    height: 200,
+    marginBottom: 18,
   },
 });

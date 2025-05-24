@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import InstitutionCard from './InstitutionCard';
 
-export default function InstitutionList({ institutions }) {
+export default function InstitutionList({ institutions, city }) {
   return (
     <View>
       {institutions.map((item, idx) => (
@@ -11,6 +11,7 @@ export default function InstitutionList({ institutions }) {
           name={item.name}
           distance={item.distance}
           type={item.type}
+          city={city}
         />
       ))}
     </View>
