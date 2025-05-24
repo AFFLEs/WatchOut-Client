@@ -17,6 +17,11 @@ end
 target 'Front' do
   config = use_native_modules!
 
+  pod 'Google-Maps-iOS-Utils', '6.1.0'
+
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-maps/Google', :path => rn_maps_path
+
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.

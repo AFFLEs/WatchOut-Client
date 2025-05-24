@@ -10,7 +10,7 @@ import PersonalInfoCard from '../../components/PersonalInfoCard';
 
 const institutions = [
   { name: 'Newyork University Hospital', distance: '1.2km', type: 'hospital' },
-  { name: '한국 대사관', distance: '2.5km', type: 'embassy' },
+  { name: 'New York City Police Department (NYPD)', distance: '2.5km', type: 'embassy' },
 ];
 
 export default function HomeScreen() {
@@ -36,7 +36,7 @@ export default function HomeScreen() {
       </SectionCard>
 
       <SectionCard title="근처 응급 기관 정보">
-        <InstitutionList institutions={institutions} />
+        <InstitutionList institutions={institutions} city="New York"/>
       </SectionCard>
 
       <SectionCard title="긴급 구조 설정">

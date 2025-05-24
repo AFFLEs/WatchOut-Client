@@ -27,6 +27,7 @@ android/app/build/
 android/app/.cxx/
 android/local.properties
 android/app/debug.keystore
+android/gradle.properties
 
 # Gradle
 .gradle/
@@ -49,3 +50,13 @@ ios/Podfile.lock
 # Environment files
 .env
 .env.*
+
+# API Keys
+src/config/keys.js
+ios/Front/Info.plist
+android/gradle.properties
+
+# Keep template files
+!ios/Front/Info.plist.template
+!android/gradle.properties.template
+ios/Front/Info.plist
