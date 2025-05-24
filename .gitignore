@@ -60,3 +60,8 @@ android/gradle.properties
 !ios/Front/Info.plist.template
 !android/gradle.properties.template
 ios/Front/Info.plist
+ios/.xcode.env.local
+ios/Front.xcodeproj/project.pbxproj
+ios/Front.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+ios/Front.xcodeproj/project.xcworkspace/xcuserdata/jiminkim.xcuserdatad/UserInterfaceState.xcuserstate
+*.plist

@@ -96,6 +96,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 20,
+    paddingBottom: 34,
+    marginBottom: 50,
   },
   footerText: {
     fontSize: 12,

@@ -18,7 +18,8 @@ export default function OnBoardingNavigator() {
     >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="Terms" component={TermsScreen2} />
+      <Stack.Screen name="Terms" component={TermsScreen} />
+      <Stack.Screen name="Terms2" component={TermsScreen2} />
       <Stack.Screen name="TravelDate" component={TravelDateScreen} />
     </Stack.Navigator>
   );
