@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import TravelScheduleCard from '../../components/TravelScheduleCard';
 import TravelRecordCard from '../../components/TravelRecordCard';
@@ -8,6 +8,7 @@ import TravelRecordNotice from '../../components/TravelRecordNotice';
 import ExportTravelRecord from '../../components/ExportTravelRecord';
 import ScheduleInputModal from '../../components/ScheduleInputModal';
 import { useNavigation } from '@react-navigation/native';
+import { travelAPI } from '../../apis/travelAPI';
 
 export default function TravelScreen() {
   const [scheduleByDate, setScheduleByDate] = useState({
@@ -64,6 +65,11 @@ export default function TravelScreen() {
     setScheduleByDate(newData);
     setModalVisible(false);
   };
+
+  useEffect(() => {
+    travelAPI.getTravelDate().then(response => {
+    });
+  }, []);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
