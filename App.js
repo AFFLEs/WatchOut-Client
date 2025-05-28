@@ -8,7 +8,7 @@ const Stack = createNativeStackNavigator();
 
 const AppContent = () => {
   //로그인 전 온보딩 화면 진행을 위한 false 설정
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <NavigationContainer>
