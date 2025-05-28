@@ -64,7 +64,7 @@ export default function MonitoringScreen() {
           type="rainstorm" 
           timeAgo="2시간 전" 
         />
-        <View style={{ backgroundColor: '#F1F2F4',  borderRadius: 10, padding: 10, marginTop: 5 }}>
+        <View style={{ backgroundColor: '#fff',  borderRadius: 10, padding: 10, marginTop: 5 }}>
           <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#222B3A'}}>근처 응급 기관 정보</Text>
           <InstitutionList institutions={institutions} />
         </View>

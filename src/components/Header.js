@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 {/* npm install react-native-safe-area-context 필요 */}
 export default function Header() {
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <Image
           source={require('../assets/icons/logo.png')}
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     height: 60,
     backgroundColor: '#fff',
-//    justifyContent: 'center',
+  //  justifyContent: 'center',
     alignItems: 'flex-start',
   },
   logo: {
