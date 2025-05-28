@@ -9,6 +9,23 @@ export default function LoginScreen({ navigation }) {
     navigation.navigate('SignUp');
   };
 
+  const handleLogin = async () => {
+    const userInfo = {
+      email,
+      password,
+    };
+    try {
+      const response = await userAPI.loginUserInfo(userInfo);
+      const { accessToken, refreshToken } = response.data.data;
+      await AsyncStorage.setItem('accessToken', accessToken);
+      await AsyncStorage.setItem('refreshToken', refreshToken);
+      console.log('로그인 성공:', userInfo);
+      navigation.navigate('Main');
+    } catch (error) {
+      Alert.alert('로그인 실패', error.message || '알 수 없는 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>

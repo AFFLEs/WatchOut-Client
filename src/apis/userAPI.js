@@ -10,5 +10,13 @@ export const userAPI = {
         } catch (error) {
             throw handleApiError(error);
         }
+    },
+    loginUserInfo: async (userInfo) => {
+        try {
+            const response = await apiClient.post(ENDPOINTS.USERS.LOGIN,userInfo);
+            return handleApiResponse(response);
+        } catch (error) {
+            throw handleApiError(error);
+        }
     }
 }; 
