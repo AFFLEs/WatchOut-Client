@@ -11,8 +11,8 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     const userInfo = {
-      email,
-      password,
+      email:email,
+      password:password,
     };
     try {
       const response = await userAPI.loginUserInfo(userInfo);
