@@ -34,14 +34,7 @@ export default function SignUpScreen({ navigation }) {
       confirmPassword: passwordConfirm,
       phoneNumber: phone
     };
-  
-    try {
-      const response = await userAPI.createUserInfo(userInfo); 
-      console.log('회원가입 성공:', userInfo);
-      navigation.navigate('Login');
-    } catch (error) {
-      Alert.alert('회원가입 실패', error.message || '알 수 없는 오류가 발생했습니다.');
-    }
+    navigation.navigate('Terms',{userInfo});
   };
 
   return (

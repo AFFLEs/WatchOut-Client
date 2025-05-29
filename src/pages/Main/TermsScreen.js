@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 
-export default function TermsScreen({ navigation }) {
+export default function TermsScreen({ navigation, route}) {
+  const { userInfo } = route.params;
+
   const handleBack = () => {
     navigation.goBack();
   };
 
   const handleAgree = () => {
-    // 동의 후 다음 단계로 이동
-    navigation.navigate('Terms2');
+    navigation.navigate('Terms2', { 
+      userInfo,
+      termsAgreement1: {
+        agreeEmergencyDataShare: true,
+        allowLocationTracking: true,
+      },
+    });
   };
+  
 
   return (
     <View style={styles.container}>
@@ -39,7 +47,10 @@ export default function TermsScreen({ navigation }) {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.</Text>
-        <TouchableOpacity style={styles.agreeButton} onPress={handleAgree}>
+        <TouchableOpacity 
+          style={styles.agreeButton} 
+          onPress={handleAgree}
+        >
           <Text style={styles.agreeButtonText}>동의하기</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.disagreeButton} onPress={handleBack}>
