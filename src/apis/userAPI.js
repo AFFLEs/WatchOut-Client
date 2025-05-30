@@ -18,5 +18,23 @@ export const userAPI = {
         } catch (error) {
             throw handleApiError(error);
         }
+    },
+    changeEmergencyToggle: async (agreeEmergencyDataShare) => {
+        try {
+            const response = await apiClient.patch(ENDPOINTS.USERS.SETTINGS.EMERGENCY, {
+                agreeEmergencyDataShare
+            });
+            return handleApiResponse(response);
+        } catch (error) {
+            throw handleApiError(error);
+        }
+    },
+    changeLocationToggle:async(allowLocationTracking)=>{
+        try{
+            const response = await apiClient.patch(ENDPOINTS.USERS.SETTINGS.LOCATION, allowLocationTracking);
+            return handleApiResponse(response);
+        }catch(error){
+            throw handleApiError(error);
+        }
     }
 }; 

@@ -3,10 +3,12 @@ import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity, Al
 import SectionCard from '../../components/SectionCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../App';
+import { userAPI } from '../../apis/userAPI';
 
 export default function ProfileScreen() {
+  const [emergencyDataSharing, setEmergencyDataSharing] = useState(true);
   const [locationDataSharing, setLocationDataSharing] = useState(true);
-  const [healthDataSharing, setHealthDataSharing] = useState(true);
+
   const [connectedWatch, setConnectedWatch] = useState(null);
   const { setIsAuthenticated, setAccessToken } = useContext(AuthContext);
 
@@ -26,6 +28,58 @@ export default function ProfileScreen() {
       Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
     }
   };
+  const changeEmergencyToggle = async () => {
+    Alert.alert(
+      '알림',
+      '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+      [
+        {
+          text: '취소',
+          style: 'cancel'
+        },
+        {
+          text: '확인',
+          onPress: async () => {
+            try {
+              const response = await userAPI.changeEmergencyToggle(!emergencyDataSharing);
+              setEmergencyDataSharing(!emergencyDataSharing);
+            } catch (error) {
+              console.error('응급 상황 시 데이터 공유 변경 실패:', error);
+              Alert.alert('오류', '설정 변경에 실패했습니다.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  const changeLocationToggle = async () => {
+    Alert.alert(
+      '알림',
+      '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+      [
+        {
+          text: '취소',
+          style: 'cancel'
+        },
+        {
+          text: '확인',
+          onPress: async () => {
+            try {
+              const response = await userAPI.changeLocationToggle({
+                allowLocationTracking: !locationDataSharing
+              });
+              setLocationDataSharing(!locationDataSharing);
+            } catch (error) {
+              console.error('위치 추적 허용 변경 실패:', error);
+              Alert.alert('오류', '설정 변경에 실패했습니다.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
 
   // 연결된 워치 정보를 가져오는 함수
   const fetchConnectedWatchInfo = async () => {
@@ -86,11 +140,10 @@ export default function ProfileScreen() {
             <Text style={styles.settingDesc}>비상 시 개인정보 공유를 허용합니다.</Text>
           </View>
           <Switch
-            value={locationDataSharing}
-            onValueChange={setLocationDataSharing}
+            value={emergencyDataSharing}
+            onValueChange={changeEmergencyToggle}
             trackColor={{ false: '#ccc', true: '#2563EB' }}
             thumbColor="#fff"
-            disabled={true}
           />
         </View>
         <View style={styles.settingRow}>
@@ -99,11 +152,10 @@ export default function ProfileScreen() {
             <Text style={styles.settingDesc}>주기적인 위치 추적을 허용합니다.</Text>
           </View>
           <Switch
-            value={healthDataSharing}
-            onValueChange={setHealthDataSharing}
+            value={locationDataSharing}
+            onValueChange={changeLocationToggle}
             trackColor={{ false: '#ccc', true: '#2563EB' }}
             thumbColor="#fff"
-            disabled={true}
           />
         </View>
         <Text style={styles.warningText}>동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.</Text>
