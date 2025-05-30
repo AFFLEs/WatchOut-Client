@@ -1,12 +1,44 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userAPI } from '../../apis/userAPI';
+import { AuthContext } from '../../../App';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { setIsAuthenticated, setAccessToken } = useContext(AuthContext);
 
   const handleSignUp = () => {
     navigation.navigate('SignUp');
+  };
+
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      Alert.alert('입력 오류', '이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
+    const userInfo = {
+      email: email.trim(),
+      password: password.trim(),
+    };
+
+    try {
+      const response = await userAPI.loginUserInfo(userInfo);
+      const { accessToken, refreshToken } = response.data;
+
+      await AsyncStorage.setItem('accessToken', accessToken);
+      await AsyncStorage.setItem('refreshToken', refreshToken);
+      
+      setAccessToken(accessToken);
+      setIsAuthenticated(true);
+      
+      console.log('로그인 성공');
+    } catch (error) {
+      console.error('로그인 에러:', error);
+      Alert.alert('로그인 실패', error.message || '알 수 없는 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -20,18 +52,22 @@ export default function LoginScreen({ navigation }) {
         <TextInput
           style={styles.input}
           value={email}
-          onChangeText={setEmail} 
+          onChangeText={setEmail}
+          placeholder="이메일을 입력하세요"
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <Text style={styles.inputText}>비밀번호</Text>
         <TextInput
           style={styles.input}
           value={password}
           onChangeText={setPassword}
-          secureTextEntry 
+          placeholder="비밀번호를 입력하세요"
+          secureTextEntry
         />
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>로그인</Text>
         </TouchableOpacity>
         <Text style={styles.signupText}>회원이 아니신가요?</Text>

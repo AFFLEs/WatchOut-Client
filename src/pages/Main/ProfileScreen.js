@@ -1,12 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity, Alert } from 'react-native';
 import SectionCard from '../../components/SectionCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../../App';
 
 export default function ProfileScreen() {
   const [locationDataSharing, setLocationDataSharing] = useState(true);
   const [healthDataSharing, setHealthDataSharing] = useState(true);
   const [connectedWatch, setConnectedWatch] = useState(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const { setIsAuthenticated, setAccessToken } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    try {
+      // 토큰 삭제
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
+      
+      // 인증 상태 초기화
+      setAccessToken(null);
+      setIsAuthenticated(false);
+      
+      console.log('로그아웃 성공');
+    } catch (error) {
+      console.error('로그아웃 중 오류:', error);
+      Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
+    }
+  };
+
   // 연결된 워치 정보를 가져오는 함수
   const fetchConnectedWatchInfo = async () => {
     try {
@@ -115,7 +135,10 @@ export default function ProfileScreen() {
 
       {/* 로그아웃 버튼 */}
       <View style={styles.logoutContainer}>
-        <TouchableOpacity style={[styles.logoutButton, styles.section]}>
+        <TouchableOpacity 
+          style={[styles.logoutButton, styles.section]}
+          onPress={handleLogout}
+        >
           <Text style={styles.logoutBtnText}>로그아웃</Text>
         </TouchableOpacity>
       </View>

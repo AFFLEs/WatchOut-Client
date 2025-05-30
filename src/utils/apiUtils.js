@@ -16,6 +16,26 @@ export const API_CODE = {
   INTERNAL_ERROR: 500
 };
 
+// API 응답 처리 함수
+export function handleApiResponse(response) {
+  if (response.data?.status === API_STATUS.SUCCESS) {
+    return response.data;
+  } else {
+    throw new APIError(
+      response.data?.message || '요청 처리 중 오류가 발생했습니다.',
+      response.data?.code || API_CODE.INTERNAL_ERROR,
+      response.data?.status || API_STATUS.FAIL
+    );
+  }
+}
+
+// API 에러 처리 함수
+export function handleApiError(error) {
+  const apiError = APIError.fromAxiosError(error);
+  return apiError;
+}
+
+
 // API 에러 클래스
 export class APIError extends Error {
   constructor(message, code, status) {

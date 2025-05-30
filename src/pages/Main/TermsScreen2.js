@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Switch, TextInput } from 'react-native';
 
-export default function TermsScreen({ navigation }) {
-  const [locationEnabled, setLocationEnabled] = useState(false);
-  const [emergencyEnabled, setEmergencyEnabled] = useState(false);
-
+export default function TermsScreen({ navigation, route }) {
+  const [vibrationAlert, setVibrationAlert] = useState(false);
+  const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(false);
+  const [guardianContact, setGuardianContact] = useState(''); 
+  const { userInfo, termsAgreement1 } = route.params;
   const handleBack = () => {
     navigation.goBack();
   };
 
   const handleAgree = () => {
-    if (locationEnabled && emergencyEnabled) {
+    if (vibrationAlert && enableWatchEmergencySignal && guardianContact.trim()) {
       // 모든 항목에 동의한 경우에만 진행
-      navigation.navigate('TravelDate');
+      navigation.navigate('TravelDate', { 
+        userInfo,
+        termsAgreement1,
+        termsAgreement2: {
+          vibrationAlert,
+          enableWatchEmergencySignal,
+          guardianContact,
+        },
+      });
     }
   };
 
@@ -31,10 +40,10 @@ export default function TermsScreen({ navigation }) {
             <Text style={styles.sectionTitle}>진동 경고 알림</Text>
             <Switch
               trackColor={{ false: "#E5E7EB", true: "#2563EB" }}
-              thumbColor={emergencyEnabled ? "#ffffff" : "#ffffff"}
+              thumbColor={vibrationAlert ? "#ffffff" : "#ffffff"}
               ios_backgroundColor="#E5E7EB"
-              onValueChange={setEmergencyEnabled}
-              value={emergencyEnabled}
+              onValueChange={setVibrationAlert}
+              value={vibrationAlert}
             />
           </View>
         </View>
@@ -44,24 +53,37 @@ export default function TermsScreen({ navigation }) {
             <Text style={styles.sectionTitle}>스마트 위치 긴급 구조 요청 전송 켜기</Text>
             <Switch
               trackColor={{ false: "#E5E7EB", true: "#EF4444" }}
-              thumbColor={locationEnabled ? "#ffffff" : "#ffffff"}
+              thumbColor={enableWatchEmergencySignal ? "#ffffff" : "#ffffff"}
               ios_backgroundColor="#E5E7EB"
-              onValueChange={setLocationEnabled}
-              value={locationEnabled}
+              onValueChange={setEnableWatchEmergencySignal}
+              value={enableWatchEmergencySignal}
             />
           </View>
           <Text style={styles.sectionSubtext}>
             스마트 워치의 위면을 5초 이상 누를 경우,{'\n'}현지 경찰서와 설정한 보호자에게 현재 상황 전달 및{'\n'}긴급 구조 요청이 전송됩니다.
           </Text>
         </View>
+
+        {/* 보호자 연락처 입력 필드 추가 */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>보호자 연락처</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="010-1234-5678"
+            value={guardianContact}
+            onChangeText={setGuardianContact}
+            keyboardType="phone-pad"
+            maxLength={13}
+          />
+        </View>
       </ScrollView>
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.</Text>
         <TouchableOpacity 
-          style={[styles.agreeButton, (!locationEnabled || !emergencyEnabled) && styles.agreeButtonDisabled]} 
+          style={[styles.agreeButton, (!vibrationAlert || !enableWatchEmergencySignal) && styles.agreeButtonDisabled]} 
           onPress={handleAgree}
-          disabled={!locationEnabled || !emergencyEnabled}
+          disabled={!vibrationAlert || !enableWatchEmergencySignal || !guardianContact.trim()}
         >
           <Text style={styles.agreeButtonText}>다음으로</Text>
         </TouchableOpacity>
@@ -161,5 +183,14 @@ const styles = StyleSheet.create({
     color: '#2563EB',
     fontSize: 14,
     fontWeight: '600',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 15,
+    marginTop: 10,
+    backgroundColor: '#F9FAFB',
   },
 }); 

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { userAPI } from '../../apis';
 
 export default function SignUpScreen({ navigation }) {
+ 
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
   const [email, setEmail] = useState('');
@@ -13,7 +15,7 @@ export default function SignUpScreen({ navigation }) {
     navigation.navigate('Login');
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     // 입력값 검증
     if (!name || !birthday || !email || !password || !passwordConfirm || !phone) {
       Alert.alert('회원가입 오류', '모든 필드를 입력해주세요.');
@@ -24,9 +26,15 @@ export default function SignUpScreen({ navigation }) {
       Alert.alert('비밀번호 오류', '비밀번호가 일치하지 않습니다.');
       return;
     }
-
-    
-    navigation.navigate('Terms');
+    const userInfo = {
+      name,
+      birthdate: birthday,
+      email,
+      password,
+      confirmPassword: passwordConfirm,
+      phoneNumber: phone
+    };
+    navigation.navigate('Terms',{userInfo});
   };
 
   return (
@@ -48,31 +56,39 @@ export default function SignUpScreen({ navigation }) {
             placeholder="YYYY-MM-DD"
             value={birthday}
             onChangeText={setBirthday}
+            keyboardType='number-pad'
+            maxLength={10}
           />
           <Text style={styles.inputText}>이메일</Text>
           <TextInput
             style={styles.input}
             value={email}
             onChangeText={setEmail}
+            keyboardType='email-address'
+            autoCapitalize='none'
           />
           <Text style={styles.inputText}>비밀번호</Text>
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
+            secureTextEntry={true}
           />
           <Text style={styles.inputText}>비밀번호 확인</Text>
           <TextInput
             style={styles.input}
             value={passwordConfirm}
             onChangeText={setPasswordConfirm}
+            secureTextEntry={true}
           />
           <Text style={styles.inputText}>연락처</Text>
           <TextInput
             style={styles.input}
-            placeholder="010-1234-5678"
+            placeholder="01012345678"
             value={phone}
             onChangeText={setPhone}
+            keyboardType='phone-pad'
+            maxLength={11}
           />
       </View>
       <View style={styles.buttonContainer}>

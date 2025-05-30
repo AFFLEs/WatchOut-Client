@@ -16,7 +16,7 @@ const authNotRequired = ['/signup', '/login'];
 // 요청 인터셉터
 apiClient.interceptors.request.use(
     async config => {
-        const token = await AsyncStorage.getItem('authToken');
+        const token = await AsyncStorage.getItem('accessToken');
 
         if (token && !authNotRequired.includes(config.url || '')) {
             config.headers.Authorization = `Bearer ${token}`;
