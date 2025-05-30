@@ -29,55 +29,73 @@ export default function ProfileScreen() {
     }
   };
   const changeEmergencyToggle = async () => {
-    Alert.alert(
-      '알림',
-      '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
-      [
-        {
-          text: '취소',
-          style: 'cancel'
-        },
-        {
-          text: '확인',
-          onPress: async () => {
-            try {
-              const response = await userAPI.changeEmergencyToggle(!emergencyDataSharing);
-              setEmergencyDataSharing(!emergencyDataSharing);
-            } catch (error) {
-              console.error('응급 상황 시 데이터 공유 변경 실패:', error);
-              Alert.alert('오류', '설정 변경에 실패했습니다.');
+    if (emergencyDataSharing) {  
+      Alert.alert(
+        '알림',
+        '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+        [
+          {
+            text: '취소',
+            style: 'cancel'
+          },
+          {
+            text: '확인',
+            onPress: async () => {
+              try {
+                const response = await userAPI.changeEmergencyToggle(false);
+                setEmergencyDataSharing(false);
+              } catch (error) {
+                console.error('응급 상황 시 데이터 공유 변경 실패:', error);
+                Alert.alert('오류', '설정 변경에 실패했습니다.');
+              }
             }
           }
-        }
-      ]
-    );
+        ]
+      );
+    } else {  
+      try {
+        const response = await userAPI.changeEmergencyToggle(true);
+        setEmergencyDataSharing(true);
+      } catch (error) {
+        console.error('응급 상황 시 데이터 공유 변경 실패:', error);
+        Alert.alert('오류', '설정 변경에 실패했습니다.');
+      }
+    }
   };
 
   const changeLocationToggle = async () => {
-    Alert.alert(
-      '알림',
-      '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
-      [
-        {
-          text: '취소',
-          style: 'cancel'
-        },
-        {
-          text: '확인',
-          onPress: async () => {
-            try {
-              const response = await userAPI.changeLocationToggle({
-                allowLocationTracking: !locationDataSharing
-              });
-              setLocationDataSharing(!locationDataSharing);
-            } catch (error) {
-              console.error('위치 추적 허용 변경 실패:', error);
-              Alert.alert('오류', '설정 변경에 실패했습니다.');
+    if (locationDataSharing) { 
+      Alert.alert(
+        '알림',
+        '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+        [
+          {
+            text: '취소',
+            style: 'cancel'
+          },
+          {
+            text: '확인',
+            onPress: async () => {
+              try {
+                const response = await userAPI.changeLocationToggle(false);
+                setLocationDataSharing(false);
+              } catch (error) {
+                console.error('위치 추적 허용 변경 실패:', error);
+                Alert.alert('오류', '설정 변경에 실패했습니다.');
+              }
             }
           }
-        }
-      ]
-    );
+        ]
+      );
+    } else {  
+      try {
+        const response = await userAPI.changeLocationToggle(true);
+        setLocationDataSharing(true);
+      } catch (error) {
+        console.error('위치 추적 허용 변경 실패:', error);
+        Alert.alert('오류', '설정 변경에 실패했습니다.');
+      }
+    }
   };
 
 

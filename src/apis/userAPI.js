@@ -29,11 +29,13 @@ export const userAPI = {
             throw handleApiError(error);
         }
     },
-    changeLocationToggle:async(allowLocationTracking)=>{
-        try{
-            const response = await apiClient.patch(ENDPOINTS.USERS.SETTINGS.LOCATION, allowLocationTracking);
+    changeLocationToggle: async (allowLocationTracking) => {
+        try {
+            const response = await apiClient.patch(ENDPOINTS.USERS.SETTINGS.LOCATION, {
+                allowLocationTracking
+            });
             return handleApiResponse(response);
-        }catch(error){
+        } catch (error) {
             throw handleApiError(error);
         }
     }
