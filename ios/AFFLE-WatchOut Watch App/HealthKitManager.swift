@@ -56,15 +56,24 @@ class HealthKitManager: ObservableObject {
     
     func fetchActiveEnergyBurned() {
         guard let type = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
-        let sort = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
-        let query = HKSampleQuery(sampleType: type, predicate: nil, limit: 1, sortDescriptors: [sort]) { [weak self] _, samples, _ in
-            if let sample = samples?.first as? HKQuantitySample {
-                let value = sample.quantity.doubleValue(for: HKUnit.kilocalorie())
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: Date())
+        let now = Date()
+
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: .strictStartDate)
+
+        let query = HKStatisticsQuery(quantityType: type, quantitySamplePredicate: predicate, options: .cumulativeSum) { [weak self] _, result, _ in
+            if let sum = result?.sumQuantity() {
+                let value = sum.doubleValue(for: HKUnit.kilocalorie())
+                print("🔥 오늘 하루 소모한 칼로리 양: \(value) kcal") //디버깅용
                 DispatchQueue.main.async {
                     self?.activeEnergyBurned = value
                 }
+            } else {
+                print("오늘 축적된 칼로리 데이터 없음")
             }
         }
+
         healthStore.execute(query)
     }
 
