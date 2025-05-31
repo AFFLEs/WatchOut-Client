@@ -3,6 +3,7 @@ import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import Geolocation from 'react-native-geolocation-service';
 import tzlookup from 'tz-lookup';
 
+
 export const requestLocationPermission = async () => {
   if (Platform.OS === 'ios') {
     const result = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);

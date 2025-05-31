@@ -9,11 +9,8 @@ import EmergencyAidCard from '../../components/EmergencyAidCard';
 import PersonalInfoCard from '../../components/PersonalInfoCard';
 import { requestLocationPermission, getCurrentLocation, getLocationInfo } from '../../utils/locationUtils';
 import { getFormattedTimes } from '../../utils/timeUtils';
+import { fetchAllNearbyInstitutions } from '../../utils/mapUtils';
 
-const institutions = [
-  { name: 'Newyork University Hospital', distance: '1.2km', type: 'hospital' },
-  { name: 'New York City Police Department (NYPD)', distance: '2.5km', type: 'embassy' },
-];
 
 export default function HomeScreen() {
   const [localTime, setLocalTime] = useState('--:--');
@@ -21,6 +18,9 @@ export default function HomeScreen() {
   const [timezone, setTimezone] = useState(null);
   const [city, setCity] = useState(null);
   const [country, setCountry] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [institutions, setInstitutions] = useState([]);
 
   const updateTimes = () => {
     const times = getFormattedTimes(timezone);
@@ -37,8 +37,10 @@ export default function HomeScreen() {
 
     try {
       const { latitude, longitude } = await getCurrentLocation();
+      setLatitude(latitude);
+      setLongitude(longitude);
+
       const locationInfo = getLocationInfo(latitude, longitude);
-      
       if (locationInfo) {
         const { timezone: newTimezone, city: newCity, country: newCountry } = locationInfo;
         setTimezone(newTimezone);
@@ -50,8 +52,38 @@ export default function HomeScreen() {
     }
   };
 
+  // 위치 정보 및 시간 초기화
   useEffect(() => {
-    initializeLocation();
+    const setup = async () => {
+      try {
+        await initializeLocation();
+      } catch (error) {
+        console.error('위치 정보 초기화 오류:', error);
+      }
+    };
+    
+    setup();
+  }, []);
+
+  // 주변 기관 정보 가져오기
+  useEffect(() => {
+    const fetchInstitutions = async () => {
+      if (latitude && longitude) {
+        try {
+          const nearbyInstitutions = await fetchAllNearbyInstitutions(latitude, longitude);
+          setInstitutions(nearbyInstitutions);
+        } catch (error) {
+          console.error('주변 기관 정보 가져오기 오류:', error);
+        }
+      }
+    };
+
+    fetchInstitutions();
+  }, [latitude, longitude]);
+
+  // 시간 업데이트
+  useEffect(() => {
+    if (!timezone) return;
 
     const timeInterval = setInterval(updateTimes, 1000);
     return () => clearInterval(timeInterval);
@@ -79,7 +111,7 @@ export default function HomeScreen() {
       </SectionCard>
 
       <SectionCard title="근처 응급 기관 정보">
-        <InstitutionList institutions={institutions} city={city}/>
+        <InstitutionList institutions={institutions}/>
       </SectionCard>
 
       <SectionCard title="긴급 구조 설정">
