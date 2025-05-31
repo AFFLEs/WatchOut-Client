@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, Modal, TextInput, Button } from 'react-native';
 import ModalButton from './ModalButton';
 import ModalCard from './ModalCard';
+import SwitchRow from './SwitchRow';
 import { userAPI } from '../apis/userAPI';
 
 const EmergencyAidCard = ({ 
@@ -52,15 +53,12 @@ const EmergencyAidCard = ({
 
   return (
     <View style={styles.card}>
-      <View style={styles.row}>
-        <Text style={styles.title}>스마트 워치 긴급 구조 요청 전송 켜기</Text>
-        <Switch
-          value={enableWatchEmergencySignal}
-          onValueChange={handleToggle}
-          trackColor={{ false: '#ccc', true: '#2563EB' }}
-          thumbColor={enableWatchEmergencySignal ? '#fff' : '#fff'}
-        />
-      </View>
+      <SwitchRow
+        label="스마트 워치 긴급 구조 요청 전송 켜기"
+        value={enableWatchEmergencySignal}
+        onValueChange={handleToggle}
+        isTop={false}
+      />
       <Text style={styles.desc}>
         스마트 워치의 화면을 5초 이상 누를 경우, 현지 경찰서와 설정한 보호자에게 현재 상황 전달 및 긴급 구조 요청이 전송됩니다.
       </Text>

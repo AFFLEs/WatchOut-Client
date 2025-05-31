@@ -19,10 +19,7 @@ export default function MonitoringScreen() {
 
   // Data
   const health = { steps: 12543, bpm: 82, temperature: 37.2 };
-  // const institutions = [
-  //   { name: 'Newyork University Hospital', distance: '1.2km', type: 'hospital' },
-  //   { name: '한국 대사관', distance: '2.5km', type: 'embassy' },
-  // ];
+
 
   // 토글 수정 후 안내 메시지 출력 + 더미 API 호출
   const handleToggle = async () => {
@@ -76,6 +73,7 @@ export default function MonitoringScreen() {
           label="진동 경고 알림"
           value={vibrationAlert}
           onValueChange={handleToggle}
+          isTop={true}
         />
       </SectionCard>
 

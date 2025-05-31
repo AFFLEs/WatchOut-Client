@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SectionCard from '../../components/SectionCard';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
-
+import { travelAPI } from '../../apis/travelAPI';
+import { formatDate } from '../../utils/timeUtils';
 
 export default function TravelRecordDetailScreen({ route }) {
-  const { dateLabel, schedules, city, country } = route.params;
+  const { dateLabel, city, country } = route.params;
   const [coordinates, setCoordinates] = useState([]);
+  const [schedules, setSchedules] = useState(null);
+  
   
   // 제주도 중심 좌표를 기본값으로 설정
   const [region, setRegion] = useState({
@@ -16,41 +19,53 @@ export default function TravelRecordDetailScreen({ route }) {
     longitudeDelta: 0.5,
   });
 
-  useEffect(() => {
-    if (schedules && schedules.length > 0) {
-      const sortedSchedules = [...schedules].sort((a, b) => {
-        const timeA = new Date(`2000/01/01 ${a.time}`).getTime();
-        const timeB = new Date(`2000/01/01 ${b.time}`).getTime();
-        return timeA - timeB;
-      });
+  const fetchDetailTravelSpot = async () => {
+    try {
+      const response = await travelAPI.getDetailTravelSpot(dateLabel);
+      setSchedules(response.data);
 
-      const coords = sortedSchedules
-        .filter(schedule => schedule.latitude && schedule.longitude)
-        .map(schedule => ({
-          latitude: schedule.latitude,
-          longitude: schedule.longitude
-        }));
-
-      setCoordinates(coords);
-
-      // 모든 마커가 보이도록 지도 중심과 줌 레벨 조정
-      if (coords.length > 0) {
-        const latitudes = coords.map(coord => coord.latitude);
-        const longitudes = coords.map(coord => coord.longitude);
-        const minLat = Math.min(...latitudes);
-        const maxLat = Math.max(...latitudes);
-        const minLng = Math.min(...longitudes);
-        const maxLng = Math.max(...longitudes);
-
-        setRegion({
-          latitude: (minLat + maxLat) / 2,
-          longitude: (minLng + maxLng) / 2,
-          latitudeDelta: (maxLat - minLat) * 1.5 || 0.02,
-          longitudeDelta: (maxLng - minLng) * 1.5 || 0.02,
+      if (schedules && schedules.length > 0) {
+        const sortedSchedules = [...schedules].sort((a, b) => {
+          const timeA = new Date(`2000/01/01 ${a.time}`).getTime();
+          const timeB = new Date(`2000/01/01 ${b.time}`).getTime();
+          return timeA - timeB;
         });
+  
+        const coords = sortedSchedules
+          .filter(schedule => schedule.latitude && schedule.longitude)
+          .map(schedule => ({
+            latitude: schedule.latitude,
+            longitude: schedule.longitude
+          }));
+  
+        setCoordinates(coords);
+  
+        // 모든 마커가 보이도록 지도 중심과 줌 레벨 조정
+        if (coords.length > 0) {
+          const latitudes = coords.map(coord => coord.latitude);
+          const longitudes = coords.map(coord => coord.longitude);
+          const minLat = Math.min(...latitudes);
+          const maxLat = Math.max(...latitudes);
+          const minLng = Math.min(...longitudes);
+          const maxLng = Math.max(...longitudes);
+  
+          setRegion({
+            latitude: (minLat + maxLat) / 2,
+            longitude: (minLng + maxLng) / 2,
+            latitudeDelta: (maxLat - minLat) * 1.5 || 0.02,
+            longitudeDelta: (maxLng - minLng) * 1.5 || 0.02,
+          });
+        }
       }
+    } catch (error) {
+      console.error('Failed to fetch detail travel spot:', error);
     }
-  }, [schedules]);
+  };
+
+  useEffect(() => {
+    fetchDetailTravelSpot();
+  }, []);
+
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }}>
@@ -76,7 +91,7 @@ export default function TravelRecordDetailScreen({ route }) {
             />
           )}
         </MapView>
-        <Text style={styles.title}>{dateLabel}</Text>
+        <Text style={styles.title}>{formatDate(dateLabel)}</Text>
         <Text style={styles.subtitle}>{city}, {country}</Text>
         <Text style={styles.sectionTitle}>일정 목록</Text>
         {(!schedules || schedules.length === 0) ? (
@@ -88,11 +103,11 @@ export default function TravelRecordDetailScreen({ route }) {
             <View key={idx} style={styles.card}>
               <View style={styles.row}>
                 <View style={styles.timeBadge}>
-                  <Text style={styles.timeText}>{item.time}</Text>
+                  <Text style={styles.timeText}>{item.spotTime || 'PLAN'}</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.place}>{item.place}</Text>
-                  <Text style={styles.address}>{item.address}</Text>
+                  <Text style={styles.place}>{item.spotName}</Text>
+                  <Text style={styles.address}>{item.spotDetail}</Text>
                 </View>
               </View>
             </View>

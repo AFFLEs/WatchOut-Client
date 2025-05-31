@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoardingNavigator from './src/navigations/OnBoardingNavigator';
 import BottomTabNavigator from './src/navigations/BottomTabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LocationProvider } from './src/contexts/LocationContext';
 
 const Stack = createNativeStackNavigator();
 export const AuthContext = createContext();
@@ -38,15 +39,17 @@ const AppContent = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {isAuthenticated ? (
-            <Stack.Screen name="Main" component={BottomTabNavigator} />
-          ) : (
-            <Stack.Screen name="OnBoarding" component={OnBoardingNavigator} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <LocationProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {isAuthenticated ? (
+              <Stack.Screen name="Main" component={BottomTabNavigator} />
+            ) : (
+              <Stack.Screen name="OnBoarding" component={OnBoardingNavigator} />
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </LocationProvider>
     </AuthContext.Provider>
   );
 };

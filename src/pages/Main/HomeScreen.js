@@ -8,26 +8,28 @@ import TimeCard from '../../components/TimeCard';
 import EmergencyAidCard from '../../components/EmergencyAidCard';
 import PersonalInfoCard from '../../components/PersonalInfoCard';
 import { requestLocationPermission, getCurrentLocation, getLocationInfo } from '../../utils/locationUtils';
-import { getFormattedTimes } from '../../utils/timeUtils';
+import { getLocationTimes } from '../../utils/timeUtils';
 import { fetchAllNearbyInstitutions } from '../../utils/mapUtils';
 import { userAPI } from '../../apis/userAPI';
+import { useLocation } from '../../contexts/LocationContext';
+
 
 export default function HomeScreen() {
   const [localTime, setLocalTime] = useState('--:--');
   const [homeTime, setHomeTime] = useState('--:--');
   const [timezone, setTimezone] = useState(null);
-  const [city, setCity] = useState(null);
   const [country, setCountry] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [city, setCity] = useState(null);
   const [institutions, setInstitutions] = useState([]);
   const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(false);
-  const [guardianPhone, setGuardianPhone] = useState('보호자 전화번호를 설정해주세요.')  ;
-  const [name, setName] = useState('한예원')  ;
-  const [birth, setBirth] = useState('1990-01-01')  ;
+  const [guardianPhone, setGuardianPhone] = useState('보호자 전화번호를 설정해주세요.');
+  const [name, setName] = useState('알수없음');
+  const [birth, setBirth] = useState('알수없음');
+  const { locationInfo, setLocationInfo } = useLocation();
+  
 
   const updateTimes = () => {
-    const times = getFormattedTimes(timezone);
+    const times = getLocationTimes(timezone);
     setLocalTime(times.localTime);
     setHomeTime(times.homeTime);
   };
@@ -41,12 +43,11 @@ export default function HomeScreen() {
 
     try {
       const { latitude, longitude } = await getCurrentLocation();
-      setLatitude(latitude);
-      setLongitude(longitude);
-
-      const locationInfo = getLocationInfo(latitude, longitude);
+      const locationInfo = await getLocationInfo(latitude, longitude);
+      
       if (locationInfo) {
         const { timezone: newTimezone, city: newCity, country: newCountry } = locationInfo;
+        setLocationInfo({ city: newCity, country: newCountry, latitude, longitude }); 
         setTimezone(newTimezone);
         setCity(newCity);
         setCountry(newCountry);
@@ -76,9 +77,12 @@ export default function HomeScreen() {
   // 주변 기관 정보 가져오기
   useEffect(() => {
     const fetchInstitutions = async () => {
-      if (latitude && longitude) {
+      if (locationInfo?.latitude && locationInfo?.longitude) {
         try {
-          const nearbyInstitutions = await fetchAllNearbyInstitutions(latitude, longitude);
+          const nearbyInstitutions = await fetchAllNearbyInstitutions(
+            locationInfo.latitude,
+            locationInfo.longitude
+          );
           setInstitutions(nearbyInstitutions);
         } catch (error) {
           console.error('주변 기관 정보 가져오기 오류:', error);
@@ -87,7 +91,7 @@ export default function HomeScreen() {
     };
 
     fetchInstitutions();
-  }, [latitude, longitude]);
+  }, [locationInfo?.latitude, locationInfo?.longitude]);
 
   // 시간 업데이트
   useEffect(() => {

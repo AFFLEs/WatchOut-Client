@@ -9,6 +9,8 @@ import ExportTravelRecord from '../../components/ExportTravelRecord';
 import ScheduleInputModal from '../../components/ScheduleInputModal';
 import { useNavigation } from '@react-navigation/native';
 import { travelAPI } from '../../apis/travelAPI';
+import { useLocation } from '../../contexts/LocationContext';
+import { formatDate } from '../../utils/timeUtils';
 
 export default function TravelScreen() {
   const [scheduleByDate, setScheduleByDate] = useState({
@@ -62,6 +64,7 @@ export default function TravelScreen() {
     departDate: '',
     arriveDate: ''
   });
+  const { locationInfo } = useLocation();
   const navigation = useNavigation();
 
   // 저장 핸들러
@@ -70,13 +73,23 @@ export default function TravelScreen() {
     setModalVisible(false);
   };
 
+  const fetchLatestTravelSpot = async () => {
+    try {
+      const response = await travelAPI.getLatestTravelSpot();
+      setScheduleByDate(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Failed to fetch latest travel spot:', error);
+    }
+  };
+
   useEffect(() => {
     const fetchTravelDates = async () => {
       try {
         const response = await travelAPI.getTravelDate();
         setTravelDates({
-          departDate: response.data.data.departDate,
-          arriveDate: response.data.data.arriveDate
+          departDate: formatDate(response.data.departDate),
+          arriveDate: formatDate(response.data.arriveDate)
         });
       } catch (error) {
         console.error('Failed to fetch travel dates:', error);
@@ -84,23 +97,16 @@ export default function TravelScreen() {
     };
 
     fetchTravelDates();
+    fetchLatestTravelSpot();
   }, []);
 
-  // 데이터 포맷팅
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const weekDay = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-    return `${month}월 ${day}일 (${weekDay})`;
-  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
       <SectionCard title="여행 일정">
         <TravelScheduleCard 
-          departureDate={travelDates.departDate ? formatDate(travelDates.departDate) : ' '} 
-          returnDate={travelDates.arriveDate ? formatDate(travelDates.arriveDate) : ' '}
+          departureDate={travelDates.departDate} 
+          returnDate={travelDates.arriveDate}
         />
       </SectionCard>
       <SectionCard title="여행 기록 카드">
@@ -108,25 +114,18 @@ export default function TravelScreen() {
         {Object.entries(scheduleByDate).map(([dateLabel, schedules], idx) => (
           <TravelRecordCard
             key={dateLabel}
-            dateLabel={dateLabel}
+            dateLabel={formatDate(dateLabel)}
             city="New York"
             country="USA"
             schedules={schedules.map(schedule => ({
-              time: schedule.spotTime,
+              time: schedule.spotTime || 'PLAN',
               place: schedule.spotName,
               address: schedule.spotDetail,
               latitude: schedule.latitude,
               longitude: schedule.longitude
             }))}
             onCheckSchedule={() => navigation.navigate('TravelRecordDetail', {
-              dateLabel,
-              schedules: schedules.map(schedule => ({
-                time: schedule.spotTime,
-                place: schedule.spotName,
-                address: schedule.spotDetail,
-                latitude: schedule.latitude,
-                longitude: schedule.longitude
-              })),
+              dateLabel: dateLabel,
               city: "New York",
               country: "USA",
             })}
@@ -140,8 +139,8 @@ export default function TravelScreen() {
           onRequestClose={() => setModalVisible(false)}
           onSave={handleSaveSchedule}
           initialData={scheduleByDate}
-          departureDate="2025년 5월 19일 (월)"
-          returnDate="2025년 5월 23일 (금)"
+          departureDate={travelDates.departDate}
+          returnDate={travelDates.arriveDate}
         />
       </SectionCard>
     </ScrollView>

@@ -19,7 +19,7 @@ export const ENDPOINTS = {
   },
   SPOT: {
     BASE: '/api/spots',
-    LATEST: (date) => `/api/spots/latest?date=${date}`,
+    LATEST: `/api/spots/latest`,
     DETAIL: (date) => `/api/spots/detail?date=${date}`,
     DELETE: (spotId) => `/api/spots/${spotId}`
   },
