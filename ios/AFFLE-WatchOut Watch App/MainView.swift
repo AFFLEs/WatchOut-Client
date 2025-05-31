@@ -1,56 +1,67 @@
 import SwiftUI
 import Foundation
 
-struct ContentView: View {
+struct MainView: View {
+    @StateObject private var healthManager = HealthKitManager()
+    @State private var healthAuthorized = false
     @EnvironmentObject var connectionHelper: ConnectionHelper
+    @Environment(\.scenePhase) var scenePhase
     @State private var now = Date()
-    
+
     var localTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: now)
     }
-    
+
     var localDate: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "M월 d일 (E)"
         return formatter.string(from: now)
     }
-    
-    let koreaTime = "22:24"
-    let koreaDate = "5월 5일 (수)"
-    let steps = 9543
-    let heartRate = 82
-    let temp = 37.2
-    
+
+    var koreaTime: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: now)
+    }
+
+    var koreaDate: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        formatter.dateFormat = "M월 d일 (E)"
+        return formatter.string(from: now)
+    }
+
     var body: some View {
         ZStack {
             Rectangle()
                 .fill(Color(red: 0/255, green: 32/255, blue: 158/255))
                 .edgesIgnoringSafeArea(.all)
-            
-            if !connectionHelper.isConnected {
+            if connectionHelper.isConnected {
                 VStack(spacing: 8) {
                     LogoHeaderView()
-                    
                     TimeInfoView(
                         localTime: localTime,
                         localDate: localDate,
                         koreaTime: koreaTime,
                         koreaDate: koreaDate
                     )
-                    
+
                     LineDivider()
                         .padding(.vertical, 8)
-                    
+
                     BottomStatsView(
-                        steps: steps,
-                        heartRate: heartRate,
-                        temp: temp
+                        steps: healthManager.steps,
+                        heartRate: healthManager.heartRate,
+                        activeEnergy: healthManager.activeEnergyBurned
                     )
-                    
+
                     MessageView(message: connectionHelper.receivedMessage)
                 }
                 .padding(12)
@@ -58,16 +69,46 @@ struct ContentView: View {
                 VStack(alignment: .center) {
                     LogoHeaderView()
                     Spacer().frame(height: 30)
-                    
+
                     Text("워치와 휴대폰이 연결되지 않았어요")
                         .foregroundColor(.yellow)
                         .font(.system(size: 15, weight: .bold))
                         .multilineTextAlignment(.center)
-                    
+
                     Spacer()
                 }
             }
         }
+        .onAppear {
+            // 1초마다 시간 갱신
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.now = Date()
+            }
+
+            // HealthKit 권한 요청 후 초기 fetch
+            healthManager.requestAuthorization { success in
+                if success {
+                    fetchAllHealthData()
+                }
+            }
+
+            // 5분마다 health data fetch
+            Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
+                fetchAllHealthData()
+            }
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                // 앱이 다시 포그라운드로 전환되면 health data fetch
+                fetchAllHealthData()
+            }
+        }
+    }
+
+    private func fetchAllHealthData() {
+        healthManager.fetchSteps()
+        healthManager.fetchHeartRate()
+        healthManager.fetchActiveEnergyBurned()
     }
 }
 
@@ -91,7 +132,7 @@ struct TimeInfoView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 13) {
-            VStack(alignment: .trailing, spacing: 5) {
+            VStack(alignment: .center, spacing: 5) {
                 Text("현지 시간")
                     .font(.system(size: 15, weight: .bold))
                     .foregroundColor(.white)
@@ -103,7 +144,7 @@ struct TimeInfoView: View {
                     .foregroundColor(.white)
             }
             
-            VStack(alignment: .trailing, spacing: 5) {
+            VStack(alignment: .center, spacing: 5) {
                 Text("한국 시각")
                     .font(.system(size: 15, weight: .bold))
                     .foregroundColor(.white)
@@ -145,14 +186,14 @@ struct LineDivider: View {
 
 struct BottomStatsView: View {
     let steps: Int
-    let heartRate: Int
-    let temp: Double
+    let heartRate: Double
+    let activeEnergy: Double
     
     var body: some View {
         HStack(spacing: 20) {
             StatItemView(icon: "stepIcon", value: "\(steps)")
-            StatItemView(icon: "heartIcon", value: "\(heartRate)")
-            StatItemView(icon: "tempIcon", value: "\(temp)")
+            StatItemView(icon: "heartIcon",  value: String(format: "%.0f", heartRate))
+            StatItemView(icon: "kcalIcon", value: String(format: "%.0f", activeEnergy))
         }
         .padding(.bottom, 8)
     }
@@ -163,9 +204,10 @@ struct StatItemView: View {
     let value: String
     
     var body: some View {
-        VStack(spacing: 6) {
+      VStack(alignment:.center, spacing: 6) {
             Image(icon)
                 .foregroundColor(.white)
+                .frame(width: 11.79, height: 11.79)
             Text(value)
                 .foregroundColor(.white)
                 .font(.system(size: 13, weight: .bold))
@@ -196,7 +238,7 @@ struct MessageView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+      MainView()
             .environmentObject(ConnectionHelper())
     }
 }

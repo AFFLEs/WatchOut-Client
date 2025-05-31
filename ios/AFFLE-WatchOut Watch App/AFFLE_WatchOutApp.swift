@@ -14,7 +14,7 @@ struct AFFLE_WatchOut_Watch_AppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
                 .environmentObject(connectionHelper)
         }
     }
