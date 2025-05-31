@@ -55,5 +55,9 @@
         <string>google.navigation</string>
         <string>maps</string>
     </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>현재 위치를 기반으로 근처 응급 기관 정보와 현지 시간을 제공하기 위해 위치 정보가 필요합니다.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>앱 사용 중 및 백그라운드에서 위치 정보를 사용합니다</string>
 </dict>
 </plist> 
