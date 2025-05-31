@@ -6,17 +6,23 @@ import AlertCard from '../../components/AlertCard';
 import SwitchRow from '../../components/SwitchRow';
 import  InstitutionList from '../../components/InstitutionList';
 import ModalCard from '../../components/ModalCard';
+import { getCurrentLocation } from '../../utils/locationUtils';
+import { fetchAllNearbyInstitutions } from '../../utils/mapUtils';
+import { useEffect } from 'react';
 
 export default function MonitoringScreen() {
   const [vibrationAlert, setVibrationAlert] = useState(true);
   const [noticeModal, setNoticeModal] = useState({ visible: false, message: '' });
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [institutions, setInstitutions] = useState([]);
 
   // Data
   const health = { steps: 12543, bpm: 82, temperature: 37.2 };
-  const institutions = [
-    { name: 'Newyork University Hospital', distance: '1.2km', type: 'hospital' },
-    { name: '한국 대사관', distance: '2.5km', type: 'embassy' },
-  ];
+  // const institutions = [
+  //   { name: 'Newyork University Hospital', distance: '1.2km', type: 'hospital' },
+  //   { name: '한국 대사관', distance: '2.5km', type: 'embassy' },
+  // ];
 
   // 토글 수정 후 안내 메시지 출력 + 더미 API 호출
   const handleToggle = async () => {
@@ -37,6 +43,25 @@ export default function MonitoringScreen() {
   const updateVibrationAlertSettingAPI = async (newVibrationAlert) => {
     return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
   };
+
+  useEffect(() => {
+    const fetchInstitutions = async () => {
+      const { latitude, longitude } = await getCurrentLocation();
+      setLatitude(latitude);
+      setLongitude(longitude);
+
+      if (latitude && longitude) {
+        try {
+          const nearbyInstitutions = await fetchAllNearbyInstitutions(latitude, longitude);
+          setInstitutions(nearbyInstitutions);
+        } catch (error) {
+          console.error('주변 기관 정보 가져오기 오류:', error);
+        }
+      }
+    };
+
+    fetchInstitutions();
+  }, [latitude, longitude]);
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
@@ -64,7 +89,7 @@ export default function MonitoringScreen() {
           type="rainstorm" 
           timeAgo="2시간 전" 
         />
-        <View style={{ backgroundColor: '#F1F2F4',  borderRadius: 10, padding: 10, marginTop: 5 }}>
+        <View style={{ backgroundColor: '#fff',  borderRadius: 10, padding: 10, marginTop: 5 }}>
           <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#222B3A'}}>근처 응급 기관 정보</Text>
           <InstitutionList institutions={institutions} />
         </View>

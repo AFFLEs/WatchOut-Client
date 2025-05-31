@@ -4,7 +4,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Linking, Platform, Ale
 const typeIcons = {
   hospital: require('../assets/icons/hospital.png'),
   embassy: require('../assets/icons/embassy.png'),
-  // 필요시 추가
+  fire_station: require('../assets/icons/fire-station.png'),
+  police: require('../assets/icons/police.png'),
+};
+
+const typeNames = {
+  hospital: '종합 병원',
+  embassy: '대사관',
+  fire_station: '소방서',
+  police: '경찰서',
 };
 
 export default function InstitutionCard({ name, distance, type, city }) {
@@ -56,7 +64,7 @@ export default function InstitutionCard({ name, distance, type, city }) {
       <Image source={typeIcons[type]} style={styles.icon} resizeMode="contain" />
       <View>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.distance}>{distance} 거리</Text>
+        <Text style={styles.distance}>{distance}km 거리, {typeNames[type]}</Text>
       </View>
     </TouchableOpacity>
   );

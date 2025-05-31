@@ -6,7 +6,7 @@ export const travelAPI = {
   getTravelDate: async () => {
     try {
       const response = await apiClient.get(ENDPOINTS.TRAVEL.BASE);
-      return handleApiResponse(response);
+      return response;
     } catch (error) {
       throw handleApiError(error);
     }

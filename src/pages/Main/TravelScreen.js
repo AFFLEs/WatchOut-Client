@@ -58,6 +58,10 @@ export default function TravelScreen() {
     ],
   });
   const [modalVisible, setModalVisible] = useState(false);
+  const [travelDates, setTravelDates] = useState({
+    departDate: '',
+    arriveDate: ''
+  });
   const navigation = useNavigation();
 
   // 저장 핸들러
@@ -67,14 +71,37 @@ export default function TravelScreen() {
   };
 
   useEffect(() => {
-    travelAPI.getTravelDate().then(response => {
-    });
+    const fetchTravelDates = async () => {
+      try {
+        const response = await travelAPI.getTravelDate();
+        setTravelDates({
+          departDate: response.data.data.departDate,
+          arriveDate: response.data.data.arriveDate
+        });
+      } catch (error) {
+        console.error('Failed to fetch travel dates:', error);
+      }
+    };
+
+    fetchTravelDates();
   }, []);
+
+  // 데이터 포맷팅
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const weekDay = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    return `${month}월 ${day}일 (${weekDay})`;
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
       <SectionCard title="여행 일정">
-        <TravelScheduleCard departureDate="05월 19일" returnDate="05월 23일" />
+        <TravelScheduleCard 
+          departureDate={travelDates.departDate ? formatDate(travelDates.departDate) : ' '} 
+          returnDate={travelDates.arriveDate ? formatDate(travelDates.arriveDate) : ' '}
+        />
       </SectionCard>
       <SectionCard title="여행 기록 카드">
         <AddTravelButton onPress={() => setModalVisible(true)} />

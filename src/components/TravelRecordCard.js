@@ -7,7 +7,6 @@ export default function TravelRecordCard({
   dateLabel,
   city,
   country,
-  mapImage,
   schedules,
   onCheckSchedule,
 }) {
