@@ -7,21 +7,26 @@ struct MainView: View {
     @EnvironmentObject var connectionHelper: ConnectionHelper
     @Environment(\.scenePhase) var scenePhase
     @State private var now = Date()
-
+    //재난정보
+    @State private var alertTitle: String = ""
+    @State private var alertContents: String = ""
+    @State private var showAlert = false
+    let apiService = APIservice()
+  
     var localTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: now)
     }
-
+    
     var localDate: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
         formatter.dateFormat = "M월 d일 (E)"
         return formatter.string(from: now)
     }
-
+    
     var koreaTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -29,7 +34,7 @@ struct MainView: View {
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: now)
     }
-
+    
     var koreaDate: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "ko_KR")
@@ -37,7 +42,7 @@ struct MainView: View {
         formatter.dateFormat = "M월 d일 (E)"
         return formatter.string(from: now)
     }
-
+    
     var body: some View {
         ZStack {
             Rectangle()
@@ -52,16 +57,16 @@ struct MainView: View {
                         koreaTime: koreaTime,
                         koreaDate: koreaDate
                     )
-
+                    
                     LineDivider()
                         .padding(.vertical, 8)
-
+                    
                     BottomStatsView(
                         steps: healthManager.steps,
                         heartRate: healthManager.heartRate,
                         activeEnergy: healthManager.activeEnergyBurned
                     )
-
+                    
                     MessageView(message: connectionHelper.receivedMessage)
                 }
                 .padding(12)
@@ -69,47 +74,64 @@ struct MainView: View {
                 VStack(alignment: .center) {
                     LogoHeaderView()
                     Spacer().frame(height: 30)
-
+                    
                     Text("워치와 휴대폰이 연결되지 않았어요")
                         .foregroundColor(.yellow)
                         .font(.system(size: 15, weight: .bold))
                         .multilineTextAlignment(.center)
-
+                    
                     Spacer()
                 }
             }
         }
+        .fullScreenCover(isPresented: $showAlert) {
+            WarningViewTemplate(
+                backgroundColor: .blue,
+                iconName: "cloud.sun.rain.fill",
+                title: alertTitle,
+                subtitle: alertContents,
+                buttonAction: { showAlert = false }
+            )
+            .navigationBarHidden(true)
+          
+        }
         .onAppear {
-            // 1초마다 시간 갱신
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                self.now = Date()
-            }
-
-            // HealthKit 권한 요청 후 초기 fetch
-            healthManager.requestAuthorization { success in
-                if success {
-                    fetchAllHealthData()
-                }
-            }
-
-            // 5분마다 health data fetch
-            Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
-                fetchAllHealthData()
-            }
+          Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+              self.now = Date()
+          }
+          
+          healthManager.requestAuthorization { success in
+              if success {
+                  fetchAllHealthData()
+              }
+          }
+      
+          fetchAllHealthData()
+          
+          apiService.fetchDisasterAlert(lat: 37.5665, lng: 126.9780) { result in
+              if let result = result {
+                  DispatchQueue.main.async {
+                      alertTitle = result.title ?? ""
+                      alertContents = result.contents ?? ""
+                      showAlert = true
+                  }
+              }
+          }
+            
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             if newPhase == .active {
-                // 앱이 다시 포그라운드로 전환되면 health data fetch
                 fetchAllHealthData()
             }
         }
     }
-
+    
     private func fetchAllHealthData() {
         healthManager.fetchSteps()
         healthManager.fetchHeartRate()
         healthManager.fetchActiveEnergyBurned()
     }
+  
 }
 
 struct LogoHeaderView: View {
@@ -129,7 +151,7 @@ struct TimeInfoView: View {
     let localDate: String
     let koreaTime: String
     let koreaDate: String
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 13) {
             VStack(alignment: .center, spacing: 5) {
@@ -143,7 +165,7 @@ struct TimeInfoView: View {
                     .font(.system(size: 10, weight: .bold))
                     .foregroundColor(.white)
             }
-            
+
             VStack(alignment: .center, spacing: 5) {
                 Text("한국 시각")
                     .font(.system(size: 15, weight: .bold))
@@ -188,7 +210,7 @@ struct BottomStatsView: View {
     let steps: Int
     let heartRate: Double
     let activeEnergy: Double
-    
+
     var body: some View {
         HStack(spacing: 20) {
             StatItemView(icon: "stepIcon", value: "\(steps)")
@@ -202,7 +224,7 @@ struct BottomStatsView: View {
 struct StatItemView: View {
     let icon: String
     let value: String
-    
+
     var body: some View {
       VStack(alignment:.center, spacing: 6) {
             Image(icon)
@@ -217,7 +239,7 @@ struct StatItemView: View {
 
 struct MessageView: View {
     let message: String
-    
+
     var body: some View {
         if !message.isEmpty {
             Text(message)
