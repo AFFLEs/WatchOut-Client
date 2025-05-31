@@ -3,6 +3,7 @@ export const ENDPOINTS = {
     SIGNUP: '/api/users/signup',
     LOGIN: '/api/users/login',
     LOGOUT: '/api/users/logout',
+    GET_USER_INFO: '/api/users/info',
     SETTINGS: {
       CONSENTS: '/api/users/settings/consents',
       EMERGENCY: '/api/users/settings/emergency',

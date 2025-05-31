@@ -3,12 +3,16 @@ import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity, Al
 import SectionCard from '../../components/SectionCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../App';
+import { userAPI } from '../../apis/userAPI';
 
 export default function ProfileScreen() {
   const [locationDataSharing, setLocationDataSharing] = useState(true);
   const [healthDataSharing, setHealthDataSharing] = useState(true);
   const [connectedWatch, setConnectedWatch] = useState(null);
   const { setIsAuthenticated, setAccessToken } = useContext(AuthContext);
+  const [name, setName] = useState('한예원');
+  const [birth, setBirth] = useState('1990-01-01');
+  const [phoneNumber, setPhoneNumber] = useState('010-0000-0000');
 
   const handleLogout = async () => {
     try {
@@ -45,8 +49,16 @@ export default function ProfileScreen() {
     }
   };
 
+  const fetchUserInfo = async () => {
+    const userInfo = await userAPI.getUserInfo();
+    setPhoneNumber(userInfo.data.phoneNumber || '010-0000-0000');
+    setName(userInfo.data.name || '한예원');
+    setBirth(userInfo.data.birthdate || '1990-01-01');
+  };
+
   useEffect(() => {
     fetchConnectedWatchInfo();
+    fetchUserInfo();
   }, []);
 
   return (
@@ -55,8 +67,8 @@ export default function ProfileScreen() {
       <View style={styles.profileHeader}>
         <View style={styles.profileContent}>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>김영원</Text>
-            <Text style={styles.profileLocation}>대한민국, 서울</Text>
+            <Text style={styles.profileName}>{name}</Text>
+            <Text style={styles.profileLocation}>서울, 대한민국</Text>
           </View>
         </View>
       </View>
@@ -66,14 +78,14 @@ export default function ProfileScreen() {
         <View style={styles.infoContainer}>
           <Text style={styles.label}>생년월일</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.value}>1993-05-15</Text>
+            <Text style={styles.value}>{birth}</Text>
           </View>
         </View>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>전화번호</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.value}>010-9225-0234</Text>
+            <Text style={styles.value}>{phoneNumber}</Text>
           </View>
         </View>
       </SectionCard>

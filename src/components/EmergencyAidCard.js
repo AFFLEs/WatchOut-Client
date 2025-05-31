@@ -2,47 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch, TouchableOpacity, Alert, Image, Modal, TextInput, Button } from 'react-native';
 import ModalButton from './ModalButton';
 import ModalCard from './ModalCard';
+import { userAPI } from '../apis/userAPI';
 
-export default function EmergencyAidCard() {
-  const [enabled, setEnabled] = useState(false);
-  const [guardianPhone, setGuardianPhone] = useState('');
+const EmergencyAidCard = ({ 
+  enableWatchEmergencySignal, 
+  guardianPhone,
+  onPhoneUpdate 
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputPhone, setInputPhone] = useState('');
   const [noticeModal, setNoticeModal] = useState({ visible: false, message: '' });
 
-  const fetchInitialSettings = async () => {
-    // 초기 설정용 API 호출
-    return {
-      enabled: true,
-      guardianPhone: '010-9225-0234',
-    };
-  };
-
-  useEffect(() => {
-    fetchInitialSettings().then(data => {
-      setEnabled(data.enabled);
-      setGuardianPhone(data.guardianPhone);
-    });
-  }, []);
-
   // 토글 수정 후 안내 메시지 출력 + 더미 API 호출
   const handleToggle = async () => {
-    const newEnabled = !enabled;
-    setEnabled(newEnabled);
+    const newEnabled = !enableWatchEmergencySignal;
 
     const message = newEnabled
       ? '긴급 구조 요청이 설정되었습니다.'
       : '긴급 구조 요청이 해제되었습니다.';
 
     setNoticeModal({ visible: true, message });
-
-    await updateEmergencySettingAPI(newEnabled);
+    try {
+      await userAPI.updateEmergencySetting(newEnabled);
+    } catch (error) {
+      message = error.message;
+    }
     setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
-  };
-
-  // 긴급 구조 설정용 더미 API 함수 (API 파일로 따로 분리 예정)
-  const updateEmergencySettingAPI = async (newEnabled) => {
-    return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
   };
 
   // 보호자 전화번호 수정 모달 창 열기
@@ -51,21 +36,16 @@ export default function EmergencyAidCard() {
     setModalVisible(true);
   };
 
-  // 보호자 전화번호 수정용 더미 API 함수 (API 파일로 따로 분리 예정)
-  const updatePhoneAPI = async (newPhone) => {
-    return new Promise(resolve => setTimeout(() => resolve({ success: true }), 500));
-  };
-
   // 보호자 전화번호 수정 모달 창 닫기
   const handlePhoneSubmit = async () => {
-    const res = await updatePhoneAPI(inputPhone);
-    if (res.success) {
-      setGuardianPhone(inputPhone);
+    try {
+      await userAPI.updateGuardianPhone(inputPhone);
       setModalVisible(false);
+      onPhoneUpdate(inputPhone); 
       setNoticeModal({ visible: true, message: '전화번호가 수정되었습니다.' });
       setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
-    } else {
-      setNoticeModal({ visible: true, message: '전화번호 수정에 실패했습니다.' });
+    } catch (error) {
+      setNoticeModal({ visible: true, message: error.message });
       setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
     }
   };
@@ -75,10 +55,10 @@ export default function EmergencyAidCard() {
       <View style={styles.row}>
         <Text style={styles.title}>스마트 워치 긴급 구조 요청 전송 켜기</Text>
         <Switch
-          value={enabled}
+          value={enableWatchEmergencySignal}
           onValueChange={handleToggle}
           trackColor={{ false: '#ccc', true: '#2563EB' }}
-          thumbColor={enabled ? '#fff' : '#fff'}
+          thumbColor={enableWatchEmergencySignal ? '#fff' : '#fff'}
         />
       </View>
       <Text style={styles.desc}>
@@ -199,3 +179,5 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 });
+
+export default EmergencyAidCard;

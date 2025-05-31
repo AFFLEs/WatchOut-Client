@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 12,
     color: '#222B3A',
+    textAlign: 'center',
   },
   btnRow: {
     flexDirection: 'row',

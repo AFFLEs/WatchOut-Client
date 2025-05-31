@@ -10,7 +10,7 @@ import PersonalInfoCard from '../../components/PersonalInfoCard';
 import { requestLocationPermission, getCurrentLocation, getLocationInfo } from '../../utils/locationUtils';
 import { getFormattedTimes } from '../../utils/timeUtils';
 import { fetchAllNearbyInstitutions } from '../../utils/mapUtils';
-
+import { userAPI } from '../../apis/userAPI';
 
 export default function HomeScreen() {
   const [localTime, setLocalTime] = useState('--:--');
@@ -21,6 +21,10 @@ export default function HomeScreen() {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [institutions, setInstitutions] = useState([]);
+  const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(false);
+  const [guardianPhone, setGuardianPhone] = useState('보호자 전화번호를 설정해주세요.')  ;
+  const [name, setName] = useState('한예원')  ;
+  const [birth, setBirth] = useState('1990-01-01')  ;
 
   const updateTimes = () => {
     const times = getFormattedTimes(timezone);
@@ -50,6 +54,10 @@ export default function HomeScreen() {
     } catch (error) {
       console.error('위치 정보 초기화 오류:', error);
     }
+  };
+
+  const updateGuardianPhone = (newPhone) => {
+    setGuardianPhone(newPhone);
   };
 
   // 위치 정보 및 시간 초기화
@@ -89,6 +97,17 @@ export default function HomeScreen() {
     return () => clearInterval(timeInterval);
   }, [timezone]);
 
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const userInfo = await userAPI.getUserInfo();
+      console.log(userInfo.data);
+      setGuardianPhone(userInfo.data.guardianPhone || '010-0000-0000');
+      setName(userInfo.data.name || '한예원');
+      setBirth(userInfo.data.birthdate || '1990-01-01');
+    };
+    fetchUserInfo();
+  }, []);
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
       <SectionCard>
@@ -116,8 +135,12 @@ export default function HomeScreen() {
 
       <SectionCard title="긴급 구조 설정">
         <View>
-          <EmergencyAidCard />
-          <PersonalInfoCard name="김영원" nationality="대한민국" age={32} />
+          <EmergencyAidCard 
+            enableWatchEmergencySignal={true} 
+            guardianPhone={guardianPhone} 
+            onPhoneUpdate={updateGuardianPhone}
+          />
+          <PersonalInfoCard name={name} nationality="대한민국" birth={birth} />
         </View>
       </SectionCard>  
     </ScrollView>
