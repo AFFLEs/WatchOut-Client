@@ -13,6 +13,16 @@ struct MainView: View {
     @State private var showAlert = false
     let apiService = APIservice()
   
+    //위치 정보 추출
+    @StateObject private var locationManager = LocationManager()
+    var currentLocation: GPSLocationModel? {
+        if let lat = locationManager.latitude, let lng = locationManager.longitude {
+            return GPSLocationModel(lat: lat, lng: lng)
+        }
+        return nil
+    }
+
+  
     var localTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
@@ -87,7 +97,7 @@ struct MainView: View {
         .fullScreenCover(isPresented: $showAlert) {
             WarningViewTemplate(
                 backgroundColor: .blue,
-                iconName: "cloud.sun.rain.fill",
+                iconName: "exclamationmark.triangle.fill",
                 title: alertTitle,
                 subtitle: alertContents,
                 buttonAction: { showAlert = false }
@@ -107,23 +117,29 @@ struct MainView: View {
           }
       
           fetchAllHealthData()
-          
-          apiService.fetchDisasterAlert(lat: 37.5665, lng: 126.9780) { result in
-              if let result = result {
-                  DispatchQueue.main.async {
-                      alertTitle = result.title ?? ""
-                      alertContents = result.contents ?? ""
-                      showAlert = true
-                  }
-              }
+          if locationManager.authorizationStatus == .denied {
+              print("위치 권한이 거부되었습니다.\n워치 설정에서 위치 권한을 허용해주세요.")
           }
-            
         }
-        .onChange(of: scenePhase) { oldPhase, newPhase in
+        .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
                 fetchAllHealthData()
             }
         }
+
+        .onChange(of: currentLocation) { newLocation in
+            guard let location = newLocation else { return }
+            apiService.fetchDisasterAlert(lat: location.lat, lng: location.lng) { result in
+                if let result = result {
+                    DispatchQueue.main.async {
+                        alertTitle = result.title ?? ""
+                        alertContents = result.contents ?? ""
+                        showAlert = true
+                    }
+                }
+            }
+        }
+      
     }
     
     private func fetchAllHealthData() {

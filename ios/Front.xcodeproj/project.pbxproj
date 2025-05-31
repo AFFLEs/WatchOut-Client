@@ -716,6 +716,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱에서 건강 데이터를 읽기 위해 필요합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱에서 건강 데이터를 기록하거나 업데이트하기 위해 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "서비스 이용을 위해 GPS로 위치 정보를 읽어오기 위해 필요합니다.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = org.reactjs.native.AFFLE.WatchOut;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -765,6 +766,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱에서 건강 데이터를 읽기 위해 필요합니다.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱에서 건강 데이터를 기록하거나 업데이트하기 위해 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "서비스 이용을 위해 GPS로 위치 정보를 읽어오기 위해 필요합니다.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = org.reactjs.native.AFFLE.WatchOut;
 				LD_RUNPATH_SEARCH_PATHS = (
