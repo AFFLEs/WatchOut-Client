@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 
-export default function SwitchRow({ label, value, onValueChange, isTop }) {
+export default function SwitchRow({ label, value, onValueChange, isTop, disabled }) {
   return (
     <View style={[styles.row, { borderTopWidth: isTop ? 1 : 0 }]}>
       <Text style={styles.label}>{label}</Text>
@@ -10,6 +10,7 @@ export default function SwitchRow({ label, value, onValueChange, isTop }) {
         onValueChange={onValueChange} 
         trackColor={{ false: '#ccc', true: '#2563EB' }}
         thumbColor={value ? '#fff' : '#fff'}
+        disabled={disabled}
       />
     </View>
   );

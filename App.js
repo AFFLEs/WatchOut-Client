@@ -1,10 +1,14 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnBoardingNavigator from './src/navigations/OnBoardingNavigator';
 import BottomTabNavigator from './src/navigations/BottomTabNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LocationProvider } from './src/contexts/LocationContext';
+import GooglePlacesSDK from 'react-native-google-places-sdk';
+console.log('>>> GooglePlacesSDK =', GooglePlacesSDK);
+
+import { GOOGLE_MAPS_API_KEY } from './src/config/keys';
 
 const Stack = createNativeStackNavigator();
 export const AuthContext = createContext();
@@ -55,5 +59,18 @@ const AppContent = () => {
 };
 
 export default function App() {
+  useEffect(() => {
+    try {
+      GooglePlacesSDK.initialize(GOOGLE_MAPS_API_KEY);
+      console.log(
+        '🚀 [PlacesSDK] available methods:',
+        Object.keys(GooglePlacesSDK)
+      );
+    } catch (err) {
+      console.error('Failed to init SDK:', err);
+    }
+  }, []);
+  
+
   return <AppContent />;
 }

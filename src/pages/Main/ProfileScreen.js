@@ -4,6 +4,7 @@ import SectionCard from '../../components/SectionCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../App';
 import { userAPI } from '../../apis/userAPI';
+import { formatPhoneNumberForDisplay } from '../../utils/userUtils';
 
 export default function ProfileScreen() {
   const [locationDataSharing, setLocationDataSharing] = useState(true);
@@ -51,9 +52,9 @@ export default function ProfileScreen() {
 
   const fetchUserInfo = async () => {
     const userInfo = await userAPI.getUserInfo();
-    setPhoneNumber(userInfo.data.phoneNumber || '010-0000-0000');
-    setName(userInfo.data.name || '한예원');
-    setBirth(userInfo.data.birthdate || '1990-01-01');
+    setPhoneNumber(userInfo.data.phoneNumber || '알수없음');
+    setName(userInfo.data.name || '알수없음');
+    setBirth(userInfo.data.birthdate || '알수없음');
   };
 
   useEffect(() => {
@@ -85,7 +86,7 @@ export default function ProfileScreen() {
         <View style={styles.infoContainer}>
           <Text style={styles.label}>전화번호</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.value}>{phoneNumber}</Text>
+            <Text style={styles.value}>{formatPhoneNumberForDisplay(phoneNumber)}</Text>
           </View>
         </View>
       </SectionCard>

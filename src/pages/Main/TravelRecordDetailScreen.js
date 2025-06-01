@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SectionCard from '../../components/SectionCard';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 import { travelAPI } from '../../apis/travelAPI';
-import { formatDate } from '../../utils/timeUtils';
+import { formatDate, formatTime } from '../../utils/timeUtils';
 
 export default function TravelRecordDetailScreen({ route }) {
   const { dateLabel, city, country } = route.params;
   const [coordinates, setCoordinates] = useState([]);
   const [schedules, setSchedules] = useState(null);
+  const [timeSchedules, setTimeSchedules] = useState([]);
+  const [planSchedules, setPlanSchedules] = useState([]);
   
   
   // 제주도 중심 좌표를 기본값으로 설정
@@ -23,6 +25,8 @@ export default function TravelRecordDetailScreen({ route }) {
     try {
       const response = await travelAPI.getDetailTravelSpot(dateLabel);
       setSchedules(response.data);
+      setTimeSchedules(response.data.filter(item => item.spotTime && item.spotTime !== 'PLAN'));
+      setPlanSchedules(response.data.filter(item => !item.spotTime || item.spotTime === 'PLAN'));
 
       if (schedules && schedules.length > 0) {
         const sortedSchedules = [...schedules].sort((a, b) => {
@@ -66,6 +70,53 @@ export default function TravelRecordDetailScreen({ route }) {
     fetchDetailTravelSpot();
   }, []);
 
+  // 일정을 시간별과 계획으로 분리하여 렌더링
+  const renderSchedules = () => {
+    return (
+      <>
+        {/* 시간이 있는 일정 */}
+        {timeSchedules.length > 0 && (
+          <>
+            <Text style={styles.sectionTitle}>방문 기록</Text>
+            {timeSchedules.map((item, idx) => (
+              <View key={`time-${idx}`} style={styles.card}>
+                <View style={styles.row}>
+                  <View style={styles.timeBadge}>
+                    <Text style={styles.timeText}>{formatTime(item.spotTime)}</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.place}>{item.spotName}</Text>
+                    <Text style={styles.address}>{item.spotDetail}</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+
+        {/* 계획된 일정 */}
+        {planSchedules.length > 0 && (
+          <>
+            <View style={styles.divider} />
+            <Text style={styles.sectionTitle}>방문 예정</Text>
+            {planSchedules.map((item, idx) => (
+              <View key={`plan-${idx}`} style={[styles.card, styles.planCard]}>
+                <View style={styles.row}>
+                  <View style={[styles.timeBadge, styles.planBadge]}>
+                    <Text style={[styles.timeText, styles.planText]}>PLAN</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.place}>{item.spotName}</Text>
+                    <Text style={styles.address}>{item.spotDetail}</Text>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
+      </>
+    );
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }}>
@@ -93,26 +144,7 @@ export default function TravelRecordDetailScreen({ route }) {
         </MapView>
         <Text style={styles.title}>{formatDate(dateLabel)}</Text>
         <Text style={styles.subtitle}>{city}, {country}</Text>
-        <Text style={styles.sectionTitle}>일정 목록</Text>
-        {(!schedules || schedules.length === 0) ? (
-          <View style={styles.emptyBox}>
-            <Text style={styles.emptyText}>등록된 일정이 없습니다.</Text>
-          </View>
-        ) : (
-          schedules.map((item, idx) => (
-            <View key={idx} style={styles.card}>
-              <View style={styles.row}>
-                <View style={styles.timeBadge}>
-                  <Text style={styles.timeText}>{item.spotTime || 'PLAN'}</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.place}>{item.spotName}</Text>
-                  <Text style={styles.address}>{item.spotDetail}</Text>
-                </View>
-              </View>
-            </View>
-          ))
-        )}
+        {renderSchedules()}
       </SectionCard>
     </ScrollView>
   );
@@ -145,11 +177,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   sectionTitle: {
-    fontWeight: 'bold',
     fontSize: 16,
-    color: '#222B3A',
-    marginBottom: 10,
-    marginLeft: 4,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 12,
+    marginTop: 8,
+    paddingHorizontal: 16,
   },
   card: {
     backgroundColor: '#fff',
@@ -202,5 +235,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     marginBottom: 18,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
+    marginVertical: 16,
+    marginHorizontal: 16,
+  },
+  planCard: {
+    backgroundColor: '#F9FAFB',
+  },
+  planBadge: {
+    backgroundColor: '#E5E7EB',
+  },
+  planText: {
+    color: '#4B5563',
   },
 });

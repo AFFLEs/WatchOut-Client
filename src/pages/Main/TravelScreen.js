@@ -10,55 +10,10 @@ import ScheduleInputModal from '../../components/ScheduleInputModal';
 import { useNavigation } from '@react-navigation/native';
 import { travelAPI } from '../../apis/travelAPI';
 import { useLocation } from '../../contexts/LocationContext';
-import { formatDate } from '../../utils/timeUtils';
+import { formatDate, formatDatewithYear, formatTime } from '../../utils/timeUtils';
 
 export default function TravelScreen() {
-  const [scheduleByDate, setScheduleByDate] = useState({
-    '2025년 5월 19일 (월)': [
-      {
-        spotId: 4,
-        spotTime: '10:00',
-        spotName: 'Radio City',
-        spotDetail: '1260 6th Ave, New York, NY 10020 미국',
-        latitude: 40.7599,
-        longitude: -73.9802
-      },
-      {
-        spotId: 1,
-        spotTime: '11:00',
-        spotName: 'Disney Store',
-        spotDetail: '1540 Broadway, New York, NY 10036 미국',
-        latitude: 40.7566,
-        longitude: -73.9863
-      },
-      {
-        spotId: 5,
-        spotTime: '12:30',
-        spotName: 'Central Park',
-        spotDetail: 'Central Park, New York, NY, 미국',
-        latitude: 40.7829,
-        longitude: -73.9654
-      },
-    ],
-    '2025년 5월 20일 (화)': [
-      {
-        spotId: 1,
-        spotTime: '13:00',
-        spotName: 'Disney Store',
-        spotDetail: '1540 Broadway, New York, NY 10036 미국',
-        latitude: 40.7566,
-        longitude: -73.9863
-      },
-      {
-        spotId: 5,
-        spotTime: '15:30',
-        spotName: 'Central Park',
-        spotDetail: 'Central Park, New York, NY, 미국',
-        latitude: 40.7829,
-        longitude: -73.9654
-      },
-    ],
-  });
+  const [scheduleByDate, setScheduleByDate] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [travelDates, setTravelDates] = useState({
     departDate: '',
@@ -87,12 +42,30 @@ export default function TravelScreen() {
     const fetchTravelDates = async () => {
       try {
         const response = await travelAPI.getTravelDate();
+        console.log('Travel dates response:', response); // 디버깅을 위한 로그 추가
+        
+        if (!response || !response.data) {
+          console.error('Invalid travel dates response:', response);
+          return;
+        }
+
+        const { departDate, arriveDate } = response.data;
+        
+        if (!departDate || !arriveDate) {
+          console.error('Missing date values:', { departDate, arriveDate });
+          return;
+        }
+
         setTravelDates({
-          departDate: formatDate(response.data.departDate),
-          arriveDate: formatDate(response.data.arriveDate)
+          departDate: departDate || '날짜 없음',
+          arriveDate: arriveDate || '날짜 없음'
         });
       } catch (error) {
         console.error('Failed to fetch travel dates:', error);
+        setTravelDates({
+          departDate: '날짜 없음',
+          arriveDate: '날짜 없음'
+        });
       }
     };
 
@@ -105,20 +78,22 @@ export default function TravelScreen() {
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
       <SectionCard title="여행 일정">
         <TravelScheduleCard 
-          departureDate={travelDates.departDate} 
-          returnDate={travelDates.arriveDate}
+          departureDate={formatDate(travelDates.departDate)} 
+          returnDate={formatDate(travelDates.arriveDate)}
         />
       </SectionCard>
       <SectionCard title="여행 기록 카드">
         <AddTravelButton onPress={() => setModalVisible(true)} />
-        {Object.entries(scheduleByDate).map(([dateLabel, schedules], idx) => (
+        {Object.entries(scheduleByDate)
+          .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
+          .map(([dateLabel, schedules], idx) => (
           <TravelRecordCard
             key={dateLabel}
             dateLabel={formatDate(dateLabel)}
-            city="New York"
-            country="USA"
+            city={schedules[schedules.length - 1]?.city || locationInfo?.city}
+            country={schedules[schedules.length - 1]?.country || locationInfo?.country}
             schedules={schedules.map(schedule => ({
-              time: schedule.spotTime || 'PLAN',
+              time: formatTime(schedule.spotTime) || 'PLAN',
               place: schedule.spotName,
               address: schedule.spotDetail,
               latitude: schedule.latitude,
@@ -126,8 +101,8 @@ export default function TravelScreen() {
             }))}
             onCheckSchedule={() => navigation.navigate('TravelRecordDetail', {
               dateLabel: dateLabel,
-              city: "New York",
-              country: "USA",
+              city: schedules[schedules.length - 1]?.city || locationInfo?.city,
+              country: schedules[schedules.length - 1]?.country || locationInfo?.country,
             })}
           />
         ))}
@@ -139,8 +114,8 @@ export default function TravelScreen() {
           onRequestClose={() => setModalVisible(false)}
           onSave={handleSaveSchedule}
           initialData={scheduleByDate}
-          departureDate={travelDates.departDate}
-          returnDate={travelDates.arriveDate}
+          departureDate={formatDatewithYear(travelDates.departDate)}
+          returnDate={formatDatewithYear(travelDates.arriveDate)}
         />
       </SectionCard>
     </ScrollView>
