@@ -21,7 +21,11 @@ export default function HomeScreen() {
   const [country, setCountry] = useState(null);
   const [city, setCity] = useState(null);
   const [institutions, setInstitutions] = useState([]);
-  const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(false);
+  const [institutionsCache, setInstitutionsCache] = useState({
+    isCache: false,
+    lastUpdated: null
+  });
+  const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(true);
   const [guardianPhone, setGuardianPhone] = useState('보호자 전화번호를 설정해주세요.');
   const [name, setName] = useState('알수없음');
   const [birth, setBirth] = useState('알수없음');
@@ -79,11 +83,12 @@ export default function HomeScreen() {
     const fetchInstitutions = async () => {
       if (locationInfo?.latitude && locationInfo?.longitude) {
         try {
-          const nearbyInstitutions = await fetchAllNearbyInstitutions(
+          const { data, isCache, lastUpdated } = await fetchAllNearbyInstitutions(
             locationInfo.latitude,
             locationInfo.longitude
           );
-          setInstitutions(nearbyInstitutions);
+          setInstitutions(data);
+          setInstitutionsCache({ isCache, lastUpdated });
         } catch (error) {
           console.error('주변 기관 정보 가져오기 오류:', error);
         }
@@ -104,10 +109,10 @@ export default function HomeScreen() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       const userInfo = await userAPI.getUserInfo();
-      console.log(userInfo.data);
-      setGuardianPhone(userInfo.data.guardianPhone || '010-0000-0000');
-      setName(userInfo.data.name || '한예원');
-      setBirth(userInfo.data.birthdate || '1990-01-01');
+      setGuardianPhone(userInfo.data.guardianPhone || '보호자 전화번호를 설정해주세요.');
+      setName(userInfo.data.name || '알수없음');
+      setBirth(userInfo.data.birthdate || '알수없음');
+      setEnableWatchEmergencySignal(userInfo.data.enableWatchEmergencySignal || true);
     };
     fetchUserInfo();
   }, []);
@@ -133,14 +138,17 @@ export default function HomeScreen() {
         </View>
       </SectionCard>
 
-      <SectionCard title="근처 응급 기관 정보">
-        <InstitutionList institutions={institutions}/>
+      <SectionCard 
+        title="근처 응급 기관 정보" 
+        subtitle={institutionsCache.isCache ? `마지막 업데이트: ${institutionsCache.lastUpdated}` : '방금 전'}
+      >
+        <InstitutionList institutions={institutions || []}/>
       </SectionCard>
 
       <SectionCard title="긴급 구조 설정">
         <View>
           <EmergencyAidCard 
-            enableWatchEmergencySignal={true} 
+            enableWatchEmergencySignal={enableWatchEmergencySignal} 
             guardianPhone={guardianPhone} 
             onPhoneUpdate={updateGuardianPhone}
           />
