@@ -136,6 +136,7 @@ struct MainView: View {
                         alertContents = result.contents ?? ""
                         showAlert = true
                     }
+                  print("내 위치 : \(location.lat), \(location.lng)")
                 }
             }
         }
