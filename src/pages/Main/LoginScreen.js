@@ -29,7 +29,6 @@ export default function LoginScreen({ navigation }) {
       const { accessToken, refreshToken } = response.data;
 
       await AsyncStorage.setItem('accessToken', accessToken);
-      await AsyncStorage.setItem('refreshToken', refreshToken);
       
       setAccessToken(accessToken);
       setIsAuthenticated(true);

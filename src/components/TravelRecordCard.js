@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
     color: '#222B3A',
   },
   map: {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   dateLabel: {
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 16,
     color: '#222B3A',
     marginBottom: 4,
   },

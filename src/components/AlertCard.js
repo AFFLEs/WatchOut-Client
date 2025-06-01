@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 13,
     lineHeight: 18,
+    
   },
   time: {
     marginTop: 4,

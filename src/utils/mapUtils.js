@@ -1,5 +1,5 @@
 import { GOOGLE_MAPS_API_KEY } from '../config/keys';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const typeMapping = {
   hospital: 'hospital',
@@ -15,49 +15,97 @@ const categories = [
   { type: 'embassy', keyword: '대한민국 대사관' }, 
 ];
 
+const CACHE_PREFIX = '@nearby_institutions_';
+const CACHE_EXPIRY = 24 * 60 * 60 * 1000; // 24시간
+
+const getCacheKey = (type, lat, lng) => {
+  return `${CACHE_PREFIX}${type}_${lat.toFixed(4)}_${lng.toFixed(4)}`;
+};
+
+const saveToCache = async (type, lat, lng, data) => {
+  const cacheKey = getCacheKey(type, lat, lng);
+  const cacheData = {
+    data,
+    timestamp: Date.now(),
+  };
+  try {
+    await AsyncStorage.setItem(cacheKey, JSON.stringify(cacheData));
+    console.log('캐시 저장 완료:', cacheKey);
+  } catch (error) {
+    console.warn('캐시 저장 실패:', error);
+  }
+};
+
+const getFromCache = async (type, lat, lng) => {
+  const cacheKey = getCacheKey(type, lat, lng);
+  try {
+    const cached = await AsyncStorage.getItem(cacheKey);
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const age = Date.now() - timestamp;
+
+    // 캐시가 만료되었으면 null 반환
+    if (age > CACHE_EXPIRY) {
+      AsyncStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return {
+      data,
+      timestamp,
+      isCache: true
+    };
+  } catch (error) {
+    console.warn('캐시 조회 실패:', error);
+    return null;
+  }
+};
+
 export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
   if (!lat || !lng) {
-    console.error('🚨 위도/경도가 제공되지 않았습니다:', { lat, lng });
-    return [];
+    console.error('🚨 위치 정보가 없습니다.');
+    return { data: [], isCache: false };
   }
 
-  const radius = 5000; // 5km 반경 내의 기관 검색
+  // 먼저 캐시 확인
+  const cached = await getFromCache(type, lat, lng);
+  if (cached) {
+    console.log("📦 캐시된 데이터를 사용합니다.");
+    return { data: cached.data, isCache: true, timestamp: cached.timestamp };
+  }
 
   try {
-    console.log('📍 Places 검색 시작:', {
-      location: `${lat},${lng}`,
-      type,
-      keyword,
-    });
-
-    // Google Places API 요청 URL 구성
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
     const params = {
       location: `${lat},${lng}`,
-      radius,
+      radius: 5000,
       type: typeMapping[type] || type,
       keyword,
       language: 'ko',
       key: GOOGLE_MAPS_API_KEY,
     };
 
-    // URL에 파라미터 추가
     const queryString = Object.keys(params)
       .map(key => `${key}=${encodeURIComponent(params[key])}`)
       .join('&');
 
-    // XMLHttpRequest 사용
-    return new Promise((resolve, reject) => {
+    const response = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+      
+      xhr.timeout = 10000; // 10초 타임아웃 설정
+      
       xhr.onreadystatechange = function () {
         if (xhr.readyState !== 4) return;
-
+        
         if (xhr.status === 200) {
           try {
             const response = JSON.parse(xhr.responseText);
-            if (!response.results) {
-              console.error('🚨 응답 데이터가 올바르지 않습니다:', response);
-              resolve([]);
+            console.log(`🌐 API 응답 (${type}):`, response.status);
+            
+            if (!response.results || response.status !== 'OK') {
+              console.warn(`⚠️ API 응답 없음 (${type})`);
+              reject(new Error('API 응답 없음'));
               return;
             }
 
@@ -71,57 +119,111 @@ export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
               },
               city: place.vicinity,
             }));
-            resolve(places);
+
+            console.log(`✅ 데이터 수신 성공 (${type}):`, places.length);
+            // 성공적으로 데이터를 받아오면 캐시에 저장
+            saveToCache(type, lat, lng, places);
+            resolve({ data: places, isCache: false });
           } catch (error) {
-            console.error('🚨 응답 파싱 에러:', error);
-            resolve([]);
+            console.error(`🚨 응답 파싱 에러 (${type}):`, error);
+            reject(error);
           }
         } else {
-          console.error('🚨 API 요청 실패:', xhr.status, xhr.statusText);
-          resolve([]);
+          console.error(`🚨 API 요청 실패 (${type}): ${xhr.status}`);
+          reject(new Error(`HTTP Error: ${xhr.status}`));
         }
       };
 
       xhr.onerror = function () {
-        console.error('🚨 네트워크 에러');
-        resolve([]);
+        console.error(`🚨 네트워크 에러 (${type})`);
+        reject(new Error('Network Error'));
       };
 
+      xhr.ontimeout = function () {
+        console.error(`🚨 요청 시간 초과 (${type})`);
+        reject(new Error('Timeout'));
+      };
+
+      console.log(`🔍 API 요청 시작 (${type}):`, url);
       xhr.open('GET', `${url}?${queryString}`, true);
       xhr.send();
+    }).catch(async (error) => {
+      console.warn(`⚠️ API 요청 실패, 캐시 확인 (${type}):`, error.message);
+      // API 요청 실패 시 캐시 재확인
+      const cachedAfterError = await getFromCache(type, lat, lng);
+      if (cachedAfterError) {
+        console.log(`📦 에러 후 캐시 사용 (${type})`);
+        return { data: cachedAfterError.data, isCache: true, timestamp: cachedAfterError.timestamp };
+      }
+      return { data: [], isCache: false };
     });
+
+    return response;
   } catch (error) {
-    console.error('🚨 Places API 요청 에러:', error);
-    return [];
+    console.error(`🚨 전체 요청 실패 (${type}):`, error);
+    // 최종 에러 시 캐시 확인
+    const cachedFinal = await getFromCache(type, lat, lng);
+    if (cachedFinal) {
+      console.log(`📦 최종 캐시 사용 (${type})`);
+      return { data: cachedFinal.data, isCache: true, timestamp: cachedFinal.timestamp };
+    }
+    return { data: [], isCache: false };
   }
 }
 
 export const fetchAllNearbyInstitutions = async (lat, lng) => {
   if (!lat || !lng) {
     console.error('🚨 위치 정보가 없습니다.');
-    return [];
+    return { data: [], isCache: false };
   }
 
   let allResults = [];
   const origin = { lat, lng };
+  let hasNetworkError = false;
+  let isCached = false;
+  let latestTimestamp = null;
 
   for (const { type, keyword } of categories) {
     try {
-      const results = await fetchNearbyInstitutions(lat, lng, type, keyword);
+      const result = await fetchNearbyInstitutions(lat, lng, type, keyword);
       
-      const resultsWithDistance = results.map((place) => ({
-        ...place,
-        distance: haversineDistance(origin, {
-          lat: place.location.lat,
-          lng: place.location.lng,
-        }),
-      }));
+      if (result.data.length === 0 && !hasNetworkError) {
+        hasNetworkError = true;
+      }
 
-      allResults = [...allResults, ...resultsWithDistance];
+      if (result.data.length > 0) {
+        const resultsWithDistance = result.data.map((place) => ({
+          ...place,
+          distance: haversineDistance(origin, {
+            lat: place.location.lat,
+            lng: place.location.lng,
+          }),
+          isCache: result.isCache,
+          timestamp: result.timestamp
+        }));
+
+        allResults = [...allResults, ...resultsWithDistance];
+        
+        // 캐시된 데이터가 하나라도 있으면 전체를 캐시된 것으로 표시
+        if (result.isCache) {
+          isCached = true;
+          // 가장 최근 캐시 타임스탬프 저장
+          if (!latestTimestamp || result.timestamp > latestTimestamp) {
+            latestTimestamp = result.timestamp;
+          }
+        }
+      }
     } catch (error) {
-      console.error(`🚨 ${type} 정보 가져오기 실패:`, error);
+      hasNetworkError = true;
       continue;
     }
+  }
+
+  if (allResults.length === 0) {
+    return { 
+      data: [], 
+      isCache: false 
+    };
   }
 
   allResults.sort((a, b) => a.distance - b.distance);
@@ -136,7 +238,12 @@ export const fetchAllNearbyInstitutions = async (lat, lng) => {
     }
   }
 
-  return uniqueByType;
+  return { 
+    data: uniqueByType, 
+    isCache: isCached,
+    timestamp: latestTimestamp,
+    lastUpdated: isCached ? new Date(latestTimestamp).toLocaleString() : '방금 전'
+  };
 };
 
 function haversineDistance(coord1, coord2) {

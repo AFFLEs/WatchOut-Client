@@ -15,7 +15,7 @@ export default function BottomTabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         header: () => <Header />,
-        tabBarStyle: { height: 60 },
+        tabBarStyle: { height: 70, paddingBottom: 10 },
         tabBarIcon: ({ focused, color, size }) => {
           const iconSource = icons[route.name]?.[focused ? 'active' : 'inactive'];
           if (iconSource) {

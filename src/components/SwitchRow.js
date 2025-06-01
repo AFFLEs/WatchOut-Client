@@ -1,11 +1,17 @@
 import React from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 
-export default function SwitchRow({ label, value, onValueChange }) {
+export default function SwitchRow({ label, value, onValueChange, isTop, disabled }) {
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, { borderTopWidth: isTop ? 1 : 0 }]}>
       <Text style={styles.label}>{label}</Text>
-      <Switch value={value} onValueChange={onValueChange} />
+      <Switch
+        value={value} 
+        onValueChange={onValueChange} 
+        trackColor={{ false: '#ccc', true: '#2563EB' }}
+        thumbColor={value ? '#fff' : '#fff'}
+        disabled={disabled}
+      />
     </View>
   );
 }
@@ -16,7 +22,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 10,
-    borderTopWidth: 1,
     borderTopColor: '#E5E7EB',
     marginTop: 10,
   },

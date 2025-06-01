@@ -3,6 +3,7 @@ export const ENDPOINTS = {
     SIGNUP: '/api/users/signup',
     LOGIN: '/api/users/login',
     LOGOUT: '/api/users/logout',
+    GET_USER_INFO: '/api/users/info',
     SETTINGS: {
       CONSENTS: '/api/users/settings/consents',
       EMERGENCY: '/api/users/settings/emergency',
@@ -18,7 +19,7 @@ export const ENDPOINTS = {
   },
   SPOT: {
     BASE: '/api/spots',
-    LATEST: (date) => `/api/spots/latest?date=${date}`,
+    LATEST: `/api/spots/latest`,
     DETAIL: (date) => `/api/spots/detail?date=${date}`,
     DELETE: (spotId) => `/api/spots/${spotId}`
   },

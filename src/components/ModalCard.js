@@ -45,13 +45,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding:20,
-    alignItems: 'flex-start',
+    // alignItems: 'flex-start',
   },
   title: {
     fontWeight: 'bold',
     fontSize: 16,
     marginBottom: 12,
     color: '#222B3A',
+    textAlign: 'center',
   },
   btnRow: {
     flexDirection: 'row',
