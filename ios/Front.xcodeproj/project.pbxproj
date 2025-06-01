@@ -3,47 +3,122 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		38D674C1AB9573B3E703A977 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		3DF2675E2AE4CFBECEB1A645 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		52129214AA01DD48DC4A52A0 /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58251CEBFA26423DEF728871 /* libPods-Front.a */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */; };
+		9AAE3FBF2DDB8FAF00F6592E /* AFFLE-WatchOut Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		CD710E8F2DE0B47E0063954A /* PBXContainerItemProxy */ = {
+		9AAE3FAC2DDB8FAF00F6592E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
-			remoteInfo = AirMaps;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AAE3F9E2DDB8FAE00F6592E;
+			remoteInfo = "AFFLE-WatchOut Watch App";
+		};
+		9AAE3FB62DDB8FAF00F6592E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AAE3F9E2DDB8FAE00F6592E;
+			remoteInfo = "AFFLE-WatchOut Watch App";
+		};
+		9AAE3FBD2DDB8FAF00F6592E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9AAE3F9E2DDB8FAE00F6592E;
+			remoteInfo = "AFFLE-WatchOut Watch App";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9AAE3FC02DDB8FAF00F6592E /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				9AAE3FBF2DDB8FAF00F6592E /* AFFLE-WatchOut Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* Front.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Front.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Front/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Front/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Front/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
-		66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.debug.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.debug.xcconfig"; sourceTree = "<group>"; };
+		58251CEBFA26423DEF728871 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Front/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Front/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		89535F4F425DBE409839BEA5 /* Pods-Front.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.debug.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.debug.xcconfig"; sourceTree = "<group>"; };
+		9A119D972DDF61030000E799 /* Front.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Front.entitlements; path = Front/Front.entitlements; sourceTree = "<group>"; };
+		9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFFLE-WatchOut Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AAE3FAB2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AAE3FB52DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9A3457232DE6AB7200571EC4 /* Exceptions for "AFFLE-WatchOut Watch App" folder in "AFFLE-WatchOut Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		9AAE3FA02DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9A3457232DE6AB7200571EC4 /* Exceptions for "AFFLE-WatchOut Watch App" folder in "AFFLE-WatchOut Watch App" target */,
+			);
+			path = "AFFLE-WatchOut Watch App";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */,
+				52129214AA01DD48DC4A52A0 /* libPods-Front.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3F9C2DDB8FAE00F6592E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FA82DDB8FAF00F6592E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FB22DDB8FAF00F6592E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +128,7 @@
 		13B07FAE1A68108700A75B9A /* Front */ = {
 			isa = PBXGroup;
 			children = (
+				9A119D972DDF61030000E799 /* Front.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -66,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */,
+				58251CEBFA26423DEF728871 /* libPods-Front.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -74,7 +150,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -84,6 +159,7 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* Front */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				9AAE3FA02DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -97,6 +173,9 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Front.app */,
+				9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */,
+				9AAE3FAB2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests.xctest */,
+				9AAE3FB52DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,18 +183,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */,
-				240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */,
+				89535F4F425DBE409839BEA5 /* Pods-Front.debug.xcconfig */,
+				74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		CD710E8C2DE0B47E0063954A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CD710E902DE0B47E0063954A /* libAirMaps.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,22 +196,80 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Front" */;
 			buildPhases = (
-				8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */,
+				C204D48DEE6781BC18555C70 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */,
-				8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */,
+				9AAE3FC02DDB8FAF00F6592E /* Embed Watch Content */,
+				580218D296C2CD5303EEF00F /* [CP] Embed Pods Frameworks */,
+				3ABAF735FCC403686C4C376B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9AAE3FBE2DDB8FAF00F6592E /* PBXTargetDependency */,
 			);
 			name = Front;
 			productName = Front;
 			productReference = 13B07F961A680F5B00A75B9A /* Front.app */;
 			productType = "com.apple.product-type.application";
+		};
+		9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AAE3FC72DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch App" */;
+			buildPhases = (
+				9AAE3F9B2DDB8FAE00F6592E /* Sources */,
+				9AAE3F9C2DDB8FAE00F6592E /* Frameworks */,
+				9AAE3F9D2DDB8FAE00F6592E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9AAE3FA02DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */,
+			);
+			name = "AFFLE-WatchOut Watch App";
+			productName = "AFFLE-WatchOut Watch App";
+			productReference = 9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		9AAE3FAA2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AAE3FC82DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch AppTests" */;
+			buildPhases = (
+				9AAE3FA72DDB8FAF00F6592E /* Sources */,
+				9AAE3FA82DDB8FAF00F6592E /* Frameworks */,
+				9AAE3FA92DDB8FAF00F6592E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9AAE3FAD2DDB8FAF00F6592E /* PBXTargetDependency */,
+			);
+			name = "AFFLE-WatchOut Watch AppTests";
+			productName = "AFFLE-WatchOut Watch AppTests";
+			productReference = 9AAE3FAB2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9AAE3FB42DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9AAE3FC92DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch AppUITests" */;
+			buildPhases = (
+				9AAE3FB12DDB8FAF00F6592E /* Sources */,
+				9AAE3FB22DDB8FAF00F6592E /* Frameworks */,
+				9AAE3FB32DDB8FAF00F6592E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9AAE3FB72DDB8FAF00F6592E /* PBXTargetDependency */,
+			);
+			name = "AFFLE-WatchOut Watch AppUITests";
+			productName = "AFFLE-WatchOut Watch AppUITests";
+			productReference = 9AAE3FB52DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -148,15 +277,26 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
 					};
+					9AAE3F9E2DDB8FAE00F6592E = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					9AAE3FAA2DDB8FAF00F6592E = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 9AAE3F9E2DDB8FAE00F6592E;
+					};
+					9AAE3FB42DDB8FAF00F6592E = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 9AAE3F9E2DDB8FAE00F6592E;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Front" */;
-			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -164,30 +304,18 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			preferredProjectObjectVersion = 77;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CD710E8C2DE0B47E0063954A /* Products */;
-					ProjectRef = CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Front */,
+				9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */,
+				9AAE3FAA2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests */,
+				9AAE3FB42DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CD710E902DE0B47E0063954A /* libAirMaps.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = CD710E8F2DE0B47E0063954A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
@@ -197,6 +325,28 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				38D674C1AB9573B3E703A977 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3F9D2DDB8FAE00F6592E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DF2675E2AE4CFBECEB1A645 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FA92DDB8FAF00F6592E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FB32DDB8FAF00F6592E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,7 +369,28 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */ = {
+		3ABAF735FCC403686C4C376B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		580218D296C2CD5303EEF00F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -240,7 +411,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */ = {
+		C204D48DEE6781BC18555C70 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -262,27 +433,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -294,17 +444,57 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9AAE3F9B2DDB8FAE00F6592E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FA72DDB8FAF00F6592E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9AAE3FB12DDB8FAF00F6592E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9AAE3FAD2DDB8FAF00F6592E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */;
+			targetProxy = 9AAE3FAC2DDB8FAF00F6592E /* PBXContainerItemProxy */;
+		};
+		9AAE3FB72DDB8FAF00F6592E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */;
+			targetProxy = 9AAE3FB62DDB8FAF00F6592E /* PBXContainerItemProxy */;
+		};
+		9AAE3FBE2DDB8FAF00F6592E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9AAE3F9E2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App */;
+			targetProxy = 9AAE3FBD2DDB8FAF00F6592E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */;
+			baseConfigurationReference = 89535F4F425DBE409839BEA5 /* Pods-Front.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Front/Front.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RV94SG8W9U;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Front/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -318,8 +508,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.reactjs.native.AFFLE.WatchOut;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut;
 				PRODUCT_NAME = Front;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -329,12 +518,13 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */;
+			baseConfigurationReference = 74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Front/Front.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = RV94SG8W9U;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
 				INFOPLIST_FILE = Front/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -347,8 +537,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.reactjs.native.AFFLE.WatchOut;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut;
 				PRODUCT_NAME = Front;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -501,6 +690,240 @@
 			};
 			name = Release;
 		};
+		9AAE3FC12DDB8FAF00F6592E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "AFFLE-WatchOut Watch App/AFFLE-WatchOut Watch AppDebug.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AFFLE-WatchOut-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "AFFLE-WatchOut";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱에서 건강 데이터를 읽기 위해 필요합니다.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱에서 건강 데이터를 기록하거나 업데이트하기 위해 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "서비스 이용을 위해 GPS로 위치 정보를 읽어오기 위해 필요합니다.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = org.reactjs.native.AFFLE.WatchOut;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		9AAE3FC22DDB8FAF00F6592E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "AFFLE-WatchOut-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "AFFLE-WatchOut";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "앱에서 건강 데이터를 읽기 위해 필요합니다.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "앱에서 건강 데이터를 기록하거나 업데이트하기 위해 필요합니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "서비스 이용을 위해 GPS로 위치 정보를 읽어오기 위해 필요합니다.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = org.reactjs.native.AFFLE.WatchOut;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
+		9AAE3FC32DDB8FAF00F6592E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ZZIM.AFFLE-WatchOut-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFFLE-WatchOut Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFFLE-WatchOut Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		9AAE3FC42DDB8FAF00F6592E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ZZIM.AFFLE-WatchOut-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AFFLE-WatchOut Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AFFLE-WatchOut Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
+		9AAE3FC52DDB8FAF00F6592E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ZZIM.AFFLE-WatchOut-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "AFFLE-WatchOut Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		9AAE3FC62DDB8FAF00F6592E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M89V3Q63W3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ZZIM.AFFLE-WatchOut-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "AFFLE-WatchOut Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -518,6 +941,33 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9AAE3FC72DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AAE3FC12DDB8FAF00F6592E /* Debug */,
+				9AAE3FC22DDB8FAF00F6592E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9AAE3FC82DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AAE3FC32DDB8FAF00F6592E /* Debug */,
+				9AAE3FC42DDB8FAF00F6592E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9AAE3FC92DDB8FAF00F6592E /* Build configuration list for PBXNativeTarget "AFFLE-WatchOut Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9AAE3FC52DDB8FAF00F6592E /* Debug */,
+				9AAE3FC62DDB8FAF00F6592E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
