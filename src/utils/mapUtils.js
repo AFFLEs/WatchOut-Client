@@ -71,7 +71,7 @@ export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
   // 먼저 캐시 확인
   const cached = await getFromCache(type, lat, lng);
   if (cached) {
-    console.log(`📦 캐시된 데이터 사용 (${type}):`, cached.data.length);
+    console.log("📦 캐시된 데이터를 사용합니다.");
     return { data: cached.data, isCache: true, timestamp: cached.timestamp };
   }
 

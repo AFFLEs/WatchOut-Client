@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding:20,
-    alignItems: 'flex-start',
+    // alignItems: 'flex-start',
   },
   title: {
     fontWeight: 'bold',

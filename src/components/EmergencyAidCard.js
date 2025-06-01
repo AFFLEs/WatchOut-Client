@@ -4,49 +4,114 @@ import ModalButton from './ModalButton';
 import ModalCard from './ModalCard';
 import SwitchRow from './SwitchRow';
 import { userAPI } from '../apis/userAPI';
+import { formatPhoneNumberForDisplay, formatPhoneNumberForAPI } from '../utils/userUtils';
 
-const EmergencyAidCard = ({ 
+export default function EmergencyAidCard({ 
   enableWatchEmergencySignal, 
   guardianPhone,
-  onPhoneUpdate 
-}) => {
+  onPhoneUpdate,
+  onEmergencySignalToggle 
+}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [inputPhone, setInputPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [isEnabled, setIsEnabled] = useState(enableWatchEmergencySignal);
   const [noticeModal, setNoticeModal] = useState({ visible: false, message: '' });
 
-  // 토글 수정 후 안내 메시지 출력 + 더미 API 호출
-  const handleToggle = async () => {
-    const newEnabled = !enableWatchEmergencySignal;
+  // enableWatchEmergencySignal prop이 변경될 때 로컬 상태 업데이트
+  useEffect(() => {
+    setIsEnabled(enableWatchEmergencySignal);
+  }, [enableWatchEmergencySignal]);
 
-    const message = newEnabled
-      ? '긴급 구조 요청이 설정되었습니다.'
-      : '긴급 구조 요청이 해제되었습니다.';
+  const toggleSwitch = async () => {
+    const newValue = !isEnabled;
+    
+    // 즉각적인 UI 피드백을 위해 먼저 상태 업데이트
+    setIsEnabled(newValue);
+    setNoticeModal({
+      visible: true,
+      message: '설정 변경 중...'
+    });
 
-    setNoticeModal({ visible: true, message });
     try {
-      await userAPI.updateEmergencySetting(newEnabled);
+      if (onEmergencySignalToggle) {
+        const success = await onEmergencySignalToggle(newValue);
+        if (!success) {
+          // API 호출 실패 시 상태 복구
+          setIsEnabled(!newValue);
+          setNoticeModal({
+            visible: true,
+            message: '설정 변경에 실패했습니다.'
+          });
+        } else {
+          setNoticeModal({
+            visible: true,
+            message: `긴급 구조 요청이 ${newValue ? '활성화' : '비활성화'}되었습니다.`
+          });
+        }
+      }
     } catch (error) {
-      message = error.message;
+      console.error('긴급 신호 설정 변경 실패:', error);
+      // 에러 발생 시 상태 복구
+      setIsEnabled(!newValue);
+      setNoticeModal({
+        visible: true,
+        message: '설정 변경에 실패했습니다. 다시 시도해주세요.'
+      });
+    } finally {
+      // 모든 처리가 끝난 후 일정 시간 후에 모달 닫기
+      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
     }
-    setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
+  };
+
+  // 전화번호 유효성 검사
+  const validatePhoneNumber = (phone) => {
+    const cleaned = phone.replace(/[^0-9]/g, '');
+    if (cleaned.length === 0) {
+      return '전화번호를 입력해주세요.';
+    }
+    if (cleaned.length !== 11) {
+      return '전화번호는 11자리여야 합니다.';
+    }
+    return '';
+  };
+
+  // 전화번호 입력 처리
+  const handlePhoneChange = (text) => {
+    setInputPhone(text);
+    setPhoneError(validatePhoneNumber(text));
   };
 
   // 보호자 전화번호 수정 모달 창 열기
   const handleEditPhone = () => {
-    setInputPhone(guardianPhone); 
+    setInputPhone(guardianPhone);
+    setPhoneError('');
     setModalVisible(true);
   };
 
-  // 보호자 전화번호 수정 모달 창 닫기
   const handlePhoneSubmit = async () => {
+    const error = validatePhoneNumber(inputPhone);
+    if (error) {
+      setPhoneError(error);
+      return;
+    }
+
     try {
-      await userAPI.updateGuardianPhone(inputPhone);
+      const formattedPhone = formatPhoneNumberForAPI(inputPhone);
+      await userAPI.updateGuardianPhone(formattedPhone);
       setModalVisible(false);
-      onPhoneUpdate(inputPhone); 
-      setNoticeModal({ visible: true, message: '전화번호가 수정되었습니다.' });
-      setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
+      onPhoneUpdate(formattedPhone);
+      setNoticeModal({
+        visible: true,
+        message: '전화번호가 성공적으로 수정되었습니다.'
+      });
     } catch (error) {
-      setNoticeModal({ visible: true, message: error.message });
+      const errorMessage = error.response?.data?.message || '전화번호 수정에 실패했습니다. 다시 시도해주세요.';
+      setNoticeModal({
+        visible: true,
+        message: errorMessage
+      });
+    } finally {
       setTimeout(() => setNoticeModal({ visible: false, message: '' }), 1500);
     }
   };
@@ -55,8 +120,8 @@ const EmergencyAidCard = ({
     <View style={styles.card}>
       <SwitchRow
         label="스마트 워치 긴급 구조 요청 전송 켜기"
-        value={enableWatchEmergencySignal}
-        onValueChange={handleToggle}
+        value={isEnabled}
+        onValueChange={toggleSwitch}
         isTop={false}
       />
       <Text style={styles.desc}>
@@ -69,7 +134,7 @@ const EmergencyAidCard = ({
         </Text>
       </View>
       <View style={styles.phoneEditRow}>
-        <Text style={styles.phoneNumber}>{guardianPhone}</Text>
+        <Text style={styles.phoneNumber}>{formatPhoneNumberForDisplay(guardianPhone)}</Text>
         <TouchableOpacity onPress={handleEditPhone} style={styles.editBtnRow}>
           <Image source={require('../assets/icons/edit.png')} style={styles.editIcon} />
           <Text style={styles.editBtn}>수정하기</Text>
@@ -80,26 +145,49 @@ const EmergencyAidCard = ({
       <ModalCard
         visible={modalVisible}
         title="보호자 전화번호 수정하기"
-        onRequestClose={() => setModalVisible(false)}
+        onRequestClose={() => {
+          setModalVisible(false);
+          setPhoneError('');
+        }}
         buttons={[
-          <ModalButton title="취소" onPress={() => setModalVisible(false)} />,
-          <ModalButton title="완료" onPress={handlePhoneSubmit} />,
+          <ModalButton 
+            title="취소" 
+            onPress={() => {
+              setModalVisible(false);
+              setPhoneError('');
+            }} 
+          />,
+          <ModalButton 
+            title="완료" 
+            onPress={handlePhoneSubmit}
+            disabled={!!phoneError} 
+          />,
         ]}
       >
-        <TextInput
-          value={inputPhone}
-          onChangeText={setInputPhone}
-          style={styles.input}
-          keyboardType="phone-pad"
-          placeholder="전화번호 입력"
-        />
+        <View>
+          <TextInput
+            value={inputPhone}
+            onChangeText={handlePhoneChange}
+            style={[
+              styles.input,
+              phoneError ? styles.inputError : null,
+              phoneError ? { marginBottom: 4 } : { marginBottom: 16 }
+            ]}
+            keyboardType="phone-pad"
+            placeholder="전화번호 입력 (예: 01012345678)"
+            maxLength={11}
+          />
+          {phoneError ? (
+            <Text style={styles.errorText}>{phoneError}</Text>
+          ) : null}
+        </View>
       </ModalCard>
 
       {/* 긴급 구조 요청 안내 모달 */}
       <ModalCard
         visible={noticeModal.visible}
         onRequestClose={() => setNoticeModal({ visible: false, message: '' })}
-        width={240}
+        width={280}
         buttons={[]} 
       >
         <Text style={{ color: '#222B3A', fontSize: 14, fontWeight: 'bold', textAlign: 'center' }}>
@@ -174,8 +262,13 @@ const styles = StyleSheet.create({
     padding: 8,
     width: '100%',
     fontSize: 15,
-    marginBottom: 16,
+  },
+  inputError: {
+    borderColor: '#EF4444',
+  },
+  errorText: {
+    color: '#EF4444',
+    fontSize: 12,
+    marginBottom: 12,
   },
 });
-
-export default EmergencyAidCard;
