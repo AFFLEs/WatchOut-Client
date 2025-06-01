@@ -15,6 +15,10 @@ struct MainView: View {
   
     //위치 정보 추출
     @StateObject private var locationManager = LocationManager()
+    @State private var lastAPICallLocation: GPSLocationModel? = nil
+
+
+
     var currentLocation: GPSLocationModel? {
         if let lat = locationManager.latitude, let lng = locationManager.longitude {
             return GPSLocationModel(lat: lat, lng: lng)
@@ -120,27 +124,25 @@ struct MainView: View {
           if locationManager.authorizationStatus == .denied {
               print("위치 권한이 거부되었습니다.\n워치 설정에서 위치 권한을 허용해주세요.")
           }
+          
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
                 fetchAllHealthData()
             }
         }
-
-        .onChange(of: currentLocation) { newLocation in
-            guard let location = newLocation else { return }
-            apiService.fetchDisasterAlert(lat: location.lat, lng: location.lng) { result in
+        .onReceive(locationManager.cityLevelLocationChanged) { (lat, lng) in
+            apiService.fetchDisasterAlert(lat: lat, lng: lng) { result in
                 if let result = result {
                     DispatchQueue.main.async {
                         alertTitle = result.title ?? ""
                         alertContents = result.contents ?? ""
                         showAlert = true
                     }
-                  print("내 위치 : \(location.lat), \(location.lng)")
                 }
             }
         }
-      
+
     }
     
     private func fetchAllHealthData() {
