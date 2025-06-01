@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import { userAPI } from '../../apis';
 
-export default function TravelDateScreen({ navigation }) {
+export default function TravelDateScreen({ navigation, route }) {
+  const { userInfo, termsAgreement1, termsAgreement2 } = route.params;
   const [selectedDates, setSelectedDates] = useState({});
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const onDayPress = (day) => {
     if (!startDate || (startDate && endDate)) {
@@ -51,23 +53,39 @@ export default function TravelDateScreen({ navigation }) {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (startDate && endDate) {
-      // 회원가입 완료 알림
-      Alert.alert(
-        '회원가입 완료',
-        '회원가입이 성공적으로 완료되었습니다.',
-        [
-          {
-            text: '확인',
-            onPress: () => {
-              // 로그인 화면으로 이동하면서 선택된 날짜 정보 전달
-              navigation.navigate('Login', { startDate, endDate });
-            }
+      try {
+        // 최종 회원가입 데이터 구성
+        const signupData = {
+          userInfo,
+          termsAgreement1,
+          termsAgreement2,
+          travelInfo: {
+            departDate: startDate,
+            arriveDate: endDate
           }
-        ],
-        { cancelable: false }
-      );
+        };
+
+        const response = await userAPI.createUserInfo(signupData);
+        
+        Alert.alert(
+          '회원가입 완료',
+          '회원가입이 성공적으로 완료되었습니다.',
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                // 로그인 화면으로 이동
+                navigation.navigate('Login');
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      } catch (error) {
+        Alert.alert('회원가입 실패', error.message || '알 수 없는 오류가 발생했습니다.');
+      }
     }
   };
 

@@ -1,12 +1,109 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView, Switch, Image, TouchableOpacity, Alert } from 'react-native';
 import SectionCard from '../../components/SectionCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../../../App';
+import { userAPI } from '../../apis/userAPI';
+import { formatPhoneNumberForDisplay } from '../../utils/userUtils';
+
 
 export default function ProfileScreen() {
+  const [emergencyDataSharing, setEmergencyDataSharing] = useState(true);
   const [locationDataSharing, setLocationDataSharing] = useState(true);
-  const [healthDataSharing, setHealthDataSharing] = useState(true);
+
   const [connectedWatch, setConnectedWatch] = useState(null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const { setIsAuthenticated, setAccessToken } = useContext(AuthContext);
+  const [name, setName] = useState('한예원');
+  const [birth, setBirth] = useState('1990-01-01');
+  const [phoneNumber, setPhoneNumber] = useState('010-0000-0000');
+
+  const handleLogout = async () => {
+    try {
+      // 토큰 삭제
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
+      
+      // 인증 상태 초기화
+      setAccessToken(null);
+      setIsAuthenticated(false);
+      
+      console.log('로그아웃 성공');
+    } catch (error) {
+      console.error('로그아웃 중 오류:', error);
+      Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
+    }
+  };
+  const changeEmergencyToggle = async () => {
+    if (emergencyDataSharing) {  
+      Alert.alert(
+        '알림',
+        '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+        [
+          {
+            text: '취소',
+            style: 'cancel'
+          },
+          {
+            text: '확인',
+            onPress: async () => {
+              try {
+                const response = await userAPI.changeEmergencyToggle(false);
+                setEmergencyDataSharing(false);
+              } catch (error) {
+                console.error('응급 상황 시 데이터 공유 변경 실패:', error);
+                Alert.alert('오류', '설정 변경에 실패했습니다.');
+              }
+            }
+          }
+        ]
+      );
+    } else {  
+      try {
+        const response = await userAPI.changeEmergencyToggle(true);
+        setEmergencyDataSharing(true);
+      } catch (error) {
+        console.error('응급 상황 시 데이터 공유 변경 실패:', error);
+        Alert.alert('오류', '설정 변경에 실패했습니다.');
+      }
+    }
+  };
+
+  const changeLocationToggle = async () => {
+    if (locationDataSharing) { 
+      Alert.alert(
+        '알림',
+        '동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.',
+        [
+          {
+            text: '취소',
+            style: 'cancel'
+          },
+          {
+            text: '확인',
+            onPress: async () => {
+              try {
+                const response = await userAPI.changeLocationToggle(false);
+                setLocationDataSharing(false);
+              } catch (error) {
+                console.error('위치 추적 허용 변경 실패:', error);
+                Alert.alert('오류', '설정 변경에 실패했습니다.');
+              }
+            }
+          }
+        ]
+      );
+    } else {  
+      try {
+        const response = await userAPI.changeLocationToggle(true);
+        setLocationDataSharing(true);
+      } catch (error) {
+        console.error('위치 추적 허용 변경 실패:', error);
+        Alert.alert('오류', '설정 변경에 실패했습니다.');
+      }
+    }
+  };
+
+
   // 연결된 워치 정보를 가져오는 함수
   const fetchConnectedWatchInfo = async () => {
     try {
@@ -25,8 +122,16 @@ export default function ProfileScreen() {
     }
   };
 
+  const fetchUserInfo = async () => {
+    const userInfo = await userAPI.getUserInfo();
+    setPhoneNumber(userInfo.data.phoneNumber || '알수없음');
+    setName(userInfo.data.name || '알수없음');
+    setBirth(userInfo.data.birthdate || '알수없음');
+  };
+
   useEffect(() => {
     fetchConnectedWatchInfo();
+    fetchUserInfo();
   }, []);
 
   return (
@@ -35,8 +140,8 @@ export default function ProfileScreen() {
       <View style={styles.profileHeader}>
         <View style={styles.profileContent}>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>김영원</Text>
-            <Text style={styles.profileLocation}>대한민국, 서울</Text>
+            <Text style={styles.profileName}>{name}</Text>
+            <Text style={styles.profileLocation}>서울, 대한민국</Text>
           </View>
         </View>
       </View>
@@ -46,14 +151,14 @@ export default function ProfileScreen() {
         <View style={styles.infoContainer}>
           <Text style={styles.label}>생년월일</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.value}>1993-05-15</Text>
+            <Text style={styles.value}>{birth}</Text>
           </View>
         </View>
 
         <View style={styles.infoContainer}>
           <Text style={styles.label}>전화번호</Text>
           <View style={styles.inputContainer}>
-            <Text style={styles.value}>010-9225-0234</Text>
+            <Text style={styles.value}>{formatPhoneNumberForDisplay(phoneNumber)}</Text>
           </View>
         </View>
       </SectionCard>
@@ -66,11 +171,10 @@ export default function ProfileScreen() {
             <Text style={styles.settingDesc}>비상 시 개인정보 공유를 허용합니다.</Text>
           </View>
           <Switch
-            value={locationDataSharing}
-            onValueChange={setLocationDataSharing}
+            value={emergencyDataSharing}
+            onValueChange={changeEmergencyToggle}
             trackColor={{ false: '#ccc', true: '#2563EB' }}
             thumbColor="#fff"
-            disabled={true}
           />
         </View>
         <View style={styles.settingRow}>
@@ -79,11 +183,10 @@ export default function ProfileScreen() {
             <Text style={styles.settingDesc}>주기적인 위치 추적을 허용합니다.</Text>
           </View>
           <Switch
-            value={healthDataSharing}
-            onValueChange={setHealthDataSharing}
+            value={locationDataSharing}
+            onValueChange={changeLocationToggle}
             trackColor={{ false: '#ccc', true: '#2563EB' }}
             thumbColor="#fff"
-            disabled={true}
           />
         </View>
         <Text style={styles.warningText}>동의하지 않을 경우 서비스 이용에 제약이 있을 수 있습니다.</Text>
@@ -115,7 +218,10 @@ export default function ProfileScreen() {
 
       {/* 로그아웃 버튼 */}
       <View style={styles.logoutContainer}>
-        <TouchableOpacity style={[styles.logoutButton, styles.section]}>
+        <TouchableOpacity 
+          style={[styles.logoutButton, styles.section]}
+          onPress={handleLogout}
+        >
           <Text style={styles.logoutBtnText}>로그아웃</Text>
         </TouchableOpacity>
       </View>

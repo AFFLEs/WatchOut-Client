@@ -13,6 +13,7 @@
 		52129214AA01DD48DC4A52A0 /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58251CEBFA26423DEF728871 /* libPods-Front.a */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+
 		9AAE3FBF2DDB8FAF00F6592E /* AFFLE-WatchOut Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -54,11 +55,26 @@
 		};
 /* End PBXCopyFilesBuildPhase section */
 
+		BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CD710E8F2DE0B47E0063954A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
+			remoteInfo = AirMaps;
+		};
+/* End PBXContainerItemProxy section */
+
+
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* Front.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Front.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Front/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Front/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Front/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+
 		58251CEBFA26423DEF728871 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Front/AppDelegate.swift; sourceTree = "<group>"; };
@@ -68,7 +84,14 @@
 		9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFFLE-WatchOut Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAE3FAB2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAE3FB52DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
+		66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.debug.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.debug.xcconfig"; sourceTree = "<group>"; };
+		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Front/AppDelegate.swift; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Front/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = SOURCE_ROOT; };
+
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -97,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+
 				52129214AA01DD48DC4A52A0 /* libPods-Front.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,6 +143,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+
+				BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */,
+
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +169,11 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+
 				58251CEBFA26423DEF728871 /* libPods-Front.a */,
+
+				F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */,
+
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -150,6 +181,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -183,10 +215,22 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+
 				89535F4F425DBE409839BEA5 /* Pods-Front.debug.xcconfig */,
 				74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */,
+				66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */,
+				240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */,
+
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		CD710E8C2DE0B47E0063954A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CD710E902DE0B47E0063954A /* libAirMaps.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,14 +240,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Front" */;
 			buildPhases = (
+
 				C204D48DEE6781BC18555C70 /* [CP] Check Pods Manifest.lock */,
+				8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+
 				9AAE3FC02DDB8FAF00F6592E /* Embed Watch Content */,
 				580218D296C2CD5303EEF00F /* [CP] Embed Pods Frameworks */,
 				3ABAF735FCC403686C4C376B /* [CP] Copy Pods Resources */,
+				0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */,
+				8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -307,6 +356,12 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CD710E8C2DE0B47E0063954A /* Products */;
+					ProjectRef = CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Front */,
@@ -316,6 +371,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		CD710E902DE0B47E0063954A /* libAirMaps.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAirMaps.a;
+			remoteRef = CD710E8F2DE0B47E0063954A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
@@ -370,6 +435,7 @@
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
 		3ABAF735FCC403686C4C376B /* [CP] Copy Pods Resources */ = {
+		0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -391,6 +457,7 @@
 			showEnvVarsInLog = 0;
 		};
 		580218D296C2CD5303EEF00F /* [CP] Embed Pods Frameworks */ = {
+		8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -411,7 +478,10 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+
 		C204D48DEE6781BC18555C70 /* [CP] Check Pods Manifest.lock */ = {
+		8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */ = {
+
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -488,13 +558,16 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+      
 			baseConfigurationReference = 89535F4F425DBE409839BEA5 /* Pods-Front.debug.xcconfig */;
+			baseConfigurationReference = 66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */;
+
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Front/Front.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M89V3Q63W3;
+				DEVELOPMENT_TEAM = RV94SG8W9U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Front/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -508,7 +581,10 @@
 					"-ObjC",
 					"-lc++",
 				);
+
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.reactjs.native.AFFLE.WatchOut;
+
 				PRODUCT_NAME = Front;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -518,13 +594,17 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+
 			baseConfigurationReference = 74CC9FE0CAFEACA60D543EE2 /* Pods-Front.release.xcconfig */;
+
+			baseConfigurationReference = 240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */;
+
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Front/Front.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M89V3Q63W3;
+				DEVELOPMENT_TEAM = RV94SG8W9U;
 				INFOPLIST_FILE = Front/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function PersonalInfoCard({ name, nationality, age }) {
+export default function PersonalInfoCard({ name, nationality, birth }) {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>개인 정보</Text>
@@ -14,8 +14,8 @@ export default function PersonalInfoCard({ name, nationality, age }) {
         <Text style={styles.value}>{nationality}</Text>
       </View>
       <View style={styles.infoRow}>
-        <Text style={styles.label}>나이:</Text>
-        <Text style={styles.value}>{age}</Text>
+        <Text style={styles.label}>생년월일:</Text>
+        <Text style={styles.value}>{birth}</Text>
       </View>
     </View>
   );

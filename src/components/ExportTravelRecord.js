@@ -5,7 +5,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 import ModalCard from './ModalCard';
 import ModalButton from './ModalButton';
-
+import { formatTime } from '../utils/timeUtils';
 
 export default function ExportTravelRecord({ scheduleByDate }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -17,7 +17,7 @@ export default function ExportTravelRecord({ scheduleByDate }) {
     Object.entries(scheduleByDate).forEach(([date, schedules]) => {
       html += `<h2>${date}</h2><ul>`;
       schedules.forEach(sch => {
-        html += `<li>${sch.time} - ${sch.place} (${sch.address})</li>`;
+        html += `<li>${formatTime(sch.spotTime)} - ${sch.spotName} (${sch.spotDetail})</li>`;
       });
       html += '</ul>';
     });
