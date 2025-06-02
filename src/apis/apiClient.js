@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { APIError } from '../utils/apiUtils';
+console.log('✅ API_BASE_URL:', API_BASE_URL);
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -27,6 +28,10 @@ apiClient.interceptors.request.use(
             `📤 요청: [${(config.method || '').toUpperCase()}] ${config.baseURL}${config.url}`,
             {
                 data: config.data,
+                //디버깅용 0602
+                headers: config.headers,
+                url: config.url,
+                method: config.method
             }
         );
 
