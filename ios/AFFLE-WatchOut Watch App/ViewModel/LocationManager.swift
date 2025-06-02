@@ -34,7 +34,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
       
         let roundedLat = location.coordinate.latitude.rounded(toPlaces: 5)
         let roundedLng = location.coordinate.longitude.rounded(toPlaces: 5)
-      
+        print("현재 위치: \(roundedLat), \(roundedLng)")
         DispatchQueue.main.async {
             self.latitude = location.coordinate.latitude
             self.longitude = location.coordinate.longitude
