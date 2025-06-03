@@ -4,29 +4,18 @@ import Foundation
 struct MainView: View {
     @StateObject private var healthManager = HealthKitManager()
     @State private var healthAuthorized = false
-    @EnvironmentObject var connectionHelper: ConnectionHelper
+    @EnvironmentObject var watchConnectivityManager: WatchConnectivityManager
     @Environment(\.scenePhase) var scenePhase
     @State private var now = Date()
     //재난정보
     @State private var alertTitle: String = ""
     @State private var alertContents: String = ""
     @State private var showAlert = false
-    let apiService = APIservice()
-  
+
     //위치 정보 추출
-    @StateObject private var locationManager = LocationManager()
-    @State private var lastAPICallLocation: GPSLocationModel? = nil
+    @ObservedObject var locationManager = LocationManager.shared
+    
 
-
-
-    var currentLocation: GPSLocationModel? {
-        if let lat = locationManager.latitude, let lng = locationManager.longitude {
-            return GPSLocationModel(lat: lat, lng: lng)
-        }
-        return nil
-    }
-
-  
     var localTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
@@ -62,7 +51,7 @@ struct MainView: View {
             Rectangle()
                 .fill(Color(red: 0/255, green: 32/255, blue: 158/255))
                 .edgesIgnoringSafeArea(.all)
-            if connectionHelper.isConnected {
+            if watchConnectivityManager.isConnected {
                 VStack(spacing: 8) {
                     LogoHeaderView()
                     TimeInfoView(
@@ -81,7 +70,7 @@ struct MainView: View {
                         activeEnergy: healthManager.activeEnergyBurned
                     )
                     
-                    MessageView(message: connectionHelper.receivedMessage)
+                    MessageView(message: watchConnectivityManager.receivedMessage)
                 }
                 .padding(12)
             } else {
@@ -107,38 +96,36 @@ struct MainView: View {
                 buttonAction: { showAlert = false }
             )
             .navigationBarHidden(true)
-          
         }
         .onAppear {
-          Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-              self.now = Date()
-          }
-          
-          healthManager.requestAuthorization { success in
-              if success {
-                  fetchAllHealthData()
-              }
-          }
-      
-          fetchAllHealthData()
-          if locationManager.authorizationStatus == .denied {
-              print("위치 권한이 거부되었습니다.\n워치 설정에서 위치 권한을 허용해주세요.")
-          }
-          
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                self.now = Date()
+            }
+            
+            healthManager.requestAuthorization { success in
+                if success {
+                    fetchAllHealthData()
+                }
+            }
+        
+            fetchAllHealthData()
+            if locationManager.authorizationStatus == .denied {
+                print("위치 권한이 거부되었습니다.\n워치 설정에서 위치 권한을 허용해주세요.")
+            }
         }
         .onChange(of: scenePhase) { newPhase in
             if newPhase == .active {
                 fetchAllHealthData()
             }
         }
-        .onReceive(locationManager.cityLevelLocationChanged) { (lat, lng) in
-            apiService.fetchDisasterAlert(lat: lat, lng: lng) { result in
-                if let result = result {
-                    DispatchQueue.main.async {
-                        alertTitle = result.title ?? ""
-                        alertContents = result.contents ?? ""
-                        showAlert = true
-                    }
+        .onReceive(NotificationCenter.default.publisher(for: .didReceiveDisasterAlert)) { notification in
+            if let userInfo = notification.userInfo,
+                let title = userInfo["title"] as? String,
+                let contents = userInfo["contents"] as? String {
+                DispatchQueue.main.async {
+                    alertTitle = title
+                    alertContents = contents
+                    showAlert = true
                 }
             }
         }
@@ -150,7 +137,6 @@ struct MainView: View {
         healthManager.fetchHeartRate()
         healthManager.fetchActiveEnergyBurned()
     }
-  
 }
 
 struct LogoHeaderView: View {
@@ -279,7 +265,7 @@ struct MessageView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      MainView()
-            .environmentObject(ConnectionHelper())
+        MainView()
+            .environmentObject(WatchConnectivityManager.shared)
     }
 }

@@ -67,6 +67,7 @@
 		9AAE3F9F2DDB8FAE00F6592E /* AFFLE-WatchOut Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AFFLE-WatchOut Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAE3FAB2DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9AAE3FB52DDB8FAF00F6592E /* AFFLE-WatchOut Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AFFLE-WatchOut Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9AD2759D2DEDE48300C2C3DB /* FrontDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FrontDebug.entitlements; path = Front/FrontDebug.entitlements; sourceTree = "<group>"; };
 		EC3366FB2C62BF8DFE9E5DC9 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -128,6 +129,7 @@
 		13B07FAE1A68108700A75B9A /* Front */ = {
 			isa = PBXGroup;
 			children = (
+				9AD2759D2DEDE48300C2C3DB /* FrontDebug.entitlements */,
 				9A119D972DDF61030000E799 /* Front.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
@@ -494,8 +496,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Front/Front.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Front/FrontDebug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Front/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -511,6 +516,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut;
 				PRODUCT_NAME = Front;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -706,9 +712,11 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "AFFLE-WatchOut Watch App/AFFLE-WatchOut Watch AppDebug.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M89V3Q63W3;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
@@ -731,6 +739,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.AFFLE.WatchOut.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";

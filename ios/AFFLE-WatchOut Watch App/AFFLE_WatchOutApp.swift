@@ -10,12 +10,12 @@ import WatchConnectivity
 
 @main
 struct AFFLE_WatchOut_Watch_AppApp: App {
-    @StateObject private var connectionHelper = ConnectionHelper()
+    @StateObject private var watchConnectivityManager = WatchConnectivityManager.shared
     
     var body: some Scene {
         WindowGroup {
             MainView()
-                .environmentObject(connectionHelper)
+                .environmentObject(watchConnectivityManager)
         }
     }
 }
