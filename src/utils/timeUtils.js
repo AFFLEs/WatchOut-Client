@@ -30,6 +30,7 @@ export const formatTime = (timeString) => {
 };
 
 
+
 export const formatDate = (dateString) => {
     if (!dateString) return null;
     
@@ -62,7 +63,7 @@ export const formatDatewithYear = (dateString) => {
       // 유효하지 않은 날짜인 경우
       if (isNaN(date.getTime())) {
           console.error('Invalid date string:', dateString);
-          return null;
+          return "2025-00-00";
       }
       
       const month = String(date.getMonth() + 1).padStart(2, '0');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import TravelScheduleCard from '../../components/TravelScheduleCard';
 import TravelRecordCard from '../../components/TravelRecordCard';
 import SectionCard from '../../components/SectionCard';
@@ -32,47 +33,89 @@ export default function TravelScreen() {
     try {
       const response = await travelAPI.getLatestTravelSpot();
       setScheduleByDate(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Failed to fetch latest travel spot:', error);
     }
   };
 
-  useEffect(() => {
-    const fetchTravelDates = async () => {
-      try {
-        const response = await travelAPI.getTravelDate();
-        console.log('Travel dates response:', response); // 디버깅을 위한 로그 추가
-        
-        if (!response || !response.data) {
-          console.error('Invalid travel dates response:', response);
-          return;
-        }
-
-        const { departDate, arriveDate } = response.data;
-        
-        if (!departDate || !arriveDate) {
-          console.error('Missing date values:', { departDate, arriveDate });
-          return;
-        }
-
-        setTravelDates({
-          departDate: departDate || '날짜 없음',
-          arriveDate: arriveDate || '날짜 없음'
-        });
-      } catch (error) {
-        console.error('Failed to fetch travel dates:', error);
-        setTravelDates({
-          departDate: '날짜 없음',
-          arriveDate: '날짜 없음'
-        });
+  const fetchTravelDates = async () => {
+    try {
+      const response = await travelAPI.getTravelDate();
+      
+      if (!response?.data) {
+        console.error('Invalid travel dates response:', response);
+        return;
       }
-    };
 
-    fetchTravelDates();
-    fetchLatestTravelSpot();
-  }, []);
+      const { departDate, arriveDate } = response.data;
+      
+      setTravelDates({
+        departDate: departDate || '',
+        arriveDate: arriveDate || ''
+      });
+    } catch (error) {
+      console.error('Failed to fetch travel dates:', error);
+      setTravelDates({
+        departDate: '',
+        arriveDate: ''
+      });
+    }
+  };
 
+  // 화면에 포커스될 때마다 데이터 새로 불러오기
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTravelDates();
+      fetchLatestTravelSpot();
+    }, [])
+  );
+
+  // 모든 일정 렌더링
+  const renderTravelRecords = () => {
+    console.log('Current scheduleByDate:', scheduleByDate);
+    
+    if (!scheduleByDate || typeof scheduleByDate !== 'object') {
+      console.warn('Invalid scheduleByDate:', scheduleByDate);
+      return null;
+    }
+
+    return Object.entries(scheduleByDate)
+      .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
+      .map(([dateLabel, schedules]) => {
+      
+        if (!Array.isArray(schedules)) {
+          console.warn(`❌ Invalid schedules for date ${dateLabel}:`, schedules);
+          return null;
+        }
+
+        const lastSchedule = schedules[schedules.length - 1];
+
+        // YYYY-MM-DD 형식의 날짜를 Date 객체로 변환
+        const dateObj = new Date(dateLabel);
+        
+        return (
+          <TravelRecordCard
+            key={dateLabel}
+            dateLabel={formatDate(dateObj)}
+            city={lastSchedule?.city || locationInfo?.city}
+            country={lastSchedule?.country || locationInfo?.country}
+            schedules={schedules.map(schedule => ({
+              time: schedule.spotTime ? formatTime(schedule.spotTime) : 'PLAN',
+              place: schedule.spotName,
+              address: schedule.spotDetail,
+              latitude: schedule.latitude,
+              longitude: schedule.longitude
+            }))}
+            onCheckSchedule={() => navigation.navigate('TravelRecordDetail', {
+              dateLabel: dateLabel,
+              city: lastSchedule?.city || locationInfo?.city,
+              country: lastSchedule?.country || locationInfo?.country,
+            })}
+          />
+        );
+      })
+      .filter(Boolean); // null 값 제거
+  };
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
@@ -84,29 +127,7 @@ export default function TravelScreen() {
       </SectionCard>
       <SectionCard title="여행 기록 카드">
         <AddTravelButton onPress={() => setModalVisible(true)} />
-        {Object.entries(scheduleByDate)
-          .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
-          .map(([dateLabel, schedules], idx) => (
-          <TravelRecordCard
-            key={dateLabel}
-            dateLabel={formatDate(dateLabel)}
-            city={schedules[schedules.length - 1]?.city || locationInfo?.city}
-            country={schedules[schedules.length - 1]?.country || locationInfo?.country}
-            schedules={schedules.map(schedule => ({
-              time: formatTime(schedule.spotTime) || 'PLAN',
-              place: schedule.spotName,
-              address: schedule.spotDetail,
-              latitude: schedule.latitude,
-              longitude: schedule.longitude
-            }))}
-            onCheckSchedule={() => navigation.navigate('TravelRecordDetail', {
-              dateLabel: dateLabel,
-              city: schedules[schedules.length - 1]?.city || locationInfo?.city,
-              country: schedules[schedules.length - 1]?.country || locationInfo?.country,
-            })}
-          />
-        ))}
-        
+        {renderTravelRecords()}
         <TravelRecordNotice />
         <ExportTravelRecord scheduleByDate={scheduleByDate} />
         <ScheduleInputModal

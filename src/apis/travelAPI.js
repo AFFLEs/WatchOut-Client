@@ -26,5 +26,21 @@ export const travelAPI = {
     } catch (error) {
       throw handleApiError(error);
     }
+  },
+  postTravelSpot: async (data) => {
+    try {
+      const response = await apiClient.post(ENDPOINTS.SPOT.BASE, data);
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
+  },
+  deleteTravelSpot: async (spotId) => {
+    try {
+      const response = await apiClient.delete(ENDPOINTS.SPOT.DELETE(spotId));
+      return response.data;
+    } catch (error) {
+      throw handleApiError(error);
+    }
   }
 }; 

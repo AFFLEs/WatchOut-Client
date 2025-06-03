@@ -14,10 +14,20 @@ export default function ExportTravelRecord({ scheduleByDate }) {
   const handleExport = async () => {
     // HTML 생성
     let html = '<h1>여행 기록</h1>';
-    Object.entries(scheduleByDate).forEach(([date, schedules]) => {
+    
+    // 날짜로 정렬
+    const sortedDates = Object.keys(scheduleByDate).sort((a, b) => {
+      const dateA = new Date(a);
+      const dateB = new Date(b);
+      return dateA - dateB;
+    });
+
+    sortedDates.forEach(date => {
+      const schedules = scheduleByDate[date];
       html += `<h2>${date}</h2><ul>`;
       schedules.forEach(sch => {
-        html += `<li>${formatTime(sch.spotTime)} - ${sch.spotName} (${sch.spotDetail})</li>`;
+        const timeDisplay = sch.spotTime ? `${formatTime(sch.spotTime)} -` : '예정 -';
+        html += `<li>${timeDisplay} ${sch.spotName} (${sch.spotDetail})</li>`;
       });
       html += '</ul>';
     });
