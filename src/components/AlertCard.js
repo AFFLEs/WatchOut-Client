@@ -1,15 +1,42 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { alertTemplates } from '../datas/alertTemplates';
-import { AlertCircle, X } from 'lucide-react-native'; // X는 닫기 아이콘
+import { AlertCircle, X, Cloud, CloudRain, Sun } from 'lucide-react-native'; // 날씨 아이콘 추가
 
-const AlertCard = ({ title, description }) => {
+const AlertCard = ({ title, description, type, isWarning }) => {
+  // 알림 타입에 따른 아이콘과 스타일 결정
+  const getAlertStyle = () => {
+    if (type === 'weather') {
+      if (isWarning) {
+        return {
+          backgroundColor: '#FFF3CD', // 황색 경고
+          icon: <CloudRain color={'#856404'} size={20} />,
+          titleColor: '#856404'
+        };
+      } else {
+        return {
+          backgroundColor: '#E8F4FD', // 연한 파랑색
+          icon: <Sun color={'#0066CC'} size={20} />,
+          titleColor: '#0066CC'
+        };
+      }
+    }
+    
+    // 기본 경고 스타일 (기존 재해/안전 경보)
+    return {
+      backgroundColor: '#FFEAEA',
+      icon: <AlertCircle color={'#D32F2F'} size={20} />,
+      titleColor: '#D32F2F'
+    };
+  };
+
+  const alertStyle = getAlertStyle();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: alertStyle.backgroundColor }]}>
       <View style={styles.header}>
-        <AlertCircle color={'#D32F2F'} size={20} />
-        <Text style={styles.title}>{title}</Text>
+        {alertStyle.icon}
+        <Text style={[styles.title, { color: alertStyle.titleColor }]}>{title}</Text>
       </View>
       <Text style={styles.description}>{description}</Text>
     </View>
@@ -21,7 +48,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
-    backgroundColor: '#FFEAEA',
   },
   header: {
     flexDirection: 'row',
@@ -42,7 +68,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 13,
     lineHeight: 18,
-    
   },
   time: {
     marginTop: 4,

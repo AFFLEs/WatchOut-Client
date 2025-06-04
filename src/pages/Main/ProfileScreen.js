@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../../../App';
 import { userAPI } from '../../apis/userAPI';
 import { formatPhoneNumberForDisplay } from '../../utils/userUtils';
-
+import { stopLocationTracking, isLocationTrackingActive, sendLocationNow } from '../../utils/backgroundUtils';
 
 export default function ProfileScreen() {
   const [emergencyDataSharing, setEmergencyDataSharing] = useState(true);
@@ -63,7 +63,6 @@ export default function ProfileScreen() {
       // 인증 상태 초기화
       setAccessToken(null);
       setIsAuthenticated(false);
-      BackgroundFetch.stop();
       console.log('로그아웃 성공');
     } catch (error) {
       console.error('로그아웃 중 오류:', error);
@@ -424,12 +423,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
     padding: 12,
     borderRadius: 8,
-    width: '50%',
+    width: '46%',
   },
   testButtonText: {
     fontSize: 14,
     color: '#1F2937',
     fontWeight: '500',
+    textAlign: 'center',
   },
   sendButton: {
     backgroundColor: '#2563EB',
