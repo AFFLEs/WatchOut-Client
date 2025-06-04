@@ -68,13 +68,6 @@ export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
     return { data: [], isCache: false };
   }
 
-  // 먼저 캐시 확인
-  const cached = await getFromCache(type, lat, lng);
-  if (cached) {
-    console.log("📦 캐시된 데이터를 사용합니다.");
-    return { data: cached.data, isCache: true, timestamp: cached.timestamp };
-  }
-
   try {
     const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
     const params = {

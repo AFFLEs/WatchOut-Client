@@ -1975,6 +1975,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/geolocation@^3.4.0":
+  version "3.4.0"
+  resolved "https://registry.npmjs.org/@react-native-community/geolocation/-/geolocation-3.4.0.tgz"
+  integrity sha512-bzZH89/cwmpkPMKKveoC72C4JH0yF4St5Ceg/ZM9pA1SqX9MlRIrIrrOGZ/+yi++xAvFDiYfihtn9TvXWU9/rA==
+
 "@react-native-picker/picker@^2.11.0":
   version "2.11.0"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.11.0.tgz"
@@ -7152,6 +7157,16 @@ react-is@^19.1.0:
   resolved "https://registry.npmjs.org/react-is/-/react-is-19.1.0.tgz"
   integrity sha512-Oe56aUPnkHyyDxxkvqtd7KkdQP5uIUfHxd5XTb3wE9d/kRnZLmKbDB0GWk919tdQ+mxxPtG6EAs6RMT6i1qtHg==
 
+react-native-background-fetch@^4.2.8:
+  version "4.2.8"
+  resolved "https://registry.npmjs.org/react-native-background-fetch/-/react-native-background-fetch-4.2.8.tgz"
+  integrity sha512-vKPumvhBuxr3oI1L7cNunYIsKV8jD4Xz2A9JT/FW5yvn7GAAct184FAZ9dFef75auBxixinaCjRBlip53xGWmQ==
+
+react-native-background-timer@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/react-native-background-timer/-/react-native-background-timer-2.4.1.tgz"
+  integrity sha512-TE4Kiy7jUyv+hugxDxitzu38sW1NqjCk4uE5IgU2WevLv7sZacaBc6PZKOShNRPGirLl1NWkaG3LDEkdb9Um5g==
+
 react-native-calendars@^1.1312.0:
   version "1.1312.0"
   resolved "https://registry.npmjs.org/react-native-calendars/-/react-native-calendars-1.1312.0.tgz"
@@ -7333,7 +7348,7 @@ react-native-vector-icons@^10.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.30.0", "react-native@>= 0.76.0", react-native@>=0.23.1, react-native@>=0.47, react-native@>=0.56, react-native@>=0.59.0, react-native@>=0.70.0, react-native@>=0.73.0, react-native@0.77.0:
+react-native@*, "react-native@^0.0.0-0 || >=0.65 <1.0", "react-native@>= 0.30.0", "react-native@>= 0.76.0", react-native@>=0.23.1, react-native@>=0.47, react-native@>=0.47.0, react-native@>=0.56, react-native@>=0.59.0, react-native@>=0.70.0, react-native@>=0.73.0, react-native@0.77.0:
   version "0.77.0"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.77.0.tgz"
   integrity sha512-oCgHLGHFIp6F5UbyHSedyUXrZg6/GPe727freGFvlT7BjPJ3K6yvvdlsp7OEXSAHz6Fe7BI2n5cpUyqmP9Zn+Q==

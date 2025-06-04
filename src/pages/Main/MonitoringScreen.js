@@ -8,14 +8,16 @@ import InstitutionList from '../../components/InstitutionList';
 import { fetchAllNearbyInstitutions } from '../../utils/mapUtils';
 import { useLocation } from '../../contexts/LocationContext';
 import { userAPI } from '../../apis/userAPI';
+import { disastersAPI } from '../../apis/disastersAPI';
 
 export default function MonitoringScreen() {
   const [vibrationAlert, setVibrationAlert] = useState(true);
-  const [institutions, setInstitutions] = useState([]);
+  const [institutions, setInstitutions] = useState(null);
   const [institutionsCache, setInstitutionsCache] = useState({
     isCache: false,
     lastUpdated: null
   });
+  const [disasters, setDisasters] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { locationInfo } = useLocation();
 
@@ -33,8 +35,18 @@ export default function MonitoringScreen() {
     }
   };
 
+  const fetchDisasters = async () => {
+    try {
+      const response = await disastersAPI.getAlert(locationInfo.latitude, locationInfo.longitude);
+      setDisasters(response.data);
+    } catch (error) {
+      console.error('지역 별 안전 경보 가져오기 실패:', error);
+    }
+  };
+
   useEffect(() => {
     fetchUserSettings();
+    fetchDisasters();
   }, []);
 
   // 기관 정보 새로고침 함수
@@ -66,10 +78,6 @@ export default function MonitoringScreen() {
       {/* 건강 모니터링 */}
       <SectionCard title="건강 모니터링">
         <HealthMetricsCard {...health} />
-        <AlertCard
-          type="dehydration" 
-          timeAgo="2시간 전" 
-        />
         <SwitchRow
           label="진동 경고 알림"
           value={vibrationAlert}
@@ -82,14 +90,13 @@ export default function MonitoringScreen() {
       <SectionCard 
         title="지역 별 안전 경보"
       >
-        <AlertCard
-          type="earthquake" 
-          timeAgo="2시간 전" 
-        />
-        <AlertCard
-          type="rainstorm" 
-          timeAgo="2시간 전" 
-        />
+        {disasters.map((disaster, index) => (
+          <AlertCard
+            key={index}
+            title={disaster.title}
+            description={disaster.contents}
+          />
+        ))}
         <View style={styles.institutionContainer}>
           <Text style={styles.institutionTitle}>근처 응급 기관 정보</Text>
           <Text style={styles.institutionSubtitle}>{institutionsCache.isCache ? `마지막 업데이트: ${institutionsCache.lastUpdated}` : '방금 전'}</Text>

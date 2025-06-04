@@ -6,7 +6,7 @@ import tzlookup from 'tz-lookup';
 
 export const requestLocationPermission = async () => {
   if (Platform.OS === 'ios') {
-    const result = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+    const result = await request(PERMISSIONS.IOS.LOCATION_ALWAYS);
     console.log('위치 권한 요청 결과:', result);
     return result === RESULTS.GRANTED;
   }

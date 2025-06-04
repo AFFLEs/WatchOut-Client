@@ -3,26 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { alertTemplates } from '../datas/alertTemplates';
 import { AlertCircle, X } from 'lucide-react-native'; // X는 닫기 아이콘
 
-const AlertCard = ({ type, magnitude, distance, timeAgo, showCloseButton, onClose }) => {
-  const template = alertTemplates[type];
-
-  if (!template) return null;
-
-  const description = template.getDescription({ magnitude, distance });
+const AlertCard = ({ title, description }) => {
 
   return (
-    <View style={[styles.container, { backgroundColor: template.backgroundColor }]}>
+    <View style={styles.container}>
       <View style={styles.header}>
-        <AlertCircle color={template.iconColor} size={20} />
-        <Text style={styles.title}>{template.title}</Text>
-        {showCloseButton && (
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <X color="#888" size={18} />
-          </TouchableOpacity>
-        )}
+        <AlertCircle color={'#D32F2F'} size={20} />
+        <Text style={styles.title}>{title}</Text>
       </View>
       <Text style={styles.description}>{description}</Text>
-      {timeAgo ? <Text style={styles.time}>{timeAgo}</Text> : null}
     </View>
   );
 };

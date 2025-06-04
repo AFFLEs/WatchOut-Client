@@ -17,16 +17,53 @@ export default function ProfileScreen() {
   const [birth, setBirth] = useState('1990-01-01');
   const [phoneNumber, setPhoneNumber] = useState('010-0000-0000');
 
+  // 위치 추적 테스트 함수
+  const testLocationTracking = async () => {
+    Alert.alert(
+      '🧪 위치 추적 테스트',
+      '지금 즉시 현재 위치를 서버에 전송합니다.',
+      [
+        { text: '취소', style: 'cancel' },
+        {
+          text: '전송',
+          onPress: async () => {
+            try {
+              await sendLocationNow();
+              Alert.alert('✅ 성공', '위치가 성공적으로 전송되었습니다.');
+            } catch (error) {
+              Alert.alert('❌ 오류', '위치 전송 중 오류가 발생했습니다.');
+            }
+          }
+        }
+      ]
+    );
+  };
+
+  // 추적 상태 확인
+  const checkTrackingStatus = () => {
+    const isActive = isLocationTrackingActive();
+    Alert.alert(
+      '📊 위치 추적 상태',
+      `현재 상태: ${isActive ? '✅ 활성화됨 (5분 간격)' : '❌ 비활성화됨'}\n\n` +
+      '• 로그인 시 자동으로 시작됩니다.\n' +
+      '• 로그아웃 시 자동으로 중지됩니다.\n' +
+      '• 앱이 실행 중일 때만 작동합니다.',
+      [{ text: '확인' }]
+    );
+  };
+
   const handleLogout = async () => {
     try {
+      // 위치 추적 중지
+      stopLocationTracking();
+      
       // 토큰 삭제
       await AsyncStorage.removeItem('accessToken');
-      await AsyncStorage.removeItem('refreshToken');
       
       // 인증 상태 초기화
       setAccessToken(null);
       setIsAuthenticated(false);
-      
+      BackgroundFetch.stop();
       console.log('로그아웃 성공');
     } catch (error) {
       console.error('로그아웃 중 오류:', error);
@@ -216,6 +253,20 @@ export default function ProfileScreen() {
         </View>
       </SectionCard>
 
+      {/* 위치 추적 테스트 섹션 */}
+      <SectionCard title="개발자 도구" style={styles.section}>
+        <View style={styles.testContainer}>
+          <TouchableOpacity style={styles.testButton} onPress={checkTrackingStatus}>
+            <Text style={styles.testButtonText}>📊 추적 상태 확인</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity style={[styles.testButton, styles.sendButton]} onPress={testLocationTracking}>
+            <Text style={[styles.testButtonText, styles.sendButtonText]}>🧪 즉시 위치 전송</Text>
+          </TouchableOpacity>
+        </View>
+      
+      </SectionCard>
+
       {/* 로그아웃 버튼 */}
       <View style={styles.logoutContainer}>
         <TouchableOpacity 
@@ -363,4 +414,30 @@ const styles = StyleSheet.create({
     marginTop: 12,
     textAlign: 'center',
   },    
+  testContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  testButton: {
+    backgroundColor: '#F3F4F6',
+    padding: 12,
+    borderRadius: 8,
+    width: '50%',
+  },
+  testButtonText: {
+    fontSize: 14,
+    color: '#1F2937',
+    fontWeight: '500',
+  },
+  sendButton: {
+    backgroundColor: '#2563EB',
+  },
+  sendButtonText: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: '500',
+  },
+  
 });

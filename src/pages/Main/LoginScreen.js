@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } fro
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { userAPI } from '../../apis/userAPI';
 import { AuthContext } from '../../../App';
+import { startLocationTracking } from '../../utils/backgroundUtils';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -26,13 +27,17 @@ export default function LoginScreen({ navigation }) {
 
     try {
       const response = await userAPI.loginUserInfo(userInfo);
-      const { accessToken, refreshToken } = response.data;
+      const { accessToken } = response.data;
 
       await AsyncStorage.setItem('accessToken', accessToken);
-      
+
       setAccessToken(accessToken);
       setIsAuthenticated(true);
       
+      // 로그인 성공 후 위치 추적 시작
+      console.log('✅ 로그인 성공 - 위치 추적 시작');
+      await startLocationTracking();
+
       console.log('로그인 성공');
     } catch (error) {
       console.error('로그인 에러:', error);

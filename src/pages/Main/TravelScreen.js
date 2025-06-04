@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import TravelScheduleCard from '../../components/TravelScheduleCard';
 import TravelRecordCard from '../../components/TravelRecordCard';
@@ -16,6 +16,7 @@ import { formatDate, formatDatewithYear, formatTime } from '../../utils/timeUtil
 export default function TravelScreen() {
   const [scheduleByDate, setScheduleByDate] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [travelDates, setTravelDates] = useState({
     departDate: '',
     arriveDate: ''
@@ -59,6 +60,23 @@ export default function TravelScreen() {
         departDate: '',
         arriveDate: ''
       });
+    }
+  };
+
+  // 새로고침 핸들러
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {
+      console.log('🔄 Pull-to-refresh: 데이터 새로고침 중...');
+      await Promise.all([
+        fetchTravelDates(),
+        fetchLatestTravelSpot()
+      ]);
+      console.log('✅ Pull-to-refresh: 새로고침 완료');
+    } catch (error) {
+      console.error('❌ Pull-to-refresh 오류:', error);
+    } finally {
+      setRefreshing(false);
     }
   };
 
@@ -118,7 +136,19 @@ export default function TravelScreen() {
   };
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}>
+    <ScrollView 
+      style={{ flex: 1, backgroundColor: '#F5F5F5', padding: 2 }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={['#2563EB']} // Android 새로고침 색상
+          tintColor="#2563EB" // iOS 새로고침 색상
+          title="새로고침 중..." // iOS 새로고침 텍스트
+          titleColor="#2563EB" // iOS 새로고침 텍스트 색상
+        />
+      }
+    >
       <SectionCard title="여행 일정">
         <TravelScheduleCard 
           departureDate={formatDate(travelDates.departDate)} 
