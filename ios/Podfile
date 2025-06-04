@@ -30,7 +30,7 @@ target 'Front' do
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
   require_relative '../node_modules/react-native-permissions/scripts/setup'
   setup_permissions([
-    # 'Health',
+    'Health',
     'LocationWhenInUse'
   ])
   
