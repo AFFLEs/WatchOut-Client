@@ -99,6 +99,7 @@ apiClient.interceptors.response.use(
                     data: error.response.data,
                 }
             );
+            console.log("📦 전체 error.response 객체:", error.response);
         }
         // 네트워크 에러 처리
         else if (error.request) {
