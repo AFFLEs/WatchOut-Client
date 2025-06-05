@@ -20,6 +20,13 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var longitude: Double?
     @Published var authorizationStatus: CLAuthorizationStatus = .notDetermined
     
+    var currentLocation: (latitude: Double, longitude: Double) {
+        guard let lat = latitude, let lng = longitude else {
+            return (0, 0) // 기본값 처리
+        }
+        return (lat, lng)
+    }
+
     private var hasCalledAPIForCurrentToken = false //최초 Ambee API 호출 여부 트래킹
     private var lastNotifiedLocation: CLLocation?
     let cityLevelLocationChanged = PassthroughSubject<(lat: Double, lng: Double), Never>()

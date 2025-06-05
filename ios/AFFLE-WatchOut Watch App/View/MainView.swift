@@ -118,6 +118,15 @@ struct MainView: View {
                 fetchAllHealthData()
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .didReceiveAccessToken)) { _ in
+            print("🔑 토큰 수신됨 - HealthKit 모니터링 시작")
+            healthManager.requestAuthorization { success in
+                print("✅ HealthKit 권한: \(success)")
+                if success {
+                    healthManager.startHealthMonitoring()
+                }
+            }
+        }
         .onReceive(NotificationCenter.default.publisher(for: .didReceiveDisasterAlert)) { notification in
             if let userInfo = notification.userInfo,
                 let title = userInfo["title"] as? String,
