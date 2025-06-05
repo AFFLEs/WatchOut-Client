@@ -13,7 +13,7 @@ class HealthKitManager: ObservableObject {
     private let healthStore = HKHealthStore()
     
     @Published var steps: Int = 0
-    @Published var heartRate: Double = 0
+    @Published var heartRate: Int = 0
     @Published var activeEnergyBurned: Double = 0
     
     func requestAuthorization(completion: @escaping (Bool) -> Void) {
@@ -47,9 +47,9 @@ class HealthKitManager: ObservableObject {
         let query = HKSampleQuery(sampleType: type, predicate: nil, limit: 1, sortDescriptors: [sort]) { [weak self] _, samples, _ in
             if let sample = samples?.first as? HKQuantitySample {
                 let value = sample.quantity.doubleValue(for: HKUnit(from: "count/min"))
-                print("심박수 : \(value) bpm") //디버깅용
+                print("심박수2 : \(Int(value)) bpm") //디버깅용
                 DispatchQueue.main.async {
-                    self?.heartRate = value
+                    self?.heartRate = Int(value)
                 }
             }
         }
@@ -104,27 +104,21 @@ extension HealthKitManager {
         // 위험 상황 판단
         let isEmergency = heartRate > 30
         print("🚨 응급상황 여부: \(isEmergency) (heartRate: \(heartRate) > 30)")
-          
+
         if isEmergency {
-            print("🚀 응급 API 호출 시작")
-            APIservice.shared.sendEmergencyAlert(
-                reason: "심박수가 너무 높습니다.",
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude
-            ) { result in
-                switch result {
-                case .success(let response):
-                    print("비상 신호 전송 성공: \(response.data.userName)")
-                    DispatchQueue.main.async {
-                        // UI 업데이트 또는 알림 처리
-                    }
-                case .failure(let error):
-                    print("비상 신호 전송 실패: \(error.localizedDescription)")
-                    // 재시도 로직 추가 가능
-                }
-            }
+            let userInfo: [String: Any] = [
+                "reason": "심박수가 너무 높습니다: \(heartRate) BPM",
+                "latitude": currentLocation.latitude,
+                "longitude": currentLocation.longitude
+            ]
+            NotificationCenter.default.post(
+                name: .emergencyDetected,
+                object: nil,
+                userInfo: userInfo
+            )
+        }else{
+            print("❌ 응급상황 아님 - API 호출 안함")
         }
-        print("❌ 응급상황 아님 - API 호출 안함")
     }
 }
 

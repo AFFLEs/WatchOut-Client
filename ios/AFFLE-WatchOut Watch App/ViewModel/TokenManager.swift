@@ -13,4 +13,6 @@ class TokenManager {
 }
 extension Notification.Name {
     static let didReceiveAccessToken = Notification.Name("didReceiveAccessToken")
+    static let emergencyDetected = Notification.Name("emergencyDetected")
 }
+

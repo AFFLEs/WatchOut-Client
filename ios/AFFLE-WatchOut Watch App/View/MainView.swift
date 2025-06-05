@@ -15,7 +15,13 @@ struct MainView: View {
     //위치 정보 추출
     @ObservedObject var locationManager = LocationManager.shared
     
-
+    //응급문자 전송
+    @State private var showEmergencyAlert = false
+    @State private var emergencyTimer: Timer?
+    @State private var emergencyReason = ""
+    @State private var emergencyLatitude = 0.0
+    @State private var emergencyLongitude = 0.0
+  
     var localTime: String {
         let formatter = DateFormatter()
         formatter.locale = Locale.current
@@ -138,6 +144,42 @@ struct MainView: View {
                 }
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .emergencyDetected)) { notification in
+            if let userInfo = notification.userInfo,
+               let reason = userInfo["reason"] as? String,
+               let lat = userInfo["latitude"] as? Double,
+               let lng = userInfo["longitude"] as? Double {
+                
+                DispatchQueue.main.async {
+                    self.showAlert = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.emergencyReason = reason
+                        self.emergencyLatitude = lat
+                        self.emergencyLongitude = lng
+                        self.showEmergencyAlert = true
+                    }
+                }
+            }
+        }
+        .alert("🚨 위험 상황 감지", isPresented: $showEmergencyAlert) {
+            Button("안전합니다", role: .cancel) {
+                emergencyTimer?.invalidate()
+            }
+        } message: {
+            Text("10초 내로 버튼을 눌러 취소해주세요!\n사유: \(emergencyReason)")
+        }
+          if newValue {
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                  print("!!!!!!!!!1들어왔니!!!!!!1")
+                  startEmergencyTimer()
+                  print("!!!!!!!!!나왔니!!!!!!!!!1")
+              }
+          } else {
+              emergencyTimer?.invalidate()
+              
+          }
+        }
+
 
     }
     
@@ -146,6 +188,33 @@ struct MainView: View {
         healthManager.fetchHeartRate()
         healthManager.fetchActiveEnergyBurned()
     }
+
+    private func startEmergencyTimer() {
+        emergencyTimer?.invalidate()
+        print("⏳ 10초 타이머 시작: \(Date())")
+        emergencyTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: false) { _ in
+            print("🔔 10초 경과 - API 호출: \(Date())")
+            APIservice.shared.sendEmergencyAlert(
+                reason: self.emergencyReason,
+                latitude: self.emergencyLatitude,
+                longitude: self.emergencyLongitude
+            ) { result in
+                switch result {
+                case .success(let response):
+                    print("✅ 비상 신호 전송 성공: \(response.data.userName)")
+                case .failure(let error):
+                    print("❌ 비상 신호 전송 실패: \(error.localizedDescription)")
+                }
+            }
+        }
+        // ✅ RunLoop에 .common 모드로 추가
+        if let emergencyTimer = emergencyTimer {
+            RunLoop.main.add(emergencyTimer, forMode: .common)
+        }
+    }
+
+
+
 }
 
 struct LogoHeaderView: View {
@@ -222,13 +291,13 @@ struct LineDivider: View {
 
 struct BottomStatsView: View {
     let steps: Int
-    let heartRate: Double
+    let heartRate: Int
     let activeEnergy: Double
 
     var body: some View {
         HStack(spacing: 20) {
             StatItemView(icon: "stepIcon", value: "\(steps)")
-            StatItemView(icon: "heartIcon",  value: String(format: "%.0f", heartRate))
+            StatItemView(icon: "heartIcon",  value:"\(heartRate)")
             StatItemView(icon: "kcalIcon", value: String(format: "%.0f", activeEnergy))
         }
         .padding(.bottom, 8)
@@ -278,3 +347,4 @@ struct ContentView_Previews: PreviewProvider {
             .environmentObject(WatchConnectivityManager.shared)
     }
 }
+
