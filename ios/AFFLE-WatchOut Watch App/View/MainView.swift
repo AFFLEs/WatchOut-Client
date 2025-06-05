@@ -168,6 +168,7 @@ struct MainView: View {
         } message: {
             Text("10초 내로 버튼을 눌러 취소해주세요!\n사유: \(emergencyReason)")
         }
+        .onChange(of: showEmergencyAlert) { newValue in
           if newValue {
               DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                   print("!!!!!!!!!1들어왔니!!!!!!1")
