@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { userAPI } from '../../apis';
 
 export default function SignUpScreen({ navigation }) {
@@ -38,68 +38,77 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <Image source={require('../../assets/icons/logo.png')} style={styles.logo} />
-        <Text style={styles.description}>여행자들을 위한 스마트 워치 안전 관리 서비스</Text>
-      </View>
-      <View style={styles.inputContainer}>
-          <Text style={styles.inputText}>이름</Text>
-          <TextInput
-            style={styles.input}
-            value={name}
-            onChangeText={setName} 
-          />
-          <Text style={styles.inputText}>생년월일</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="YYYY-MM-DD"
-            value={birthday}
-            onChangeText={setBirthday}
-            keyboardType='number-pad'
-            maxLength={10}
-          />
-          <Text style={styles.inputText}>이메일</Text>
-          <TextInput
-            style={styles.input}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType='email-address'
-            autoCapitalize='none'
-          />
-          <Text style={styles.inputText}>비밀번호</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={true}
-          />
-          <Text style={styles.inputText}>비밀번호 확인</Text>
-          <TextInput
-            style={styles.input}
-            value={passwordConfirm}
-            onChangeText={setPasswordConfirm}
-            secureTextEntry={true}
-          />
-          <Text style={styles.inputText}>연락처</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="01012345678"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType='phone-pad'
-            maxLength={11}
-          />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.signupButton} onPress={handleSignUp}>
-          <Text style={styles.signupButtonText}>회원가입 진행하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton} onPress={handleBack}>
-          <Text style={styles.loginButtonText}>로그인하기</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView 
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.contentContainer}>
+          <Image source={require('../../assets/icons/logo.png')} style={styles.logo} />
+          <Text style={styles.description}>여행자들을 위한 스마트 워치 안전 관리 서비스</Text>
+        </View>
+        <View style={styles.inputContainer}>
+            <Text style={styles.inputText}>이름</Text>
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={setName} 
+            />
+            <Text style={styles.inputText}>생년월일</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="YYYY-MM-DD"
+              value={birthday}
+              onChangeText={setBirthday}
+              maxLength={10}
+            />
+            <Text style={styles.inputText}>이메일</Text>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={setEmail}
+              keyboardType='email-address'
+              autoCapitalize='none'
+            />
+            <Text style={styles.inputText}>비밀번호</Text>
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+            />
+            <Text style={styles.inputText}>비밀번호 확인</Text>
+            <TextInput
+              style={styles.input}
+              value={passwordConfirm}
+              onChangeText={setPasswordConfirm}
+              secureTextEntry={true}
+            />
+            <Text style={styles.inputText}>연락처</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="01012345678"
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType='phone-pad'
+              maxLength={11}
+            />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.signupButton} onPress={handleSignUp}>
+            <Text style={styles.signupButtonText}>회원가입 진행하기</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.loginButton} onPress={handleBack}>
+            <Text style={styles.loginButtonText}>로그인하기</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -107,6 +116,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingBottom: 30,
   },
   contentContainer: {
     alignItems: 'left',

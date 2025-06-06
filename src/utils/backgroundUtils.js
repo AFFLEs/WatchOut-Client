@@ -81,14 +81,29 @@ const getAddressFromCoordinates = async (latitude, longitude) => {
     const data = await response.json();
     
     if (data.status === 'OK' && data.results.length > 0) {
-      const result = data.results[0];
-      const addressComponents = result.address_components;
+      const result = data.results[0]; // One Apple Park Way, Cupertino, CA 95014, USA
+      const addressComponents = result.address_components; // One Apple Park Way, Cupertino, CA 95014, USA
       
       // ScheduleInputModal과 동일한 방식으로 데이터 추출
-      const spotName = addressComponents[0]?.long_name || '현재 위치';
-      const spotDetail = result.formatted_address || '';
-      const city = addressComponents.find(c => c.types.includes('administrative_area_level_1'))?.long_name || 'Not Found';
-      const country = addressComponents.find(c => c.types.includes('country'))?.long_name || 'Not Found';
+      // 구체적인 장소명 찾기 (establishment, point_of_interest, route 순으로 우선순위)
+      const spotNameComponent = addressComponents.find(c => 
+        c.types.includes('establishment') || 
+        c.types.includes('point_of_interest') ||
+        c.types.includes('route')
+      );
+      const spotName = spotNameComponent?.long_name || addressComponents[0]?.long_name || '현재 위치'; // One Apple Park Way
+      
+      const spotDetail = result.formatted_address || ''; // One Apple Park Way, Cupertino, CA 95014, USA
+      
+      // 도시명 찾기 (locality 우선, 없으면 administrative_area_level_2, 그 다음 administrative_area_level_1)
+      const cityComponent = addressComponents.find(c => 
+        c.types.includes('locality') || 
+        c.types.includes('administrative_area_level_2') ||
+        c.types.includes('administrative_area_level_1')
+      );
+      const city = cityComponent?.long_name || 'Not Found'; // Cupertino
+      
+      const country = addressComponents.find(c => c.types.includes('country'))?.long_name || 'Not Found'; // USA
       
       return { spotName, spotDetail, city, country };
     } else {
@@ -176,7 +191,9 @@ const trackAndSendLocation = async () => {
     Geolocation.getCurrentPosition(
       async (position) => {
         try {
-          const { latitude, longitude } = position.coords;
+          // const { latitude, longitude } = position.coords;
+          const latitude = 37.3349;
+          const longitude = -122.0090;
           console.log(`📍 위치 획득: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
 
           // 주소 정보 가져오기

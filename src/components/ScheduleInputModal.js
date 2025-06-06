@@ -123,7 +123,7 @@ export default function ScheduleInputModal({
   // ────────────────────────────────────────────────────────────────────────────
   const searchPlace = async (query) => {
     try {
-      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=place_id,name,formatted_address,geometry&key=${GOOGLE_MAPS_API_KEY}&language=ko`;
+      const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=place_id,name,formatted_address,geometry&language=en&key=${GOOGLE_MAPS_API_KEY}`;
       
       const response = await fetch(url, {
         method: 'GET',
@@ -154,7 +154,7 @@ export default function ScheduleInputModal({
   // ────────────────────────────────────────────────────────────────────────────
   const fetchPlaceDetails = async (placeId) => {
     try {
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${GOOGLE_MAPS_API_KEY}&language=ko`;
+      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&language=en&key=${GOOGLE_MAPS_API_KEY}`;
       
       const response = await fetch(url, {
         method: 'GET',
