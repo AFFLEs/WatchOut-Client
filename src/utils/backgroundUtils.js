@@ -67,7 +67,7 @@ const checkLocationPermission = async () => {
       });
     }
   } catch (error) {
-    console.error('위치 권한 체크 오류:', error);
+    console.log('위치 권한 체크 오류:', error);
     return false;
   }
 };
@@ -101,7 +101,7 @@ const getAddressFromCoordinates = async (latitude, longitude) => {
       };
     }
   } catch (error) {
-    console.error('역지오코딩 오류:', error);
+    console.log('역지오코딩 오류:', error);
     return {
       spotName: '위치 오류',
       spotDetail: '',
@@ -141,7 +141,7 @@ const formatDateTimeForTimezone = (latitude, longitude) => {
       spotTime: timePart      // HH:MM:SS
     };
   } catch (error) {
-    console.error('Timezone 처리 오류:', error);
+    console.log('Timezone 처리 오류:', error);
     // 오류 시 UTC 시간 사용
     const now = new Date();
     const utcTime = now.toISOString();
@@ -205,11 +205,11 @@ const trackAndSendLocation = async () => {
           console.log('✅ 위치 전송 성공');
 
         } catch (apiError) {
-          console.error('❌ API 전송 실패:', apiError);
+          console.log('❌ API 전송 실패:', apiError);
         }
       },
       (error) => {
-        console.error('❌ 위치 획득 실패:', error.message);
+        console.log('❌ 위치 획득 실패:', error.message);
       },
       {
         enableHighAccuracy: true,
@@ -218,7 +218,7 @@ const trackAndSendLocation = async () => {
       }
     );
   } catch (error) {
-    console.error('❌ 위치 추적 중 오류:', error);
+    console.log('❌ 위치 추적 중 오류:', error);
   }
 };
 
