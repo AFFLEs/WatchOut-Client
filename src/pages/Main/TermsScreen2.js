@@ -4,14 +4,14 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, Switch, Te
 export default function TermsScreen({ navigation, route }) {
   const [vibrationAlert, setVibrationAlert] = useState(false);
   const [enableWatchEmergencySignal, setEnableWatchEmergencySignal] = useState(false);
-  const [guardianContact, setGuardianContact] = useState(''); 
+  const [guardianPhone, setGuardianPhone] = useState(''); 
   const { userInfo, termsAgreement1 } = route.params;
   const handleBack = () => {
     navigation.goBack();
   };
 
   const handleAgree = () => {
-    if (vibrationAlert && enableWatchEmergencySignal && guardianContact.trim()) {
+    if (vibrationAlert && enableWatchEmergencySignal && guardianPhone.trim()) {
       // 모든 항목에 동의한 경우에만 진행
       navigation.navigate('TravelDate', { 
         userInfo,
@@ -19,7 +19,7 @@ export default function TermsScreen({ navigation, route }) {
         termsAgreement2: {
           vibrationAlert,
           enableWatchEmergencySignal,
-          guardianContact,
+          guardianPhone,
         },
       });
     }
@@ -70,9 +70,9 @@ export default function TermsScreen({ navigation, route }) {
           <TextInput
             style={styles.input}
             placeholder="010-1234-5678"
-            value={guardianContact}
-            onChangeText={setGuardianContact}
-            keyboardType="phone-pad"
+            value={guardianPhone}
+            onChangeText={setGuardianPhone}
+            keyboardType="number-pad"
             maxLength={13}
           />
         </View>
@@ -83,7 +83,7 @@ export default function TermsScreen({ navigation, route }) {
         <TouchableOpacity 
           style={[styles.agreeButton, (!vibrationAlert || !enableWatchEmergencySignal) && styles.agreeButtonDisabled]} 
           onPress={handleAgree}
-          disabled={!vibrationAlert || !enableWatchEmergencySignal || !guardianContact.trim()}
+          disabled={!vibrationAlert || !enableWatchEmergencySignal || !guardianPhone.trim()}
         >
           <Text style={styles.agreeButtonText}>다음으로</Text>
         </TouchableOpacity>

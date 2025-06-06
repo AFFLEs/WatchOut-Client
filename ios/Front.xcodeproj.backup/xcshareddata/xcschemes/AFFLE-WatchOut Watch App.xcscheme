@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "1630"
-   version = "1.3">
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9AAE3F9E2DDB8FAE00F6592E"
+               BuildableName = "AFFLE-WatchOut Watch App.app"
+               BlueprintName = "AFFLE-WatchOut Watch App"
+               ReferencedContainer = "container:Front.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
             buildForRunning = "YES"
@@ -26,15 +41,28 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "FrontTests.xctest"
-               BlueprintName = "FrontTests"
+               BlueprintIdentifier = "9AAE3FAA2DDB8FAF00F6592E"
+               BuildableName = "AFFLE-WatchOut Watch AppTests.xctest"
+               BlueprintName = "AFFLE-WatchOut Watch AppTests"
+               ReferencedContainer = "container:Front.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9AAE3FB42DDB8FAF00F6592E"
+               BuildableName = "AFFLE-WatchOut Watch AppUITests.xctest"
+               BlueprintName = "AFFLE-WatchOut Watch AppUITests"
                ReferencedContainer = "container:Front.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -54,9 +82,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Front.app"
-            BlueprintName = "Front"
+            BlueprintIdentifier = "9AAE3F9E2DDB8FAE00F6592E"
+            BuildableName = "AFFLE-WatchOut Watch App.app"
+            BlueprintName = "AFFLE-WatchOut Watch App"
             ReferencedContainer = "container:Front.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -71,9 +99,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Front.app"
-            BlueprintName = "Front"
+            BlueprintIdentifier = "9AAE3F9E2DDB8FAE00F6592E"
+            BuildableName = "AFFLE-WatchOut Watch App.app"
+            BlueprintName = "AFFLE-WatchOut Watch App"
             ReferencedContainer = "container:Front.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
