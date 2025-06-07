@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { userAPI } from '../../apis/userAPI';
 import { AuthContext } from '../../../App';
+import { startLocationTracking } from '../../utils/backgroundUtils';
 import { updateAccessToken } from '../../utils/authUtils';
 
 export default function LoginScreen({ navigation }) {
@@ -27,13 +28,16 @@ export default function LoginScreen({ navigation }) {
     try {
       const response = await userAPI.loginUserInfo(userInfo);
       const { accessToken } = response.data;
-      
-      await updateAccessToken(accessToken);
+
+      await AsyncStorage.setItem('accessToken', accessToken);
+
       setAccessToken(accessToken);
       setIsAuthenticated(true);
-;
+      
+      // 로그인 성공 후 위치 추적 시작
+      await startLocationTracking();
+      console.log('✅ 로그인 성공 - 위치 추적 시작');
 
-      console.log('✅ 로그인 성공');
     } catch (error) {
       console.error('❌ 로그인 에러:', error);
       Alert.alert('로그인 실패', error.message || '알 수 없는 오류가 발생했습니다.');

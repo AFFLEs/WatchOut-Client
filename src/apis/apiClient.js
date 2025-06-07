@@ -89,7 +89,7 @@ apiClient.interceptors.response.use(
         
         // API 에러 응답 처리
         if (error.response) {
-            console.error(
+            console.log(
                 `❌ API 에러: [${error.config?.method?.toUpperCase() || 'Unknown Method'}] ${error.config?.baseURL || ''}${error.config?.url || 'Unknown URL'}`,
                 {
                     httpStatus: error.response.status,
@@ -103,7 +103,7 @@ apiClient.interceptors.response.use(
         }
         // 네트워크 에러 처리
         else if (error.request) {
-            console.error(
+            console.log(
                 `❌ 네트워크 에러: [${error.config?.method?.toUpperCase() || 'Unknown Method'}] ${error.config?.baseURL || ''}${error.config?.url || 'Unknown URL'}`,
                 {
                     name: error.name,
@@ -114,7 +114,7 @@ apiClient.interceptors.response.use(
         }
         // 기타 에러 처리
         else {
-            console.error(
+            console.log(
                 `❌ 기타 에러:`,
                 {
                     name: error.name,

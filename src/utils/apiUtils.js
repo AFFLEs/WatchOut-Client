@@ -21,20 +21,46 @@ export function handleApiResponse(response) {
   if (response.data?.status === API_STATUS.SUCCESS) {
     return response.data;
   } else {
-    throw new APIError(
-      response.data?.message || '요청 처리 중 오류가 발생했습니다.',
-      response.data?.code || API_CODE.INTERNAL_ERROR,
-      response.data?.status || API_STATUS.FAIL
-    );
+    // 에러를 콘솔에만 로깅하고 기본값 반환
+    const errorMessage = response.data?.message || '요청 처리 중 오류가 발생했습니다.';
+    const errorCode = response.data?.code || API_CODE.INTERNAL_ERROR;
+    const errorStatus = response.data?.status || API_STATUS.FAIL;
+    
+    console.log('API Response Error:', {
+      message: errorMessage,
+      code: errorCode,
+      status: errorStatus
+    });
+    
+    // 에러 대신 기본 응답 반환
+    return {
+      status: API_STATUS.FAIL,
+      message: errorMessage,
+      code: errorCode,
+      data: null
+    };
   }
 }
 
 // API 에러 처리 함수
 export function handleApiError(error) {
   const apiError = APIError.fromAxiosError(error);
-  return apiError;
+  
+  // 콘솔에만 에러 로깅
+  console.log('API Error:', {
+    message: apiError.message,
+    code: apiError.code,
+    status: apiError.status
+  });
+  
+  // 에러 객체 대신 기본 응답 반환
+  return {
+    status: API_STATUS.ERROR,
+    message: apiError.message,
+    code: apiError.code,
+    data: null
+  };
 }
-
 
 // API 에러 클래스
 export class APIError extends Error {

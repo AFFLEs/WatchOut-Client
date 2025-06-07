@@ -36,7 +36,7 @@ const saveToCache = async (type, lat, lng, data) => {
   }
 };
 
-const getFromCache = async (type, lat, lng) => {
+const getFromCache = async (type, lat, lng, allowExpired = false, ignoreExpiry = false) => {
   const cacheKey = getCacheKey(type, lat, lng);
   try {
     const cached = await AsyncStorage.getItem(cacheKey);
@@ -45,8 +45,18 @@ const getFromCache = async (type, lat, lng) => {
     const { data, timestamp } = JSON.parse(cached);
     const age = Date.now() - timestamp;
 
-    // 캐시가 만료되었으면 null 반환
-    if (age > CACHE_EXPIRY) {
+    // ignoreExpiry가 true면 만료 체크 완전히 무시
+    if (ignoreExpiry) {
+      return {
+        data,
+        timestamp,
+        isCache: true,
+        expired: age > CACHE_EXPIRY
+      };
+    }
+
+    // 캐시가 만료되었으면 null 반환 (allowExpired가 false일 때만)
+    if (age > CACHE_EXPIRY && !allowExpired) {
       AsyncStorage.removeItem(cacheKey);
       return null;
     }
@@ -54,7 +64,8 @@ const getFromCache = async (type, lat, lng) => {
     return {
       data,
       timestamp,
-      isCache: true
+      isCache: true,
+      expired: age > CACHE_EXPIRY
     };
   } catch (error) {
     console.warn('캐시 조회 실패:', error);
@@ -64,15 +75,8 @@ const getFromCache = async (type, lat, lng) => {
 
 export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
   if (!lat || !lng) {
-    console.error('🚨 위치 정보가 없습니다.');
+    console.log('🚨 위치 정보가 없습니다.');
     return { data: [], isCache: false };
-  }
-
-  // 먼저 캐시 확인
-  const cached = await getFromCache(type, lat, lng);
-  if (cached) {
-    console.log("📦 캐시된 데이터를 사용합니다.");
-    return { data: cached.data, isCache: true, timestamp: cached.timestamp };
   }
 
   try {
@@ -104,7 +108,7 @@ export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
             console.log(`🌐 API 응답 (${type}):`, response.status);
             
             if (!response.results || response.status !== 'OK') {
-              console.warn(`⚠️ API 응답 없음 (${type})`);
+              console.log(`⚠️ API 응답 없음 (${type})`);
               reject(new Error('API 응답 없음'));
               return;
             }
@@ -125,55 +129,47 @@ export async function fetchNearbyInstitutions(lat, lng, type, keyword = '') {
             saveToCache(type, lat, lng, places);
             resolve({ data: places, isCache: false });
           } catch (error) {
-            console.error(`🚨 응답 파싱 에러 (${type}):`, error);
+            console.log(`🚨 응답 파싱 에러 (${type}):`, error);
             reject(error);
           }
         } else {
-          console.error(`🚨 API 요청 실패 (${type}): ${xhr.status}`);
+          console.log(`🚨 API 요청 실패 (${type}): ${xhr.status}`);
           reject(new Error(`HTTP Error: ${xhr.status}`));
         }
       };
 
       xhr.onerror = function () {
-        console.error(`🚨 네트워크 에러 (${type})`);
+        console.log(`🚨 네트워크 에러 (${type})`);
         reject(new Error('Network Error'));
       };
 
       xhr.ontimeout = function () {
-        console.error(`🚨 요청 시간 초과 (${type})`);
+        console.log(`🚨 요청 시간 초과 (${type})`);
         reject(new Error('Timeout'));
       };
 
       console.log(`🔍 API 요청 시작 (${type}):`, url);
       xhr.open('GET', `${url}?${queryString}`, true);
       xhr.send();
-    }).catch(async (error) => {
-      console.warn(`⚠️ API 요청 실패, 캐시 확인 (${type}):`, error.message);
-      // API 요청 실패 시 캐시 재확인
-      const cachedAfterError = await getFromCache(type, lat, lng);
-      if (cachedAfterError) {
-        console.log(`📦 에러 후 캐시 사용 (${type})`);
-        return { data: cachedAfterError.data, isCache: true, timestamp: cachedAfterError.timestamp };
-      }
-      return { data: [], isCache: false };
     });
 
     return response;
   } catch (error) {
-    console.error(`🚨 전체 요청 실패 (${type}):`, error);
-    // 최종 에러 시 캐시 확인
-    const cachedFinal = await getFromCache(type, lat, lng);
-    if (cachedFinal) {
-      console.log(`📦 최종 캐시 사용 (${type})`);
-      return { data: cachedFinal.data, isCache: true, timestamp: cachedFinal.timestamp };
+    console.log(`🚨 API 요청 실패, 캐시 확인 (${type}):`, error.message);
+    // API 요청 실패 시에만 캐시 확인 (만료 여부 완전히 무시)
+    const cachedAfterError = await getFromCache(type, lat, lng, false, true);
+    if (cachedAfterError) {
+      console.log(`📦 API 실패 후 캐시 사용 (${type})${cachedAfterError.expired ? ' (만료됨)' : ''}`);
+      return { data: cachedAfterError.data, isCache: true, timestamp: cachedAfterError.timestamp };
     }
+    console.log(`❌ 캐시도 없음 (${type})`);
     return { data: [], isCache: false };
   }
 }
 
 export const fetchAllNearbyInstitutions = async (lat, lng) => {
   if (!lat || !lng) {
-    console.error('🚨 위치 정보가 없습니다.');
+    console.log('🚨 위치 정보가 없습니다.');
     return { data: [], isCache: false };
   }
 

@@ -1,28 +1,44 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { alertTemplates } from '../datas/alertTemplates';
-import { AlertCircle, X } from 'lucide-react-native'; // X는 닫기 아이콘
+import { AlertCircle, X, Cloud, CloudRain, Sun } from 'lucide-react-native'; // 날씨 아이콘 추가
 
-const AlertCard = ({ type, magnitude, distance, timeAgo, showCloseButton, onClose }) => {
-  const template = alertTemplates[type];
+const AlertCard = ({ title, description, type, isWarning }) => {
+  // 알림 타입에 따른 아이콘과 스타일 결정
+  const getAlertStyle = () => {
+    if (type === 'weather') {
+      if (isWarning) {
+        return {
+          backgroundColor: '#FFF3CD', // 황색 경고
+          icon: <CloudRain color={'#856404'} size={20} />,
+          titleColor: '#856404'
+        };
+      } else {
+        return {
+          backgroundColor: '#E8F4FD', // 연한 파랑색
+          icon: <Sun color={'#0066CC'} size={20} />,
+          titleColor: '#0066CC'
+        };
+      }
+    }
+    
+    // 기본 경고 스타일 (기존 재해/안전 경보)
+    return {
+      backgroundColor: '#FFEAEA',
+      icon: <AlertCircle color={'#D32F2F'} size={20} />,
+      titleColor: '#D32F2F'
+    };
+  };
 
-  if (!template) return null;
-
-  const description = template.getDescription({ magnitude, distance });
+  const alertStyle = getAlertStyle();
 
   return (
-    <View style={[styles.container, { backgroundColor: template.backgroundColor }]}>
+    <View style={[styles.container, { backgroundColor: alertStyle.backgroundColor }]}>
       <View style={styles.header}>
-        <AlertCircle color={template.iconColor} size={20} />
-        <Text style={styles.title}>{template.title}</Text>
-        {showCloseButton && (
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <X color="#888" size={18} />
-          </TouchableOpacity>
-        )}
+        {alertStyle.icon}
+        <Text style={[styles.title, { color: alertStyle.titleColor }]}>{title}</Text>
       </View>
       <Text style={styles.description}>{description}</Text>
-      {timeAgo ? <Text style={styles.time}>{timeAgo}</Text> : null}
     </View>
   );
 };
@@ -32,7 +48,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginVertical: 6,
-    backgroundColor: '#FFEAEA',
   },
   header: {
     flexDirection: 'row',
@@ -53,7 +68,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 13,
     lineHeight: 18,
-    
   },
   time: {
     marginTop: 4,

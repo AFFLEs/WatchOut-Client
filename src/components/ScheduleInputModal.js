@@ -14,16 +14,8 @@ import GooglePlacesSDK from 'react-native-google-places-sdk';
 import ModalCard from './ModalCard';
 import ModalButton from './ModalButton';
 import { GOOGLE_MAPS_API_KEY } from '../config/keys';
+import { travelAPI } from '../apis/travelAPI';
 
-// Logger for ScheduleInputModal
-const logger = {
-  prefix: '[ScheduleInputModal]',
-  log: (...args) => console.log(logger.prefix, ...args),
-  warn: (...args) => console.warn(logger.prefix, ...args),
-  error: (...args) => console.error(logger.prefix, ...args),
-  group: (label) => console.group(`${logger.prefix} ${label}`),
-  groupEnd: () => console.groupEnd(),
-};
 
 function parseDate(dateStr) {
   if (!dateStr) return null;
@@ -52,7 +44,10 @@ function formatDate(date) {
 }
 
 function formatDateForAPI(date) {
-  return date.toISOString().split('T')[0];
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 function getDateRange(from, to) {
@@ -84,7 +79,6 @@ export default function ScheduleInputModal({
   // ────────────────────────────────────────────────────────────────────────────
   useEffect(() => {
     GooglePlacesSDK.initialize(GOOGLE_MAPS_API_KEY);
-    logger.log('SDK initialized');
   }, []);
 
   // ────────────────────────────────────────────────────────────────────────────
@@ -97,14 +91,12 @@ export default function ScheduleInputModal({
     const dep = parseDate(departureDate);
     const ret = parseDate(returnDate);
     if (!dep || !ret) {
-      logger.warn('Invalid date range:', { departureDate, returnDate });
       return { dateList: [], dateObjs: [] };
     }
 
     const start = today > dep ? today : dep;
     const dateObjs = getDateRange(start, ret);
     const dateList = dateObjs.map(formatDate);
-    logger.log('Date range calculated:', { start: formatDate(start), end: formatDate(ret), count: dateList.length });
     return { dateList, dateObjs };
   }, [departureDate, returnDate]);
 
@@ -127,14 +119,11 @@ export default function ScheduleInputModal({
   }, [dateList, initialData]);
 
   // ────────────────────────────────────────────────────────────────────────────
-  // ④ 장소 검색: fetchPredictions({ query, language })
+  // ④ 장소 검색: fetchPredictions({ query })
   // ────────────────────────────────────────────────────────────────────────────
   const searchPlace = async (query) => {
-    logger.group(`Searching place: "${query}"`);
     try {
       const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(query)}&inputtype=textquery&fields=place_id,name,formatted_address,geometry&key=${GOOGLE_MAPS_API_KEY}&language=ko`;
-      
-      logger.log('Request URL:', url);
       
       const response = await fetch(url, {
         method: 'GET',
@@ -151,23 +140,12 @@ export default function ScheduleInputModal({
       const data = await response.json();
 
       if (data.status === 'OK') {
-        logger.log('Search results:', data.candidates);
         return data.candidates;
       }
 
-      logger.warn('API returned non-OK status:', data.status);
-      logger.warn('Error message:', data.error_message);
       return [];
     } catch (error) {
-      logger.error('Search failed:', error);
-      logger.error('Error details:', {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      });
       return [];
-    } finally {
-      logger.groupEnd();
     }
   };
 
@@ -175,11 +153,8 @@ export default function ScheduleInputModal({
   // ⑤ Place ID → 세부 정보 조회: fetchPlaceByID(placeID, { fields })
   // ────────────────────────────────────────────────────────────────────────────
   const fetchPlaceDetails = async (placeId) => {
-    logger.group(`Fetching details for place ID: ${placeId}`);
     try {
       const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${GOOGLE_MAPS_API_KEY}&language=ko`;
-      
-      logger.log('Request URL:', url);
       
       const response = await fetch(url, {
         method: 'GET',
@@ -199,19 +174,10 @@ export default function ScheduleInputModal({
         return data.result;
       }
 
-      logger.warn('API returned non-OK status:', data.status);
-      logger.warn('Error message:', data.error_message);
+
       return null;
     } catch (error) {
-      logger.error('Error fetching details:', error);
-      logger.error('Error details:', {
-        name: error.name,
-        message: error.message,
-        stack: error.stack
-      });
       return null;
-    } finally {
-      logger.groupEnd();
     }
   };
 
@@ -219,7 +185,6 @@ export default function ScheduleInputModal({
   // ⑥ 일정 추가/수정/삭제 핸들러
   // ────────────────────────────────────────────────────────────────────────────
   const addSchedule = useCallback(date => {
-    logger.log('Adding schedule for:', date);
     setForm(prev => ({
       ...prev,
       [date]: [...prev[date], { place: '', details: null }],
@@ -235,7 +200,6 @@ export default function ScheduleInputModal({
   }, []);
 
   const removeSchedule = useCallback((date, idx) => {
-    logger.log('Removing schedule:', { date, index: idx });
     setForm(prev => {
       const arr = [...prev[date]];
       arr.splice(idx, 1);
@@ -247,7 +211,6 @@ export default function ScheduleInputModal({
   // ⑦ 저장 버튼 클릭 시 동작: "장소명 → fetchPredictions → placeID → fetchPlaceByID" 순서
   // ────────────────────────────────────────────────────────────────────────────
   const handleSave = useCallback(async () => {
-    logger.group('Saving schedule');
     try {
       // Reset states at the start
       setUpdateSummary(null);
@@ -278,8 +241,6 @@ export default function ScheduleInputModal({
         });
       });
 
-      logger.log('Places to fetch:', placesToFetch.length);
-      logger.log('Update summary:', updates);
 
       // 2) 검색이 필요한 장소가 있으면 확인
       if (placesToFetch.length > 0) {
@@ -295,7 +256,6 @@ export default function ScheduleInputModal({
           );
         });
         if (!userConfirmed) {
-          logger.log('User cancelled place fetch');
           return;
         }
       }
@@ -306,7 +266,6 @@ export default function ScheduleInputModal({
       
       // 4) 장소 검색 및 상세 정보 가져오기
       if (placesToFetch.length > 0) {
-        logger.log('Starting place fetch operations');
         await Promise.all(
           placesToFetch.map(async ({ dateStr, idx, placeName }) => {
             try {
@@ -327,11 +286,9 @@ export default function ScheduleInputModal({
                 },
               };
             } catch (err) {
-              logger.error('Error processing place:', err);
             }
           })
         );
-        logger.log('Place fetch operations completed');
       }
 
       // 5) API 호출용 데이터 형식으로 변환
@@ -355,13 +312,14 @@ export default function ScheduleInputModal({
 
             return {
               spotDate: apiDate,
-              spotTime: 'PLAN',
+              spotTime: null, // null 고정
               spotName: p.place,
               spotDetail: p.details.formatted_address,
               latitude: p.details.geometry.location.lat,
               longitude: p.details.geometry.location.lng,
               city: p.details.address_components.find(c => c.types.includes('administrative_area_level_1'))?.long_name || 'Not Found',
               country: p.details.address_components.find(c => c.types.includes('country'))?.long_name || 'Not Found',
+              isPlan: true,
             };
           });
 
@@ -377,7 +335,6 @@ export default function ScheduleInputModal({
       );
 
       if (totalCount === 0) {
-        logger.warn('No valid places to save');
         Alert.alert('알림', '저장할 유효한 장소가 없습니다.');
         return;
       }
@@ -394,23 +351,38 @@ export default function ScheduleInputModal({
       setProcessedData(formattedData);
       onRequestClose(); // 첫 번째 모달 닫기
       setConfirmationVisible(true);
-      logger.log('Form:', formattedData);
-      logger.log('Processed data summary:', summary);
-      logger.log('Showing confirmation modal');
     } catch (error) {
-      logger.error('Error preparing data:', error);
       Alert.alert('오류', '데이터 준비 중 오류가 발생했습니다.');
     } finally {
       setLoading(false);
-      logger.groupEnd();
     }
   }, [form, initialData]);
 
-  const handleConfirm = useCallback(() => {
-    logger.log('User confirmed save operation');
+  const handleConfirm = useCallback(async () => {
     setConfirmationVisible(false);
     if (processedData) {
-      onSave(processedData);
+      try {
+        setLoading(true);
+        // API 호출하여 데이터 저장
+        await Promise.all(
+          Object.values(processedData).flat().map(spot => 
+            travelAPI.postTravelSpot(spot)
+          )
+        );
+        
+        // 최신 데이터 가져오기
+        const latestData = await travelAPI.getLatestTravelSpot();
+        
+        // 성공 알림
+        Alert.alert('성공', '일정이 성공적으로 저장되었습니다.');
+        
+        // 부모 컴포넌트에 최신 데이터 전달
+        onSave(latestData.data);
+      } catch (error) {
+        Alert.alert('오류', '일정 저장 중 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
     }
   }, [processedData, onSave]);
 
@@ -418,8 +390,7 @@ export default function ScheduleInputModal({
   // ⑧ visible이 바뀌면 form 초기화
   // ────────────────────────────────────────────────────────────────────────────
   useEffect(() => {
-    if (visible) {
-      logger.log('Modal opened, initializing form');
+    if (visible) {      
       setForm(initializeForm());
     }
   }, [visible, initializeForm]);
@@ -518,11 +489,10 @@ export default function ScheduleInputModal({
         <ScrollView style={styles.confirmationContainer}>
           {updateSummary && (
             <View style={styles.summaryContainer}>
-              <Text style={styles.summaryTitle}>변경 사항 요약</Text>
+              <Text style={styles.summaryTitle}>변경 사항</Text>
               <Text style={styles.summaryText}>• 총 {updateSummary.dates}일의 일정</Text>
               <Text style={styles.summaryText}>• 전체 {updateSummary.totalPlaces}개의 장소</Text>
-              <Text style={styles.summaryText}>• 새로 추가: {updateSummary.newPlaces}개</Text>
-              <Text style={styles.summaryText}>• 수정됨: {updateSummary.modifiedPlaces}개</Text>
+              <Text style={styles.summaryText}>• 추가: {updateSummary.newPlaces}개</Text>
             </View>
           )}
           {processedData && Object.entries(processedData).map(([date, places]) => (
