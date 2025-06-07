@@ -56,6 +56,7 @@ export default function SignUpScreen({ navigation }) {
             placeholder="YYYY-MM-DD"
             value={birthday}
             onChangeText={setBirthday}
+            keyboardType='number-pad'
             maxLength={10}
           />
           <Text style={styles.inputText}>이메일</Text>
