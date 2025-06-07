@@ -188,7 +188,7 @@ export default function HomeScreen() {
 
       <SectionCard title="건강 모니터링">
         <View>
-          <HealthMetricsCard steps={12543} bpm={82} temperature={37.2} />
+          <HealthMetricsCard steps={8543} bpm={70} kcal={372} />
         </View>
       </SectionCard>
 
