@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import SectionCard from '../../components/SectionCard';
 import MapView, { PROVIDER_GOOGLE, Marker, Polyline } from 'react-native-maps';
 import { travelAPI } from '../../apis/travelAPI';
@@ -25,8 +26,9 @@ export default function TravelRecordDetailScreen({ route }) {
     try {
       const response = await travelAPI.getDetailTravelSpot(dateLabel);
       setSchedules(response.data);
-      setTimeSchedules(response.data.filter(item => item.spotTime && item.spotTime !== 'PLAN'));
-      setPlanSchedules(response.data.filter(item => !item.spotTime || item.spotTime === 'PLAN'));
+      setTimeSchedules(response.data.filter(item => item.isPlan === false));
+      setPlanSchedules(response.data.filter(item => item.isPlan === true));
+      console.log("planSchedules", planSchedules);
 
       if (schedules && schedules.length > 0) {
         const sortedSchedules = [...schedules].sort((a, b) => {
@@ -70,56 +72,83 @@ export default function TravelRecordDetailScreen({ route }) {
     fetchDetailTravelSpot();
   }, []);
 
-  // 일정을 시간별과 계획으로 분리하여 렌더링
-  const renderSchedules = () => {
-    return (
-      <>
-        {/* 시간이 있는 일정 */}
-        {timeSchedules.length > 0 && (
-          <>
-            <Text style={styles.sectionTitle}>방문 기록</Text>
-            {timeSchedules.map((item, idx) => (
-              <View key={`time-${idx}`} style={styles.card}>
-                <View style={styles.row}>
-                  <View style={styles.timeBadge}>
-                    <Text style={styles.timeText}>{formatTime(item.spotTime)}</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.place}>{item.spotName}</Text>
-                    <Text style={styles.address}>{item.spotDetail}</Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </>
-        )}
-
-        {/* 계획된 일정 */}
-        {planSchedules.length > 0 && (
-          <>
-            <View style={styles.divider} />
-            <Text style={styles.sectionTitle}>방문 예정</Text>
-            {planSchedules.map((item, idx) => (
-              <View key={`plan-${idx}`} style={[styles.card, styles.planCard]}>
-                <View style={styles.row}>
-                  <View style={[styles.timeBadge, styles.planBadge]}>
-                    <Text style={[styles.timeText, styles.planText]}>PLAN</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.place}>{item.spotName}</Text>
-                    <Text style={styles.address}>{item.spotDetail}</Text>
-                  </View>
-                </View>
-              </View>
-            ))}
-          </>
-        )}
-      </>
-    );
+  const handleDeleteSpot = async (spotId) => {
+    try {
+      await travelAPI.deleteTravelSpot(spotId);
+      // 삭제 후 목록 업데이트
+      setPlanSchedules(prevSchedules => 
+        prevSchedules.filter(schedule => schedule.id !== spotId)
+      );
+      // 전체 schedules도 업데이트
+      setSchedules(prevSchedules =>
+        prevSchedules.filter(schedule => schedule.id !== spotId)
+      );
+      // coordinates 업데이트
+      updateCoordinatesAfterDelete();
+      fetchDetailTravelSpot()
+    } catch (error) {
+      console.error('Failed to delete travel spot:', error);
+      Alert.alert('오류', '삭제 중 오류가 발생했습니다.');
+    }
   };
 
+  const updateCoordinatesAfterDelete = () => {
+    if (schedules) {
+      const updatedCoords = schedules
+        .filter(schedule => schedule.latitude && schedule.longitude)
+        .map(schedule => ({
+          latitude: schedule.latitude,
+          longitude: schedule.longitude
+        }));
+      setCoordinates(updatedCoords);
+    }
+  };
+
+  const renderHiddenItem = (data) => (
+    <View style={styles.rowBack}>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        onPress={() => {
+          Alert.alert(
+            '일정 삭제',
+            '이 일정을 삭제하시겠습니까?',
+            [
+              { text: '취소', style: 'cancel' },
+              { 
+                text: '삭제', 
+                onPress: () => handleDeleteSpot(data.item.spotId),
+                style: 'destructive'
+              },
+            ]
+          );
+        }}
+      >
+        <Text style={styles.backTextWhite}>삭제</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const renderPlanItem = (data) => (
+    <View style={[styles.card, styles.planCard]}>
+      <View style={styles.row}>
+        <View style={[styles.timeBadge, styles.planBadge]}>
+          <Text style={[styles.timeText, styles.planText]}>PLAN</Text>
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.place}>{data.item.spotName}</Text>
+          <Text style={styles.address}>{data.item.spotDetail}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 32 }}>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={{ paddingBottom: 32 }}
+      scrollEventThrottle={16}
+      removeClippedSubviews={true}
+    >
       <SectionCard>
         <MapView
           provider={PROVIDER_GOOGLE}
@@ -130,8 +159,8 @@ export default function TravelRecordDetailScreen({ route }) {
             <Marker
               key={index}
               coordinate={coord}
-              title={schedules[index]?.place}
-              description={`${schedules[index]?.time} - ${schedules[index]?.address}`}
+              title={schedules[index]?.spotName}
+              description={schedules[index]?.spotDetail}
             />
           ))}
           {coordinates.length > 1 && (
@@ -144,7 +173,52 @@ export default function TravelRecordDetailScreen({ route }) {
         </MapView>
         <Text style={styles.title}>{formatDate(dateLabel)}</Text>
         <Text style={styles.subtitle}>{city}, {country}</Text>
-        {renderSchedules()}
+        
+        <Text style={styles.sectionTitle}>방문 기록</Text>
+        {timeSchedules.length > 0 ? (
+          timeSchedules.map((item, idx) => (
+            <View key={`time-${idx}`} style={styles.card}>
+              <View style={styles.row}>
+                <View style={styles.timeBadge}>
+                  <Text style={styles.timeText}>{formatTime(item.spotTime)}</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.place}>{item.spotName}</Text>
+                  <Text style={styles.address}>{item.spotDetail}</Text>
+                </View>
+              </View>
+            </View>
+          ))
+        ) : (
+          <View style={styles.emptyBox}>
+            <Text style={styles.emptyText}>현재 측정된 방문 장소가 없습니다.</Text>
+          </View>
+        )}
+
+        {planSchedules.length > 0 && (
+          <>
+            <View style={styles.divider} />
+            <Text style={styles.sectionTitle}>방문 예정</Text>
+            <View>
+              {planSchedules.map((item, index) => (
+                <View key={`plan-${item.spotId}`} style={{ backgroundColor: '#fff' }}>
+                  <SwipeListView
+                    data={[item]}
+                    renderItem={renderPlanItem}
+                    renderHiddenItem={renderHiddenItem}
+                    rightOpenValue={-75}
+                    disableRightSwipe
+                    keyExtractor={(item) => item.spotId.toString()}
+                    recalculateHiddenLayout
+                    useNativeDriver={false}
+                    scrollEnabled={false}
+                    style={[styles.card, styles.planCard, { marginBottom: index === planSchedules.length - 1 ? 0 : 12 }]}
+                  />
+                </View>
+              ))}
+            </View>
+          </>
+        )}
       </SectionCard>
     </ScrollView>
   );
@@ -222,9 +296,8 @@ const styles = StyleSheet.create({
   emptyBox: {
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 32,
+    padding: 16,
     alignItems: 'center',
-    marginTop: 32,
     marginHorizontal: 8,
   },
   emptyText: {
@@ -244,11 +317,44 @@ const styles = StyleSheet.create({
   },
   planCard: {
     backgroundColor: '#F9FAFB',
+    marginBottom: 3,
   },
   planBadge: {
     backgroundColor: '#E5E7EB',
   },
   planText: {
     color: '#4B5563',
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#F9FAFB',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
+    marginBottom: 12,
+    marginHorizontal: 2,
+    borderRadius: 12,
+    height: '100%',
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    height: '100%',
+  },
+  backRightBtnRight: {
+    backgroundColor: '#EF4444',
+    right: 0,
+  },
+  backTextWhite: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });

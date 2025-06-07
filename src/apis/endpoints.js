@@ -23,8 +23,8 @@ export const ENDPOINTS = {
     DETAIL: (date) => `/api/spots/detail?date=${date}`,
     DELETE: (spotId) => `/api/spots/${spotId}`
   },
-  EMERGENCY: {
-    BASE: '/api/emergencies',
-    DETAIL: (emergencyId) => `/api/emergencies/${emergencyId}`
+  DISASTERS: {
+    BASE: '/api/disasters',
+    GET_ALERT: (lat, lng) => `/api/disasters?lat=${lat}&lng=${lng}`
   }
 }; 

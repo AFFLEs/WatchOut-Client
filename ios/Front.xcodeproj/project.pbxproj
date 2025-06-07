@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		18E4923F4F85F7EFAAFAE57B /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DB6D4B4441C04B7B0E531F30 /* libPods-Front.a */; };
 		38D674C1AB9573B3E703A977 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,13 +29,13 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Front/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Front/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = Front/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
-		66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.debug.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.debug.xcconfig"; sourceTree = "<group>"; };
+		2333EA9DFA7D6C4E291AEC5B /* Pods-Front.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.release.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.release.xcconfig"; sourceTree = "<group>"; };
+		2F9025D5283590700640335B /* Pods-Front.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Front.debug.xcconfig"; path = "Target Support Files/Pods-Front/Pods-Front.debug.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Front/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Front/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CD710E892DE0B47E0063954A /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		DB6D4B4441C04B7B0E531F30 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Front.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE96EDF5D53C1A92493C0973 /* libPods-Front.a in Frameworks */,
+				18E4923F4F85F7EFAAFAE57B /* libPods-Front.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				F5A9F747E8C056C7E7E688E3 /* libPods-Front.a */,
+				DB6D4B4441C04B7B0E531F30 /* libPods-Front.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -104,8 +104,8 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */,
-				240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */,
+				2F9025D5283590700640335B /* Pods-Front.debug.xcconfig */,
+				2333EA9DFA7D6C4E291AEC5B /* Pods-Front.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -125,13 +125,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Front" */;
 			buildPhases = (
-				8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */,
+				C7A3D87824F2CF68CD7D805F /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */,
-				8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */,
+				14A73C5EC0F99E41AE4B046C /* [CP] Embed Pods Frameworks */,
+				E30D5C38B010DDDD1FEBCEC8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -219,9 +219,9 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0657842F8D265B44608EEEE4 /* [CP] Embed Pods Frameworks */ = {
+		14A73C5EC0F99E41AE4B046C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -240,7 +240,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Front/Pods-Front-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8B6DDEC899531C8C0844AE3C /* [CP] Check Pods Manifest.lock */ = {
+		C7A3D87824F2CF68CD7D805F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -262,7 +262,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8C3D144FEDEA9248274D9F62 /* [CP] Copy Pods Resources */ = {
+		E30D5C38B010DDDD1FEBCEC8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -299,7 +299,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 66E8C840D7C1EB135BDFEEBF /* Pods-Front.debug.xcconfig */;
+			baseConfigurationReference = 2F9025D5283590700640335B /* Pods-Front.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -329,7 +329,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 240F220FDCE718CAE6200BF8 /* Pods-Front.release.xcconfig */;
+			baseConfigurationReference = 2333EA9DFA7D6C4E291AEC5B /* Pods-Front.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
